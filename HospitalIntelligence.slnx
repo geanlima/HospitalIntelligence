@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
   <Folder Name="/src/" />
   <Folder Name="/src/BuildingBlocks/">
     <Project Path="src/BuildingBlocks/Hospital.SharedKernel/Hospital.SharedKernel.csproj" />
@@ -9,5 +12,9 @@
     <Project Path="src/Modules/Patients/Hospital.Patients.Contracts/Hospital.Patients.Contracts.csproj" />
     <Project Path="src/Modules/Patients/Hospital.Patients.Domain/Hospital.Patients.Domain.csproj" />
     <Project Path="src/Modules/Patients/Hospital.Patients.Infrastructure/Hospital.Patients.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/BuildingBlocks/">
+    <Project Path="tests/BuildingBlocks/Hospital.SharedKernel.UnitTests/Hospital.SharedKernel.UnitTests.csproj" />
   </Folder>
 </Solution>

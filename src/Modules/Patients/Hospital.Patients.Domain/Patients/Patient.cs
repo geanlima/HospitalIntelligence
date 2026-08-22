@@ -1,4 +1,5 @@
-﻿using Hospital.SharedKernel.Domain;
+﻿using Hospital.Patients.Domain.Patients.Events;
+using Hospital.SharedKernel.Domain;
 
 namespace Hospital.Patients.Domain.Patients;
 
@@ -51,22 +52,95 @@ public sealed class Patient : AggregateRoot<PatientId>
     {
         ValidateName(name);
         ValidateBirthDate(birthDate);
-        ValidateExternalSource(externalId, sourceSystem);
+        ValidateExternalSource(
+            externalId,
+            sourceSystem);
 
-        return new Patient(
+        var now = DateTimeOffset.UtcNow;
+
+        var patient = new Patient(
             PatientId.New(),
             name.Trim(),
             birthDate,
             gender,
             externalId?.Trim(),
             sourceSystem?.Trim());
+
+        patient.RaiseDomainEvent(
+            new PatientCreatedDomainEvent(
+                patient.Id,
+                now));
+
+        return patient;
     }
 
     public void ChangeName(string name)
     {
         ValidateName(name);
 
-        Name = name.Trim();
+        var normalizedName = name.Trim();
+
+        if (Name == normalizedName)
+        {
+            return;
+        }
+
+        Name = normalizedName;
+        Touch();
+    }
+
+    public void ChangeBirthDate(DateOnly birthDate)
+    {
+        ValidateBirthDate(birthDate);
+
+        if (BirthDate == birthDate)
+        {
+            return;
+        }
+
+        BirthDate = birthDate;
+        Touch();
+    }
+
+    public void ChangeGender(Gender gender)
+    {
+        if (Gender == gender)
+        {
+            return;
+        }
+
+        Gender = gender;
+        Touch();
+    }
+
+    public void UpdateExternalSource(
+        string? externalId,
+        string? sourceSystem)
+    {
+        ValidateExternalSource(
+            externalId,
+            sourceSystem);
+
+        var normalizedExternalId =
+            externalId?.Trim();
+
+        var normalizedSourceSystem =
+            sourceSystem?.Trim();
+
+        if (ExternalId == normalizedExternalId &&
+            SourceSystem == normalizedSourceSystem)
+        {
+            return;
+        }
+
+        ExternalId = normalizedExternalId;
+        SourceSystem = normalizedSourceSystem;
+
+        Touch();
+    }
+
+    private void Touch()
+    {
         UpdatedAtUtc = DateTimeOffset.UtcNow;
     }
 
@@ -78,16 +152,27 @@ public sealed class Patient : AggregateRoot<PatientId>
                 "Patient name cannot be empty.");
         }
 
-        if (name.Trim().Length > 200)
+        var normalizedName = name.Trim();
+
+        if (normalizedName.Length < 2)
+        {
+            throw new PatientDomainException(
+                "Patient name must have at least 2 characters.");
+        }
+
+        if (normalizedName.Length > 200)
         {
             throw new PatientDomainException(
                 "Patient name cannot exceed 200 characters.");
         }
     }
 
-    private static void ValidateBirthDate(DateOnly birthDate)
+    private static void ValidateBirthDate(
+        DateOnly birthDate)
     {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today =
+            DateOnly.FromDateTime(
+                DateTime.UtcNow);
 
         if (birthDate > today)
         {
@@ -101,15 +186,31 @@ public sealed class Patient : AggregateRoot<PatientId>
         string? sourceSystem)
     {
         var hasExternalId =
-            !string.IsNullOrWhiteSpace(externalId);
+            !string.IsNullOrWhiteSpace(
+                externalId);
 
         var hasSourceSystem =
-            !string.IsNullOrWhiteSpace(sourceSystem);
+            !string.IsNullOrWhiteSpace(
+                sourceSystem);
 
         if (hasExternalId != hasSourceSystem)
         {
             throw new PatientDomainException(
                 "ExternalId and SourceSystem must be provided together.");
+        }
+
+        if (hasExternalId &&
+            externalId!.Trim().Length > 100)
+        {
+            throw new PatientDomainException(
+                "ExternalId cannot exceed 100 characters.");
+        }
+
+        if (hasSourceSystem &&
+            sourceSystem!.Trim().Length > 50)
+        {
+            throw new PatientDomainException(
+                "SourceSystem cannot exceed 50 characters.");
         }
     }
 }
