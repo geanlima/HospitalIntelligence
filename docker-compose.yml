@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: hospital-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: hospital_intelligence
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - hospital_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hospital_intelligence"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  hospital_postgres_data:
