@@ -13,6 +13,9 @@
   <Folder Name="/src/BuildingBlocks/">
     <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/src/BuildingBlocks/Hospital.SharedKernel/Hospital.SharedKernel.csproj" />
   </Folder>
+  <Folder Name="/src/Hosts/">
+    <Project Path="src/Hosts/Hospital.Api/Hospital.Api.csproj" />
+  </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Patients/">
     <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/src/Modules/Patients/Hospital.Patients.Application/Hospital.Patients.Application.csproj" />
