@@ -1,5 +1,6 @@
 ﻿using Hospital.Patients.Application.Abstractions;
-using Hospital.Patients.Domain.Patients;
+using Hospital.Patients.Application.Patients.Mappings;
+using Hospital.Patients.Contracts.Patients;
 using Hospital.SharedKernel.Application;
 
 namespace Hospital.Patients.Application.Patients.GetPatientById;
@@ -14,7 +15,7 @@ public sealed class GetPatientByIdHandler
         _patientRepository = patientRepository;
     }
 
-    public async Task<Result<Patient>> HandleAsync(
+    public async Task<Result<PatientResponse>> HandleAsync(
         GetPatientByIdQuery query,
         CancellationToken cancellationToken = default)
     {
@@ -25,12 +26,13 @@ public sealed class GetPatientByIdHandler
 
         if (patient is null)
         {
-            return Result<Patient>.Failure(
+            return Result<PatientResponse>.Failure(
                 new Error(
                     "Patient.NotFound",
                     "Patient was not found."));
         }
 
-        return Result<Patient>.Success(patient);
+        return Result<PatientResponse>.Success(
+            patient.ToResponse());
     }
 }

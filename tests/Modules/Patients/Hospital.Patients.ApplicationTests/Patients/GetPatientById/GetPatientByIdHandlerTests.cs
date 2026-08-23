@@ -36,12 +36,20 @@ public sealed class GetPatientByIdHandlerTests
         Assert.True(result.IsSuccess);
 
         Assert.Equal(
-            patient.Id,
+            patient.Id.Value,
             result.Value.Id);
 
         Assert.Equal(
             "João da Silva",
             result.Value.Name);
+
+        Assert.Equal(
+            patient.BirthDate,
+            result.Value.BirthDate);
+
+        Assert.Equal(
+            patient.Gender.ToString(),
+            result.Value.Gender);
     }
 
     [Fact]
