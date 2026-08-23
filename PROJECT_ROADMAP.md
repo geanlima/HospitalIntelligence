@@ -318,11 +318,11 @@ O conceito será introduzido quando tivermos casos reais como:
 
 ### Validação final da fase
 
-- [ ] Confirmar execução final de `dotnet test`
-- [ ] Confirmar execução final de `dotnet build`
-- [ ] Atualizar `PROJECT_ROADMAP.md`
-- [ ] Commit da Fase 3
-- [ ] Push para `origin/main`
+- [x] Confirmar execução final de `dotnet test`
+- [x] Confirmar execução final de `dotnet build`
+- [x] Atualizar `PROJECT_ROADMAP.md`
+- [x] Commit da Fase 3
+- [x] Push para `origin/main`
 
 
 ---
