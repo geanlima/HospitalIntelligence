@@ -12,6 +12,7 @@
   </Folder>
   <Folder Name="/src/" />
   <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/Hospital.Integration/Hospital.Integration.csproj" />
     <Project Path="src/BuildingBlocks/Hospital.SharedKernel/Hospital.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/src/Hosts/">
@@ -26,6 +27,7 @@
   </Folder>
   <Folder Name="/tests/" />
   <Folder Name="/tests/BuildingBlocks/">
+    <Project Path="tests/BuildingBlocks/Hospital.Integration.UnitTests/Hospital.Integration.UnitTests.csproj" />
     <Project Path="tests/BuildingBlocks/Hospital.SharedKernel.UnitTests/Hospital.SharedKernel.UnitTests.csproj" />
   </Folder>
   <Folder Name="/tests/Modules/" />

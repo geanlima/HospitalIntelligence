@@ -37,9 +37,9 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 3 | Patients Application | ✅ Concluída |
 | 4 | Patients Contracts | ✅ Concluída |
 | 5 | Patients Infrastructure | ✅ Concluída |
-| 6 | Hospital.Api | 🟡 95% — aguardando validação final |
-| 7 | PostgreSQL + Docker | ⬜ Não iniciada |
-| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio e Application concluídos; integração pendente |
+| 6 | Hospital.Api | 🟡 95% — implementação validada; commit/push pendente |
+| 7 | PostgreSQL + Docker | 🟡 95% — implementação e testes concluídos; fechamento pendente |
+| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio, Application e Repository integration concluídos; API tests pendentes |
 | 9 | Integration Core | ⬜ Não iniciada |
 | 10 | Mock Hospital | ⬜ Não iniciada |
 | 11 | Salux Connector | ⬜ Não iniciada |
@@ -476,7 +476,7 @@ Essa separação mantém a Fase 5 focada em código, persistência e configuraç
 
 # Fase 6 — Hospital.Api
 
-## Status: 🟡 95% concluída — aguardando validação final
+## Status: 🟡 95% concluída — implementação validada; commit/push pendente
 
 ### Projeto e referências
 
@@ -554,37 +554,79 @@ A validação ponta a ponta com persistência real será realizada na Fase 7 —
 
 # Fase 7 — PostgreSQL + Docker
 
-## Status: 🟡 Próxima fase
+## Status: 🟡 95% concluída — implementação e testes concluídos; fechamento pendente
 
 ### Docker / PostgreSQL
 
-- [ ] Criar `docker-compose.yml`
-- [ ] Adicionar serviço PostgreSQL
-- [ ] Definir imagem PostgreSQL
-- [ ] Configurar volume persistente
-- [ ] Configurar usuário e senha de desenvolvimento
-- [ ] Criar banco `hospital_intelligence`
-- [ ] Expor porta `5432`
+- [x] Criar `docker-compose.yml`
+- [x] Adicionar serviço PostgreSQL
+- [x] Usar imagem `postgres:17`
+- [x] Configurar volume persistente
+- [x] Configurar usuário e senha de desenvolvimento
+- [x] Criar banco `hospital_intelligence`
+- [x] Expor porta `5432`
+- [x] Adicionar healthcheck
+- [x] Subir container `hospital-postgres`
+- [x] Confirmar container como `healthy`
 
 ### Integração com EF Core
 
-- [ ] Configurar `HOSPITAL_PATIENTS_CONNECTION_STRING`
-- [ ] Subir container do PostgreSQL
-- [ ] Executar migration `InitialPatients`
-- [ ] Executar `dotnet ef database update`
-- [ ] Validar `__EFMigrationsHistory`
-- [ ] Validar tabela `patients`
-- [ ] Validar índice único `ux_patients_external_identifier`
+- [x] Configurar `HOSPITAL_PATIENTS_CONNECTION_STRING`
+- [x] Executar `dotnet ef database update`
+- [x] Aplicar migration `20260823154226_InitialPatients`
+- [x] Validar `__EFMigrationsHistory`
+- [x] Validar tabela `patients`
+- [x] Validar `PK_patients`
+- [x] Validar índice único `ux_patients_external_identifier`
 
-### Testes reais de persistência
+### Validação ponta a ponta da API
 
-- [ ] Criar testes de integração da Infrastructure
-- [ ] Testar `AddAsync`
-- [ ] Testar `GetByIdAsync`
-- [ ] Testar `GetByExternalIdAsync`
-- [ ] Testar `SearchAsync`
-- [ ] Testar `UpdateAsync`
-- [ ] Validar constraint de identificação externa duplicada
+- [x] Executar `Hospital.Api` conectada ao PostgreSQL
+- [x] Criar paciente via `POST /patients`
+- [x] Consultar paciente via `GET /patients/{id}`
+- [x] Pesquisar paciente via `GET /patients?name=...`
+- [x] Atualizar paciente via `PUT /patients/{id}`
+- [x] Sincronizar paciente via `POST /patients/synchronize`
+- [x] Confirmar persistência real no PostgreSQL
+
+### Testes de integração da Infrastructure
+
+- [x] Criar `Hospital.Patients.IntegrationTests`
+- [x] Adicionar projeto à Solution
+- [x] Referenciar Infrastructure e Domain
+- [x] Testar `AddAsync`
+- [x] Testar `GetByIdAsync`
+- [x] Testar `GetByExternalIdAsync`
+- [x] Testar `SearchAsync`
+- [x] Testar `UpdateAsync`
+- [x] Validar constraint de identificação externa duplicada
+- [x] Executar os testes contra PostgreSQL real
+
+### Fechamento
+
+- [x] Executar `dotnet build`
+- [x] Executar `dotnet test`
+- [x] Revisar `git status`
+- [x] Commit da Fase 7
+- [x] Push para `origin/main`
+
+### Resultado da fase
+
+Ao final da Fase 7, o módulo Patients possui persistência real validada de ponta a ponta:
+
+```text
+Swagger / HTTP
+      ↓
+Hospital.Api
+      ↓
+Patients.Application
+      ↓
+Patients.Infrastructure
+      ↓
+Entity Framework Core / Npgsql
+      ↓
+PostgreSQL em Docker
+```
 
 
 ---
@@ -611,15 +653,17 @@ A validação ponta a ponta com persistência real será realizada na Fase 7 —
 
 ## Integration
 
-- [ ] Testes com PostgreSQL
-- [ ] Testes de Repository
-- [ ] Testes da API
+- [x] Criar `Hospital.Patients.IntegrationTests`
+- [x] Testes com PostgreSQL real
+- [x] Testes de `PatientRepository`
+- [x] Persistência, busca, atualização e unicidade
+- [x] Testes automatizados dos endpoints da API
 
 ## Architecture Tests
 
-- [ ] Criar testes que impeçam `Domain -> Infrastructure`
-- [ ] Impedir `Domain -> EF Core`
-- [ ] Impedir `Domain -> Salux`
+- [x] Criar testes que impeçam `Domain -> Infrastructure`
+- [x] Impedir `Domain -> EF Core`
+- [x] Impedir `Domain -> Salux`
 
 ---
 
@@ -845,21 +889,22 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fechamento da Fase 6 — Hospital.Api
+## Fechamento da Fase 7 — PostgreSQL + Docker
+
+A implementação e os testes principais da Fase 7 estão concluídos.
 
 Antes de avançar:
 
-1. executar a `Hospital.Api`;
-2. abrir o Swagger UI;
-3. confirmar os 5 endpoints de Patients;
-4. executar `dotnet build`;
-5. executar `dotnet test`;
-6. revisar `git status`;
-7. fazer commit;
-8. fazer push para `origin/main`.
+1. executar `dotnet build`;
+2. executar `dotnet test`;
+3. revisar `git status`;
+4. confirmar que os arquivos pertencem às Fases 6 e 7;
+5. fazer os commits pendentes;
+6. fazer push para `origin/main`;
+7. atualizar este roadmap para marcar a Fase 7 como ✅ 100%.
 
-Após essa validação:
+Após o fechamento, o próximo passo oficial será:
 
-## Fase 7 — PostgreSQL + Docker
+## Fase 8 — Testes
 
-Objetivo: subir PostgreSQL em Docker, aplicar a migration `InitialPatients` e validar a persistência real do módulo Patients.
+O foco pendente da Fase 8 será completar os testes automatizados da API e, em seguida, criar testes de arquitetura para proteger as dependências da Clean Architecture.
