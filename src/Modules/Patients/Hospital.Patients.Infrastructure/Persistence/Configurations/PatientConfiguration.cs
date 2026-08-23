@@ -15,25 +15,32 @@ public sealed class PatientConfiguration
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
+            .HasColumnName("id")
             .HasConversion(
                 id => id.Value,
                 value => new PatientId(value))
             .ValueGeneratedNever();
 
         builder.Property(x => x.Name)
+            .HasColumnName("name")
             .HasMaxLength(200)
             .IsRequired();
 
         builder.Property(x => x.BirthDate)
+            .HasColumnName("birth_date")
             .IsRequired();
 
         builder.Property(x => x.Gender)
+            .HasColumnName("gender")
+            .HasConversion<int>()
             .IsRequired();
 
         builder.Property(x => x.CreatedAtUtc)
+            .HasColumnName("created_at_utc")
             .IsRequired();
 
         builder.Property(x => x.UpdatedAtUtc)
+            .HasColumnName("updated_at_utc")
             .IsRequired();
 
         builder.OwnsOne(
@@ -49,12 +56,14 @@ public sealed class PatientConfiguration
                     .HasMaxLength(100);
 
                 owned.HasIndex(
-                    x => new
-                    {
-                        x.SourceSystem,
-                        x.ExternalId
-                    })
-                    .IsUnique();
+                        x => new
+                        {
+                            x.SourceSystem,
+                            x.ExternalId
+                        })
+                    .IsUnique()
+                    .HasDatabaseName(
+                        "ux_patients_external_identifier");
             });
     }
 }

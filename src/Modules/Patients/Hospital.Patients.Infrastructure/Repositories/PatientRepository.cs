@@ -31,13 +31,44 @@ public sealed class PatientRepository
         string externalId,
         CancellationToken cancellationToken = default)
     {
+        var normalizedSourceSystem =
+            sourceSystem.Trim();
+
+        var normalizedExternalId =
+            externalId.Trim();
+
         return await _context.Patients
             .FirstOrDefaultAsync(
                 x =>
                     x.ExternalIdentifier != null &&
-                    x.ExternalIdentifier.SourceSystem == sourceSystem &&
-                    x.ExternalIdentifier.ExternalId == externalId,
+                    x.ExternalIdentifier.SourceSystem == normalizedSourceSystem &&
+                    x.ExternalIdentifier.ExternalId == normalizedExternalId,
                 cancellationToken);
+    }
+
+    public async Task<IReadOnlyCollection<Patient>> SearchAsync(
+        string? name,
+        CancellationToken cancellationToken = default)
+    {
+        var query =
+            _context.Patients
+                .AsNoTracking()
+                .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            var normalizedName =
+                name.Trim();
+
+            query = query.Where(
+                x => EF.Functions.ILike(
+                    x.Name,
+                    $"%{normalizedName}%"));
+        }
+
+        return await query
+            .OrderBy(x => x.Name)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task AddAsync(
@@ -52,33 +83,10 @@ public sealed class PatientRepository
             cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<Patient>> SearchAsync(
-    string? name,
-    CancellationToken cancellationToken = default)
-    {
-        var query =
-            _context.Patients
-                .AsNoTracking()
-                .AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            query = query.Where(x =>
-                EF.Functions.ILike(
-                    x.Name,
-                    $"%{name.Trim()}%"));
-        }
-
-        return await query
-            .OrderBy(x => x.Name)
-            .ToListAsync(cancellationToken);
-    }
     public async Task UpdateAsync(
-    Patient patient,
-    CancellationToken cancellationToken = default)
+        Patient patient,
+        CancellationToken cancellationToken = default)
     {
-        _context.Patients.Update(patient);
-
         await _context.SaveChangesAsync(
             cancellationToken);
     }
