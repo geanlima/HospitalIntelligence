@@ -17,7 +17,8 @@ public sealed class PatientConfiguration
         builder.Property(x => x.Id)
             .HasConversion(
                 id => id.Value,
-                value => new PatientId(value));
+                value => new PatientId(value))
+            .ValueGeneratedNever();
 
         builder.Property(x => x.Name)
             .HasMaxLength(200)
@@ -27,15 +28,7 @@ public sealed class PatientConfiguration
             .IsRequired();
 
         builder.Property(x => x.Gender)
-            .HasConversion<string>()
-            .HasMaxLength(20)
             .IsRequired();
-
-        builder.Property(x => x.ExternalId)
-            .HasMaxLength(100);
-
-        builder.Property(x => x.SourceSystem)
-            .HasMaxLength(50);
 
         builder.Property(x => x.CreatedAtUtc)
             .IsRequired();
@@ -43,14 +36,25 @@ public sealed class PatientConfiguration
         builder.Property(x => x.UpdatedAtUtc)
             .IsRequired();
 
-        builder.HasIndex(
-                x => new
-                {
-                    x.SourceSystem,
-                    x.ExternalId
-                })
-            .IsUnique()
-            .HasFilter(
-                "\"SourceSystem\" IS NOT NULL AND \"ExternalId\" IS NOT NULL");
+        builder.OwnsOne(
+            x => x.ExternalIdentifier,
+            owned =>
+            {
+                owned.Property(x => x.SourceSystem)
+                    .HasColumnName("source_system")
+                    .HasMaxLength(50);
+
+                owned.Property(x => x.ExternalId)
+                    .HasColumnName("external_id")
+                    .HasMaxLength(100);
+
+                owned.HasIndex(
+                    x => new
+                    {
+                        x.SourceSystem,
+                        x.ExternalId
+                    })
+                    .IsUnique();
+            });
     }
 }

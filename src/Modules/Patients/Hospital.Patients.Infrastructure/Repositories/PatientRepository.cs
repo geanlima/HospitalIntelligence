@@ -34,8 +34,9 @@ public sealed class PatientRepository
         return await _context.Patients
             .FirstOrDefaultAsync(
                 x =>
-                    x.SourceSystem == sourceSystem &&
-                    x.ExternalId == externalId,
+                    x.ExternalIdentifier != null &&
+                    x.ExternalIdentifier.SourceSystem == sourceSystem &&
+                    x.ExternalIdentifier.ExternalId == externalId,
                 cancellationToken);
     }
 

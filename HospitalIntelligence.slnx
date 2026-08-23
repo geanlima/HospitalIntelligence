@@ -1,20 +1,31 @@
 <Solution>
+  <Folder Name="/docs/">
+    <File Path="PROJECT_ROADMAP.md" />
+  </Folder>
+  <Folder Name="/docs/adr/">
+    <File Path="0003-result-pattern.md" />
+    <File Path="0004-domain-events.md" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/" />
   <Folder Name="/src/BuildingBlocks/">
-    <Project Path="src/BuildingBlocks/Hospital.SharedKernel/Hospital.SharedKernel.csproj" />
+    <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/src/BuildingBlocks/Hospital.SharedKernel/Hospital.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Patients/">
-    <Project Path="src/Modules/Patients/Hospital.Patients.Application/Hospital.Patients.Application.csproj" />
-    <Project Path="src/Modules/Patients/Hospital.Patients.Contracts/Hospital.Patients.Contracts.csproj" />
-    <Project Path="src/Modules/Patients/Hospital.Patients.Domain/Hospital.Patients.Domain.csproj" />
-    <Project Path="src/Modules/Patients/Hospital.Patients.Infrastructure/Hospital.Patients.Infrastructure.csproj" />
+    <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/src/Modules/Patients/Hospital.Patients.Application/Hospital.Patients.Application.csproj" />
+    <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/src/Modules/Patients/Hospital.Patients.Contracts/Hospital.Patients.Contracts.csproj" />
+    <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/src/Modules/Patients/Hospital.Patients.Domain/Hospital.Patients.Domain.csproj" />
+    <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/src/Modules/Patients/Hospital.Patients.Infrastructure/Hospital.Patients.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/" />
   <Folder Name="/tests/BuildingBlocks/">
-    <Project Path="tests/BuildingBlocks/Hospital.SharedKernel.UnitTests/Hospital.SharedKernel.UnitTests.csproj" />
+    <Project Path="../../../../../../../../Projetos/GSL/HospitalIntelligence/tests/BuildingBlocks/Hospital.SharedKernel.UnitTests/Hospital.SharedKernel.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/" />
+  <Folder Name="/tests/Modules/Patients/">
+    <Project Path="tests/Modules/Patients/Hospital.Patients.UnitTests/Hospital.Patients.UnitTests.csproj" />
   </Folder>
 </Solution>
