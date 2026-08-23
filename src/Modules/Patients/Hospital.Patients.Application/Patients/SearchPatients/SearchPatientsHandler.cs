@@ -1,5 +1,6 @@
 ﻿using Hospital.Patients.Application.Abstractions;
-using Hospital.Patients.Domain.Patients;
+using Hospital.Patients.Application.Patients.Mappings;
+using Hospital.Patients.Contracts.Patients;
 using Hospital.SharedKernel.Application;
 
 namespace Hospital.Patients.Application.Patients.SearchPatients;
@@ -14,7 +15,7 @@ public sealed class SearchPatientsHandler
         _patientRepository = patientRepository;
     }
 
-    public async Task<Result<IReadOnlyCollection<Patient>>> HandleAsync(
+    public async Task<Result<IReadOnlyCollection<PatientResponse>>> HandleAsync(
         SearchPatientsQuery query,
         CancellationToken cancellationToken = default)
     {
@@ -23,7 +24,13 @@ public sealed class SearchPatientsHandler
                 query.Name,
                 cancellationToken);
 
-        return Result<IReadOnlyCollection<Patient>>.Success(
-            patients);
+        var response =
+            patients
+                .Select(x => x.ToResponse())
+                .ToList()
+                .AsReadOnly();
+
+        return Result<IReadOnlyCollection<PatientResponse>>
+            .Success(response);
     }
 }

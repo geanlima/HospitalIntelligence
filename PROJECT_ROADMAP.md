@@ -34,12 +34,12 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 0 | Fundação | ✅ Concluída |
 | 1 | Arquitetura Base / SharedKernel | ✅ Concluída |
 | 2 | Patient Domain | ✅ Concluída |
-| 3 | Patients Application | 🟡 95% — aguardando validação final |
-| 4 | Patients Contracts | 🟡 Estrutura criada |
+| 3 | Patients Application | ✅ Concluída |
+| 4 | Patients Contracts | ✅ Concluída |
 | 5 | Patients Infrastructure | 🟡 Parcialmente iniciada |
 | 6 | Hospital.Api | ⬜ Não iniciada |
 | 7 | PostgreSQL + Docker | ⬜ Não iniciada |
-| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio e Application concluídos |
+| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio e Application concluídos; integração pendente |
 | 9 | Integration Core | ⬜ Não iniciada |
 | 10 | Mock Hospital | ⬜ Não iniciada |
 | 11 | Salux Connector | ⬜ Não iniciada |
@@ -226,7 +226,7 @@ O conceito será introduzido quando tivermos casos reais como:
 
 # Fase 3 — Patients Application
 
-## Status: 🟡 95% concluída — aguardando validação final
+## Status: ✅ 100% concluída
 
 ### Estrutura base
 
@@ -321,21 +321,79 @@ O conceito será introduzido quando tivermos casos reais como:
 - [x] Confirmar execução final de `dotnet test`
 - [x] Confirmar execução final de `dotnet build`
 - [x] Atualizar `PROJECT_ROADMAP.md`
-- [x] Commit da Fase 3
-- [x] Push para `origin/main`
+- [x] Fase 3 preparada para commit/push final
 
 
 ---
 
 # Fase 4 — Patients Contracts
 
-## Status: 🟡 Estrutura criada
+## Status: ✅ 100% concluída
+
+### Projeto e dependências
 
 - [x] Criar `Hospital.Patients.Contracts`
-- [ ] Criar `PatientResponse`
-- [ ] Criar contratos de criação
-- [ ] Criar contratos de atualização
-- [ ] Criar Integration Events públicos
+- [x] Adicionar à Solution
+- [x] Referenciar `Hospital.Patients.Contracts` pela Application
+- [x] Manter `Hospital.Patients.Contracts` sem dependência do Domain
+- [x] Manter `Hospital.Patients.Contracts` sem dependência da Application
+- [x] Manter `Hospital.Patients.Contracts` sem dependência da Infrastructure
+
+### Contratos de saída
+
+- [x] Criar `PatientResponse`
+- [x] Expor tipos simples (`Guid`, `string`, `DateOnly`, `DateTimeOffset`)
+- [x] Não expor `Patient`, `PatientId`, `Gender` ou `ExternalPatientIdentifier`
+- [x] Criar mapeamento `Patient -> PatientResponse`
+- [x] Alterar `GetPatientByIdHandler` para retornar `PatientResponse`
+- [x] Alterar `SearchPatientsHandler` para retornar coleção de `PatientResponse`
+- [x] Ajustar testes afetados pelo novo contrato de saída
+
+### Contratos de entrada
+
+- [x] Criar `CreatePatientRequest`
+- [x] Criar `UpdatePatientRequest`
+- [x] Criar `SearchPatientsRequest`
+- [x] Criar `SynchronizeExternalPatientRequest`
+- [x] Criar `PatientRequestMappings`
+- [x] Mapear `CreatePatientRequest -> CreatePatientCommand`
+- [x] Mapear `UpdatePatientRequest -> UpdatePatientCommand`
+- [x] Mapear `SearchPatientsRequest -> SearchPatientsQuery`
+- [x] Mapear `SynchronizeExternalPatientRequest -> SynchronizeExternalPatientCommand`
+- [x] Validar conversão do valor de `Gender`
+
+### Integration Events públicos
+
+- [x] Criar `PatientCreatedIntegrationEvent`
+- [x] Criar `PatientUpdatedIntegrationEvent`
+- [x] Manter os eventos com tipos públicos simples
+- [x] Definir contratos agora e adiar publicação para a infraestrutura de eventos
+- [x] Diferenciar Domain Events internos de Integration Events públicos
+
+### Testes e validação
+
+- [x] Criar testes de mappings dos Requests
+- [x] Validar `GetPatientById` com `PatientResponse`
+- [x] Validar `SearchPatients` com `PatientResponse`
+- [x] Executar `dotnet build`
+- [x] Executar `dotnet test`
+
+### Resultado arquitetural
+
+O módulo de Patients agora possui uma fronteira pública clara:
+
+```text
+Domain
+  ↓
+Application
+  ↓
+Contracts
+  ↓
+API / outros módulos / integrações
+```
+
+Entidades e Value Objects do Domain permanecem internos ao módulo.
+
 
 ---
 
@@ -657,25 +715,21 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fechamento da Fase 3 — Patients Application
+## Fase 5 — Patients Infrastructure
 
-Antes de avançar:
+Objetivo: consolidar a persistência do módulo Patients e preparar a conexão real com PostgreSQL.
 
-1. executar `dotnet test`;
-2. executar `dotnet build`;
-3. confirmar todos os testes verdes;
-4. revisar `git status`;
-5. criar commit da Fase 3;
-6. executar push para `origin/main`.
+Próximos passos:
 
-Após essa validação:
+1. revisar `Hospital.Patients.Infrastructure`;
+2. revisar `PatientsDbContext`;
+3. revisar `PatientConfiguration`;
+4. validar o mapeamento de `PatientId`;
+5. validar o mapeamento de `ExternalPatientIdentifier`;
+6. revisar índices e restrições de unicidade;
+7. revisar `PatientRepository`;
+8. preparar migrations do EF Core;
+9. validar persistência com PostgreSQL;
+10. criar testes de integração da Infrastructure.
 
-## Fase 4 — Patients Contracts
-
-Objetivo inicial:
-
-1. revisar a responsabilidade do projeto `Hospital.Patients.Contracts`;
-2. criar `PatientResponse`;
-3. criar contratos de criação e atualização;
-4. separar contratos públicos dos tipos internos do Domain;
-5. preparar Integration Events públicos do módulo.
+A Fase 5 já possui estrutura parcial, portanto o trabalho inicial será de revisão e consolidação, não de criação do zero.

@@ -37,7 +37,10 @@ public sealed class SearchPatientsHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Equal(2, result.Value.Count);
+
+        Assert.Equal(
+            2,
+            result.Value.Count);
     }
 
     [Fact]
@@ -47,11 +50,13 @@ public sealed class SearchPatientsHandlerTests
         var repository =
             new FakePatientRepository();
 
-        await repository.AddAsync(
+        var joao =
             Patient.Create(
                 "João da Silva",
                 new DateOnly(1990, 5, 10),
-                Gender.Male));
+                Gender.Male);
+
+        await repository.AddAsync(joao);
 
         await repository.AddAsync(
             Patient.Create(
@@ -63,7 +68,8 @@ public sealed class SearchPatientsHandlerTests
             new SearchPatientsHandler(repository);
 
         var query =
-            new SearchPatientsQuery("João");
+            new SearchPatientsQuery(
+                "João");
 
         // Act
         var result =
@@ -71,10 +77,28 @@ public sealed class SearchPatientsHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Single(result.Value);
+
+        Assert.Single(
+            result.Value);
+
+        var response =
+            result.Value.Single();
+
+        Assert.Equal(
+            joao.Id.Value,
+            response.Id);
+
         Assert.Equal(
             "João da Silva",
-            result.Value.Single().Name);
+            response.Name);
+
+        Assert.Equal(
+            joao.BirthDate,
+            response.BirthDate);
+
+        Assert.Equal(
+            joao.Gender.ToString(),
+            response.Gender);
     }
 
     [Fact]
@@ -94,7 +118,8 @@ public sealed class SearchPatientsHandlerTests
             new SearchPatientsHandler(repository);
 
         var query =
-            new SearchPatientsQuery("Carlos");
+            new SearchPatientsQuery(
+                "Carlos");
 
         // Act
         var result =
@@ -102,6 +127,8 @@ public sealed class SearchPatientsHandlerTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Empty(result.Value);
+
+        Assert.Empty(
+            result.Value);
     }
 }
