@@ -45,3 +45,5 @@ app.MapUpdatePatientEndpoint();
 app.MapSynchronizeExternalPatientEndpoint();
 
 app.Run();
+
+public partial class Program;
