@@ -34,12 +34,12 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 0 | Fundação | ✅ Concluída |
 | 1 | Arquitetura Base / SharedKernel | ✅ Concluída |
 | 2 | Patient Domain | ✅ Concluída |
-| 3 | Patients Application | 🟡 Parcialmente iniciada |
+| 3 | Patients Application | 🟡 95% — aguardando validação final |
 | 4 | Patients Contracts | 🟡 Estrutura criada |
 | 5 | Patients Infrastructure | 🟡 Parcialmente iniciada |
 | 6 | Hospital.Api | ⬜ Não iniciada |
 | 7 | PostgreSQL + Docker | ⬜ Não iniciada |
-| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio concluído |
+| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio e Application concluídos |
 | 9 | Integration Core | ⬜ Não iniciada |
 | 10 | Mock Hospital | ⬜ Não iniciada |
 | 11 | Salux Connector | ⬜ Não iniciada |
@@ -226,25 +226,104 @@ O conceito será introduzido quando tivermos casos reais como:
 
 # Fase 3 — Patients Application
 
-## Status: 🟡 Parcialmente iniciada
+## Status: 🟡 95% concluída — aguardando validação final
 
-### Já criado
+### Estrutura base
 
 - [x] `Hospital.Patients.Application`
 - [x] `Abstractions`
 - [x] `IPatientRepository`
+- [x] `GetByIdAsync`
+- [x] `GetByExternalIdAsync`
+- [x] `SearchAsync`
+- [x] `AddAsync`
+- [x] `UpdateAsync`
 
-### Pendente
+### Caso de uso — CreatePatient
 
-- [ ] `CreatePatientCommand`
-- [ ] `CreatePatientHandler`
-- [ ] `CreatePatientResult`
-- [ ] `GetPatientByIdQuery`
-- [ ] `GetPatientByIdHandler`
-- [ ] `SearchPatientsQuery`
-- [ ] `UpdatePatientCommand`
-- [ ] `SynchronizeExternalPatientCommand`
-- [ ] Testes da Application
+- [x] `CreatePatientCommand`
+- [x] `CreatePatientHandler`
+- [x] Criar paciente sem identificação externa
+- [x] Criar paciente com identificação externa
+- [x] Validar `SourceSystem + ExternalId`
+- [x] Verificar duplicidade por identificador externo
+- [x] Retornar `Result<PatientId>`
+- [x] Padronizar erro `Patient.ExternalIdentifier.Invalid`
+- [x] Padronizar erro `Patient.ExternalIdentifier.AlreadyExists`
+- [x] Testes do `CreatePatientHandler`
+
+### Caso de uso — GetPatientById
+
+- [x] `GetPatientByIdQuery`
+- [x] `GetPatientByIdHandler`
+- [x] Consultar paciente por `PatientId`
+- [x] Retornar `Patient.NotFound` quando não encontrado
+- [x] Testes de paciente encontrado
+- [x] Testes de paciente não encontrado
+
+### Caso de uso — SearchPatients
+
+- [x] `SearchPatientsQuery`
+- [x] `SearchPatientsHandler`
+- [x] Busca sem filtro
+- [x] Busca parcial por nome
+- [x] Retorno de coleção vazia quando não há resultados
+- [x] `SearchAsync` no `FakePatientRepository`
+- [x] `SearchAsync` no `PatientRepository`
+- [x] Testes de busca
+
+### Caso de uso — UpdatePatient
+
+- [x] `UpdatePatientCommand`
+- [x] `UpdatePatientHandler`
+- [x] Buscar paciente antes da atualização
+- [x] Retornar `Patient.NotFound`
+- [x] Atualizar nome via `Patient.ChangeName`
+- [x] Atualizar nascimento via `Patient.ChangeBirthDate`
+- [x] Atualizar gênero via `Patient.ChangeGender`
+- [x] `UpdateAsync` no `IPatientRepository`
+- [x] `UpdateAsync` no `FakePatientRepository`
+- [x] `UpdateAsync` no `PatientRepository`
+- [x] Testes de atualização válida
+- [x] Testes de paciente inexistente
+- [x] Testes das invariantes do Domain durante atualização
+
+### Caso de uso — SynchronizeExternalPatient
+
+- [x] `SynchronizeExternalPatientCommand`
+- [x] `SynchronizeExternalPatientHandler`
+- [x] Criar paciente quando a identificação externa não existe
+- [x] Atualizar paciente quando a identificação externa já existe
+- [x] Manter o mesmo `PatientId` em sincronizações
+- [x] Utilizar `ExternalPatientIdentifier`
+- [x] Testar origem externa inválida
+- [x] Criar `SynchronizeExternalPatientHandlerTests`
+
+### Testes da Application
+
+- [x] Criar `Hospital.Patients.ApplicationTests`
+- [x] Criar `FakePatientRepository`
+- [x] Separar testes de Domain e Application
+- [x] Testes de `CreatePatient`
+- [x] Testes de `GetPatientById`
+- [x] Testes de `SearchPatients`
+- [x] Testes de `UpdatePatient`
+- [x] Testes de `SynchronizeExternalPatient`
+
+### Padronização de erros
+
+- [x] `Patient.NotFound`
+- [x] `Patient.ExternalIdentifier.Invalid`
+- [x] `Patient.ExternalIdentifier.AlreadyExists`
+
+### Validação final da fase
+
+- [ ] Confirmar execução final de `dotnet test`
+- [ ] Confirmar execução final de `dotnet build`
+- [ ] Atualizar `PROJECT_ROADMAP.md`
+- [ ] Commit da Fase 3
+- [ ] Push para `origin/main`
+
 
 ---
 
@@ -334,9 +413,13 @@ O conceito será introduzido quando tivermos casos reais como:
 
 ## Application
 
-- [ ] `Hospital.Patients.ApplicationTests`
-- [ ] Fake Repository
-- [ ] Testes dos Handlers
+- [x] `Hospital.Patients.ApplicationTests`
+- [x] `FakePatientRepository`
+- [x] Testes de `CreatePatientHandler`
+- [x] Testes de `GetPatientByIdHandler`
+- [x] Testes de `SearchPatientsHandler`
+- [x] Testes de `UpdatePatientHandler`
+- [x] Testes de `SynchronizeExternalPatientHandler`
 
 ## Integration
 
@@ -574,17 +657,25 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fase 3 — Patients Application
+## Fechamento da Fase 3 — Patients Application
 
-Objetivo imediato:
+Antes de avançar:
 
-1. revisar o papel da camada `Application`;
-2. definir o primeiro caso de uso de criação de paciente;
-3. criar `CreatePatientCommand`;
-4. criar `CreatePatientHandler`;
-5. utilizar `Result` / `Result<T>` para erros esperados;
-6. criar `GetPatientByIdQuery`;
-7. criar `GetPatientByIdHandler`;
-8. criar testes da camada Application;
-9. executar `dotnet test` e `dotnet build`;
-10. documentar e versionar a Fase 3.
+1. executar `dotnet test`;
+2. executar `dotnet build`;
+3. confirmar todos os testes verdes;
+4. revisar `git status`;
+5. criar commit da Fase 3;
+6. executar push para `origin/main`.
+
+Após essa validação:
+
+## Fase 4 — Patients Contracts
+
+Objetivo inicial:
+
+1. revisar a responsabilidade do projeto `Hospital.Patients.Contracts`;
+2. criar `PatientResponse`;
+3. criar contratos de criação e atualização;
+4. separar contratos públicos dos tipos internos do Domain;
+5. preparar Integration Events públicos do módulo.
