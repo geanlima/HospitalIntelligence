@@ -463,11 +463,11 @@ A Fase 5 encerra a implementação da camada de Infrastructure e a preparação 
 
 Os itens que dependem de um PostgreSQL real foram movidos para a Fase 7:
 
-- [ ] subir PostgreSQL com Docker;
-- [ ] aplicar `database update`;
-- [ ] validar tabela `patients`;
-- [ ] validar `__EFMigrationsHistory`;
-- [ ] executar testes de integração com PostgreSQL real.
+- [x] subir PostgreSQL com Docker;
+- [x] aplicar `database update`;
+- [x] validar tabela `patients`;
+- [x] validar `__EFMigrationsHistory`;
+- [x] executar testes de integração com PostgreSQL real.
 
 Essa separação mantém a Fase 5 focada em código, persistência e configuração, enquanto a Fase 7 fica responsável pelo ambiente de banco e Docker.
 
@@ -671,13 +671,13 @@ PostgreSQL em Docker
 
 ## Status: ⬜ Não iniciada
 
-- [ ] Criar `Hospital.Integration.Core`
-- [ ] Criar contratos de integração
-- [ ] Criar modelo canônico
-- [ ] Criar abstrações de fontes externas
-- [ ] Criar checkpoints
-- [ ] Criar estratégia de idempotência
-- [ ] Criar logs e retry
+- [x] Criar `Hospital.Integration.Core`
+- [x] Criar contratos de integração
+- [x] Criar modelo canônico
+- [x] Criar abstrações de fontes externas
+- [x] Criar checkpoints
+- [x] Criar estratégia de idempotência
+- [x] Criar logs e retry
 
 ---
 

@@ -18,6 +18,9 @@
   <Folder Name="/src/Hosts/">
     <Project Path="src/Hosts/Hospital.Api/Hospital.Api.csproj" />
   </Folder>
+  <Folder Name="/src/Integrations/">
+    <Project Path="src/Integrations/Hospital.MockHospital/Hospital.MockHospital.csproj" />
+  </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Patients/">
     <Project Path="src/Modules/Patients/Hospital.Patients.Application/Hospital.Patients.Application.csproj" />
@@ -29,6 +32,9 @@
   <Folder Name="/tests/BuildingBlocks/">
     <Project Path="tests/BuildingBlocks/Hospital.Integration.UnitTests/Hospital.Integration.UnitTests.csproj" />
     <Project Path="tests/BuildingBlocks/Hospital.SharedKernel.UnitTests/Hospital.SharedKernel.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Integrations/">
+    <Project Path="tests/Integrations/Hospital.MockHospital.UnitTests/Hospital.MockHospital.UnitTests.csproj" />
   </Folder>
   <Folder Name="/tests/Modules/" />
   <Folder Name="/tests/Modules/Patients/">
