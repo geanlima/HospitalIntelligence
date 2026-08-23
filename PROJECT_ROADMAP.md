@@ -36,8 +36,8 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 2 | Patient Domain | ✅ Concluída |
 | 3 | Patients Application | ✅ Concluída |
 | 4 | Patients Contracts | ✅ Concluída |
-| 5 | Patients Infrastructure | 🟡 Parcialmente iniciada |
-| 6 | Hospital.Api | ⬜ Não iniciada |
+| 5 | Patients Infrastructure | ✅ Concluída |
+| 6 | Hospital.Api | 🟡 95% — aguardando validação final |
 | 7 | PostgreSQL + Docker | ⬜ Não iniciada |
 | 8 | Testes de domínio/aplicação/integração | 🟡 Domínio e Application concluídos; integração pendente |
 | 9 | Integration Core | ⬜ Não iniciada |
@@ -399,63 +399,193 @@ Entidades e Value Objects do Domain permanecem internos ao módulo.
 
 # Fase 5 — Patients Infrastructure
 
-## Status: 🟡 Parcialmente iniciada
+## Status: ✅ 100% concluída
 
-### Já criado
+### Projeto e persistência
 
 - [x] `Hospital.Patients.Infrastructure`
 - [x] Entity Framework Core
 - [x] EF Core Design
 - [x] Npgsql
 - [x] `PatientsDbContext`
+- [x] `DbSet<Patient>`
+- [x] `ApplyConfigurationsFromAssembly`
+
+### Mapeamento EF Core
+
 - [x] `PatientConfiguration`
-- [x] `PatientRepository`
-- [x] Implementação de `IPatientRepository`
-- [x] Dependency Injection inicial
+- [x] Mapear `Patient` para tabela `patients`
+- [x] Mapear `PatientId` para `Guid/uuid`
+- [x] Usar `ValueGeneratedNever()` para o ID
+- [x] Mapear `Name`
+- [x] Mapear `BirthDate`
+- [x] Mapear `Gender` como inteiro
+- [x] Mapear `CreatedAtUtc`
+- [x] Mapear `UpdatedAtUtc`
+- [x] Mapear `ExternalPatientIdentifier` com `OwnsOne`
+- [x] Mapear `SourceSystem`
+- [x] Mapear `ExternalId`
+- [x] Criar índice único `(SourceSystem, ExternalId)`
+- [x] Nomear índice `ux_patients_external_identifier`
+- [x] Permitir `ExternalIdentifier` nulo
 
-### Pendente
+### Repository
 
-- [ ] Revisar `DependencyInjection.cs`
-- [ ] Revisar mapeamento EF do `Patient`
-- [ ] Configurar índices
-- [ ] Criar constraint `(SourceSystem, ExternalId)`
-- [ ] Criar migrations
-- [ ] Conectar PostgreSQL real
+- [x] Implementar `IPatientRepository`
+- [x] `GetByIdAsync`
+- [x] `GetByExternalIdAsync`
+- [x] `SearchAsync`
+- [x] `AddAsync`
+- [x] `UpdateAsync`
+- [x] Utilizar tracking para comandos de atualização
+- [x] Utilizar `AsNoTracking()` nas consultas de busca
+- [x] Utilizar `EF.Functions.ILike` para busca por nome
+- [x] Normalizar parâmetros externos com `Trim`
+
+### Dependency Injection
+
+- [x] Revisar `DependencyInjection.cs`
+- [x] Registrar `PatientsDbContext`
+- [x] Configurar `UseNpgsql`
+- [x] Registrar `IPatientRepository -> PatientRepository`
+- [x] Ler `ConnectionStrings:PatientsDatabase`
+
+### Migrations
+
+- [x] Criar `PatientsDbContextFactory`
+- [x] Usar variável de ambiente `HOSPITAL_PATIENTS_CONNECTION_STRING` em design-time
+- [x] Criar migration inicial `InitialPatients`
+- [x] Gerar `PatientsDbContextModelSnapshot`
+
+### Decisão de escopo
+
+A Fase 5 encerra a implementação da camada de Infrastructure e a preparação do EF Core.
+
+Os itens que dependem de um PostgreSQL real foram movidos para a Fase 7:
+
+- [ ] subir PostgreSQL com Docker;
+- [ ] aplicar `database update`;
+- [ ] validar tabela `patients`;
+- [ ] validar `__EFMigrationsHistory`;
+- [ ] executar testes de integração com PostgreSQL real.
+
+Essa separação mantém a Fase 5 focada em código, persistência e configuração, enquanto a Fase 7 fica responsável pelo ambiente de banco e Docker.
+
 
 ---
 
 # Fase 6 — Hospital.Api
 
-## Status: ⬜ Não iniciada
+## Status: 🟡 95% concluída — aguardando validação final
 
-- [ ] Criar `src/Hosts/Hospital.Api`
-- [ ] Adicionar à Solution
-- [ ] Configurar `Program.cs`
-- [ ] Configurar Dependency Injection
-- [ ] Registrar módulos
-- [ ] Configurar OpenAPI
-- [ ] Configurar Problem Details
-- [ ] Criar Exception Handler global
-- [ ] Criar Health Checks
-- [ ] Criar `POST /api/patients`
-- [ ] Criar `GET /api/patients/{id}`
-- [ ] Criar `GET /api/patients`
+### Projeto e referências
+
+- [x] Criar `Hospital.Api`
+- [x] Adicionar à Solution
+- [x] Referenciar `Hospital.Patients.Application`
+- [x] Referenciar `Hospital.Patients.Contracts`
+- [x] Referenciar `Hospital.Patients.Infrastructure`
+
+### Program.cs / Composition Root
+
+- [x] Configurar `Program.cs`
+- [x] Registrar `AddPatientsInfrastructure`
+- [x] Registrar handlers da Application
+- [x] Configurar Swagger/OpenAPI
+- [x] Configurar `AddProblemDetails`
+- [x] Configurar `GlobalExceptionHandler`
+- [x] Configurar `UseExceptionHandler`
+
+### Endpoints de Patients
+
+- [x] `POST /patients`
+- [x] `GET /patients/{id}`
+- [x] `GET /patients`
+- [x] `PUT /patients/{id}`
+- [x] `POST /patients/synchronize`
+
+### Integração com Application / Contracts
+
+- [x] Usar `CreatePatientRequest`
+- [x] Usar `UpdatePatientRequest`
+- [x] Usar `SynchronizeExternalPatientRequest`
+- [x] Usar mappings `Request -> Command/Query`
+- [x] Retornar `PatientResponse` em consultas
+- [x] Manter entidades do Domain fora dos contratos HTTP
+
+### Tratamento de erros HTTP
+
+- [x] Criar `ResultExtensions`
+- [x] Mapear `Patient.NotFound` para HTTP 404
+- [x] Mapear `Patient.ExternalIdentifier.Invalid` para HTTP 400
+- [x] Mapear `Patient.ExternalIdentifier.AlreadyExists` para HTTP 409
+- [x] Criar tratamento global de exceções
+- [x] Mapear `PatientDomainException` para HTTP 400
+- [x] Mapear `ArgumentOutOfRangeException` para HTTP 400
+- [x] Manter HTTP 500 para exceções inesperadas
+
+### Swagger / documentação
+
+- [x] Adicionar tags `Patients`
+- [x] Adicionar nomes aos endpoints
+- [x] Adicionar summaries
+- [x] Adicionar descriptions
+- [x] Documentar status codes principais com `Produces`
+
+### Validação final
+
+- [x] Executar a API localmente
+- [x] Confirmar abertura do Swagger UI
+- [x] Confirmar os 5 endpoints no Swagger
+- [x] Executar `dotnet build`
+- [x] Executar `dotnet test`
+- [x] Revisar `git status`
+- [x] Commit da Fase 6
+- [x] Push para `origin/main`
+
+### Observação de escopo
+
+A API pode ser estruturada e documentada antes de o PostgreSQL real estar disponível.
+
+A validação ponta a ponta com persistência real será realizada na Fase 7 — PostgreSQL + Docker.
+
 
 ---
 
 # Fase 7 — PostgreSQL + Docker
 
-## Status: ⬜ Não iniciada
+## Status: 🟡 Próxima fase
+
+### Docker / PostgreSQL
 
 - [ ] Criar `docker-compose.yml`
-- [ ] Adicionar PostgreSQL
+- [ ] Adicionar serviço PostgreSQL
+- [ ] Definir imagem PostgreSQL
 - [ ] Configurar volume persistente
-- [ ] Configurar usuário e senha
+- [ ] Configurar usuário e senha de desenvolvimento
 - [ ] Criar banco `hospital_intelligence`
-- [ ] Configurar Connection String
-- [ ] Criar migration inicial
-- [ ] Executar `database update`
+- [ ] Expor porta `5432`
+
+### Integração com EF Core
+
+- [ ] Configurar `HOSPITAL_PATIENTS_CONNECTION_STRING`
+- [ ] Subir container do PostgreSQL
+- [ ] Executar migration `InitialPatients`
+- [ ] Executar `dotnet ef database update`
+- [ ] Validar `__EFMigrationsHistory`
 - [ ] Validar tabela `patients`
+- [ ] Validar índice único `ux_patients_external_identifier`
+
+### Testes reais de persistência
+
+- [ ] Criar testes de integração da Infrastructure
+- [ ] Testar `AddAsync`
+- [ ] Testar `GetByIdAsync`
+- [ ] Testar `GetByExternalIdAsync`
+- [ ] Testar `SearchAsync`
+- [ ] Testar `UpdateAsync`
+- [ ] Validar constraint de identificação externa duplicada
+
 
 ---
 
@@ -715,21 +845,21 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fase 5 — Patients Infrastructure
+## Fechamento da Fase 6 — Hospital.Api
 
-Objetivo: consolidar a persistência do módulo Patients e preparar a conexão real com PostgreSQL.
+Antes de avançar:
 
-Próximos passos:
+1. executar a `Hospital.Api`;
+2. abrir o Swagger UI;
+3. confirmar os 5 endpoints de Patients;
+4. executar `dotnet build`;
+5. executar `dotnet test`;
+6. revisar `git status`;
+7. fazer commit;
+8. fazer push para `origin/main`.
 
-1. revisar `Hospital.Patients.Infrastructure`;
-2. revisar `PatientsDbContext`;
-3. revisar `PatientConfiguration`;
-4. validar o mapeamento de `PatientId`;
-5. validar o mapeamento de `ExternalPatientIdentifier`;
-6. revisar índices e restrições de unicidade;
-7. revisar `PatientRepository`;
-8. preparar migrations do EF Core;
-9. validar persistência com PostgreSQL;
-10. criar testes de integração da Infrastructure.
+Após essa validação:
 
-A Fase 5 já possui estrutura parcial, portanto o trabalho inicial será de revisão e consolidação, não de criação do zero.
+## Fase 7 — PostgreSQL + Docker
+
+Objetivo: subir PostgreSQL em Docker, aplicar a migration `InitialPatients` e validar a persistência real do módulo Patients.
