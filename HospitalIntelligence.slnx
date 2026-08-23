@@ -26,6 +26,7 @@
   </Folder>
   <Folder Name="/tests/Modules/" />
   <Folder Name="/tests/Modules/Patients/">
+    <Project Path="tests/Modules/Patients/Hospital.Patients.ApplicationTests/Hospital.Patients.ApplicationTests.csproj" />
     <Project Path="tests/Modules/Patients/Hospital.Patients.UnitTests/Hospital.Patients.UnitTests.csproj" />
   </Folder>
 </Solution>

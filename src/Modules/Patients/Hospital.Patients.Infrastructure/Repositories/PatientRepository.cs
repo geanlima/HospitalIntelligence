@@ -51,4 +51,35 @@ public sealed class PatientRepository
         await _context.SaveChangesAsync(
             cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<Patient>> SearchAsync(
+    string? name,
+    CancellationToken cancellationToken = default)
+    {
+        var query =
+            _context.Patients
+                .AsNoTracking()
+                .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(x =>
+                EF.Functions.ILike(
+                    x.Name,
+                    $"%{name.Trim()}%"));
+        }
+
+        return await query
+            .OrderBy(x => x.Name)
+            .ToListAsync(cancellationToken);
+    }
+    public async Task UpdateAsync(
+    Patient patient,
+    CancellationToken cancellationToken = default)
+    {
+        _context.Patients.Update(patient);
+
+        await _context.SaveChangesAsync(
+            cancellationToken);
+    }
 }

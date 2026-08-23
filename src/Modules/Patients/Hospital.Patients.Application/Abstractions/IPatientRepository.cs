@@ -13,7 +13,14 @@ public interface IPatientRepository
         string externalId,
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyCollection<Patient>> SearchAsync(
+        string? name,
+        CancellationToken cancellationToken = default);
+
     Task AddAsync(
+        Patient patient,
+        CancellationToken cancellationToken = default);
+    Task UpdateAsync(
         Patient patient,
         CancellationToken cancellationToken = default);
 }
