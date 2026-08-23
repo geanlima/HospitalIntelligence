@@ -685,13 +685,13 @@ PostgreSQL em Docker
 
 ## Status: ⬜ Não iniciada
 
-- [ ] Criar `Hospital.Integration.Mock`
-- [ ] Gerar pacientes fictícios
-- [ ] Gerar internações
-- [ ] Gerar exames
-- [ ] Gerar prescrições
-- [ ] Gerar sinais vitais
-- [ ] Gerar evoluções
+- [x] Criar `Hospital.Integration.Mock`
+- [x] Gerar pacientes fictícios
+- [x] Gerar internações
+- [x] Gerar exames
+- [x] Gerar prescrições
+- [x] Gerar sinais vitais
+- [x] Gerar evoluções
 
 ---
 
