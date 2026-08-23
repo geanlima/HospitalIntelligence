@@ -33,13 +33,13 @@ O projeto também será utilizado como trilha prática de estudo de:
 |---|---|---|
 | 0 | Fundação | ✅ Concluída |
 | 1 | Arquitetura Base / SharedKernel | ✅ Concluída |
-| 2 | Patient Domain | 🟡 Próxima fase |
+| 2 | Patient Domain | ✅ Concluída |
 | 3 | Patients Application | 🟡 Parcialmente iniciada |
 | 4 | Patients Contracts | 🟡 Estrutura criada |
 | 5 | Patients Infrastructure | 🟡 Parcialmente iniciada |
 | 6 | Hospital.Api | ⬜ Não iniciada |
 | 7 | PostgreSQL + Docker | ⬜ Não iniciada |
-| 8 | Testes de domínio/aplicação/integração | 🟡 Parcialmente iniciada |
+| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio concluído |
 | 9 | Integration Core | ⬜ Não iniciada |
 | 10 | Mock Hospital | ⬜ Não iniciada |
 | 11 | Salux Connector | ⬜ Não iniciada |
@@ -149,9 +149,9 @@ O conceito será introduzido quando tivermos casos reais como:
 
 # Fase 2 — Patient Domain
 
-## Status: 🟡 Próxima fase
+## Status: ✅ 100% concluída
 
-### Já criado
+### Domínio
 
 - [x] `Hospital.Patients.Domain`
 - [x] `Patient`
@@ -160,27 +160,67 @@ O conceito será introduzido quando tivermos casos reais como:
 - [x] `PatientDomainException`
 - [x] Validação de nome
 - [x] Validação de data de nascimento
-- [x] `ExternalId`
-- [x] `SourceSystem`
 - [x] `CreatedAtUtc`
 - [x] `UpdatedAtUtc`
 - [x] `PatientCreatedDomainEvent`
+- [x] `Patient.Create()` registra Domain Event
 
-### Próximos passos
+### Value Object — identificação externa
 
-- [ ] Revisar a modelagem atual de `Patient`
-- [ ] Criar testes unitários de `Patient`
-- [ ] Testar nome inválido
-- [ ] Testar data futura
-- [ ] Testar origem externa inválida
-- [ ] Testar criação com origem externa válida
-- [ ] Testar Domain Event
-- [ ] Testar alteração de nome
-- [ ] Avaliar CPF como Value Object
-- [ ] Avaliar e-mail
-- [ ] Avaliar telefone
-- [ ] Modelar identificação externa de múltiplos HIS
-- [ ] Documentar regras do domínio
+- [x] Criar `ExternalPatientIdentifier`
+- [x] Encapsular `SourceSystem`
+- [x] Encapsular `ExternalId`
+- [x] Validar valores obrigatórios
+- [x] Validar tamanho máximo de `SourceSystem`
+- [x] Validar tamanho máximo de `ExternalId`
+- [x] Normalizar valores com `Trim`
+- [x] Garantir igualdade por valor usando `record`
+- [x] Refatorar `Patient` para usar `ExternalIdentifier`
+
+### Comportamentos do Patient
+
+- [x] `ChangeName`
+- [x] `ChangeBirthDate`
+- [x] `ChangeGender`
+- [x] `UpdateExternalIdentifier`
+- [x] Atualizar `UpdatedAtUtc` quando há mudança real
+- [x] Não alterar `UpdatedAtUtc` quando o valor não muda
+
+### Testes de domínio
+
+- [x] Criar `Hospital.Patients.UnitTests`
+- [x] Testar criação válida
+- [x] Testar nome vazio
+- [x] Testar nome em branco
+- [x] Testar nome curto
+- [x] Testar nome acima do limite
+- [x] Testar data de nascimento futura
+- [x] Testar criação com identificação externa
+- [x] Testar `PatientCreatedDomainEvent`
+- [x] Testar timestamp do Domain Event
+- [x] Testar `ChangeName`
+- [x] Testar `ChangeBirthDate`
+- [x] Testar `ChangeGender`
+- [x] Testar `UpdateExternalIdentifier`
+- [x] Testar `CreatedAtUtc`
+- [x] Testar `UpdatedAtUtc`
+- [x] Criar `ExternalPatientIdentifierTests`
+- [x] Testar validações e igualdade do Value Object
+
+### Impactos da refatoração
+
+- [x] Atualizar `PatientRepository` para consultar por `ExternalIdentifier`
+- [x] Manter `IPatientRepository.GetByExternalIdAsync(sourceSystem, externalId)` como contrato de consulta
+- [x] Validar domínio e testes após a refatoração
+- [x] Build/test do projeto após os ajustes
+
+### Decisões da fase
+
+- [x] Introduzir Value Object apenas quando surgiu um caso real
+- [x] Manter `Patient` responsável apenas pelas regras do paciente
+- [x] Mover as regras de identificação externa para `ExternalPatientIdentifier`
+- [x] Adiar CPF, e-mail e telefone até existir requisito real do produto
+
 
 ---
 
@@ -286,10 +326,11 @@ O conceito será introduzido quando tivermos casos reais como:
 
 ## Domain
 
-- [ ] `Hospital.Patients.UnitTests`
-- [ ] Testes de criação
-- [ ] Testes de invariantes
-- [ ] Testes de eventos
+- [x] `Hospital.Patients.UnitTests`
+- [x] Testes de criação
+- [x] Testes de invariantes
+- [x] Testes de eventos
+- [x] Testes de `ExternalPatientIdentifier`
 
 ## Application
 
@@ -533,15 +574,17 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fase 2 — Patient Domain
+## Fase 3 — Patients Application
 
 Objetivo imediato:
 
-1. revisar `Patient`;
-2. criar `Hospital.Patients.UnitTests`;
-3. criar testes de invariantes;
-4. validar `PatientCreatedDomainEvent`;
-5. revisar identificação externa;
-6. documentar as regras do domínio;
-7. build/test;
-8. commit da Fase 2.
+1. revisar o papel da camada `Application`;
+2. definir o primeiro caso de uso de criação de paciente;
+3. criar `CreatePatientCommand`;
+4. criar `CreatePatientHandler`;
+5. utilizar `Result` / `Result<T>` para erros esperados;
+6. criar `GetPatientByIdQuery`;
+7. criar `GetPatientByIdHandler`;
+8. criar testes da camada Application;
+9. executar `dotnet test` e `dotnet build`;
+10. documentar e versionar a Fase 3.
