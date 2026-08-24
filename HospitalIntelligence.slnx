@@ -20,6 +20,7 @@
   </Folder>
   <Folder Name="/src/Integrations/">
     <Project Path="src/Integrations/Hospital.MockHospital/Hospital.MockHospital.csproj" />
+    <Project Path="src/Integrations/Hospital.Salux/Hospital.Salux.csproj" />
   </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Patients/">
@@ -35,6 +36,7 @@
   </Folder>
   <Folder Name="/tests/Integrations/">
     <Project Path="tests/Integrations/Hospital.MockHospital.UnitTests/Hospital.MockHospital.UnitTests.csproj" />
+    <Project Path="tests/Integrations/Hospital.Salux.UnitTests/Hospital.Salux.UnitTests.csproj" />
   </Folder>
   <Folder Name="/tests/Modules/" />
   <Folder Name="/tests/Modules/Patients/">

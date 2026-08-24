@@ -699,17 +699,17 @@ PostgreSQL em Docker
 
 ## Status: ⬜ Não iniciada
 
-- [ ] Criar `Hospital.Integration.Salux`
-- [ ] Configurar conexão read-only
-- [ ] Mapear pacientes
-- [ ] Mapear internações
-- [ ] Mapear exames
-- [ ] Mapear prescrições
-- [ ] Mapear evoluções
-- [ ] Implementar sincronização incremental
-- [ ] Implementar checkpoint
-- [ ] Implementar retry
-- [ ] Implementar idempotência
+- [x] Criar `Hospital.Integration.Salux`
+- [x] Configurar conexão read-only
+- [x] Mapear pacientes
+- [x] Mapear internações
+- [x] Mapear exames
+- [x] Mapear prescrições
+- [x] Mapear evoluções
+- [x] Implementar sincronização incremental
+- [x] Implementar checkpoint
+- [x] Implementar retry
+- [x] Implementar idempotência
 
 Fluxo:
 
