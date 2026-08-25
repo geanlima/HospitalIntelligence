@@ -1,0 +1,659 @@
+<section class="patient-360">
+
+  @if (loading()) {
+    <p>Carregando Patient 360...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">
+      {{ errorMessage() }}
+    </p>
+  }
+
+  @if (patient(); as patient) {
+
+    <header class="patient-header">
+      <div>
+        <span class="breadcrumb">
+          Pacientes / {{ patient.name }}
+        </span>
+
+        <h1>
+          {{ patient.name }}
+        </h1>
+
+        <div class="patient-meta">
+          <span>
+            ID: {{ patient.patientId }}
+          </span>
+
+          <span>
+            Nascimento:
+            {{ patient.birthDate | date:'dd/MM/yyyy' }}
+          </span>
+
+          <span>
+            Gênero:
+            {{ formatGender(patient.gender) }}
+          </span>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="edit-button"
+      >
+        Editar
+      </button>
+    </header>
+
+    <section class="summary-grid">
+      <article>
+        <span>Internações</span>
+        <strong>{{ patient.admissions.length }}</strong>
+      </article>
+
+      <article>
+        <span>Exames</span>
+        <strong>{{ patient.exams.length }}</strong>
+      </article>
+
+      <article>
+        <span>Prescrições</span>
+        <strong>{{ patient.prescriptions.length }}</strong>
+      </article>
+
+      <article>
+        <span>Alertas</span>
+        <strong>{{ patient.alerts.length }}</strong>
+      </article>
+    </section>
+
+    <nav class="patient-tabs">
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'overview'"
+        (click)="selectTab('overview')"
+      >
+        Visão Geral
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'admissions'"
+        (click)="selectTab('admissions')"
+      >
+        Internações
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'exams'"
+        (click)="selectTab('exams')"
+      >
+        Exames
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'prescriptions'"
+        (click)="selectTab('prescriptions')"
+      >
+        Prescrições
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'vitalSigns'"
+        (click)="selectTab('vitalSigns')"
+      >
+        Sinais Vitais
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'clinicalNotes'"
+        (click)="selectTab('clinicalNotes')"
+      >
+        Notas Clínicas
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'timeline'"
+        (click)="selectTab('timeline')"
+      >
+        Timeline
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeTab() === 'alerts'"
+        (click)="selectTab('alerts')"
+      >
+        Alertas
+      </button>
+
+    </nav>
+
+    @if (activeTab() === 'overview') {
+      <section class="patient-content">
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Resumo do Paciente</h2>
+          </div>
+
+          <div class="info-list">
+            <div>
+              <span>Sistema externo</span>
+              <strong>
+                {{ patient.sourceSystem || '-' }}
+              </strong>
+            </div>
+
+            <div>
+              <span>Identificador externo</span>
+              <strong>
+                {{ patient.externalId || '-' }}
+              </strong>
+            </div>
+
+            <div>
+              <span>Última internação</span>
+
+              <strong>
+                @if (patient.admissions.length > 0) {
+                  {{
+                    patient.admissions[0].admissionDate
+                      | date:'dd/MM/yyyy HH:mm'
+                  }}
+                } @else {
+                  Nenhuma
+                }
+              </strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Linha do Tempo</h2>
+
+            <button
+              type="button"
+              (click)="selectTab('timeline')"
+            >
+              Ver tudo
+            </button>
+          </div>
+
+          <div class="timeline">
+            @for (
+              item of patient.timeline.slice(0, 5);
+              track item.id
+            ) {
+              <div class="timeline-item">
+                <div class="timeline-marker"></div>
+
+                <div class="timeline-content">
+                  <div class="timeline-title">
+                    <strong>
+                      {{ item.title }}
+                    </strong>
+
+                    <span>
+                      {{
+                        item.occurredAtUtc
+                          | date:'dd/MM/yyyy HH:mm'
+                      }}
+                    </span>
+                  </div>
+
+                  <p>
+                    {{ item.description }}
+                  </p>
+
+                  <small>
+                    {{ item.type }}
+                  </small>
+                </div>
+              </div>
+            }
+
+            @if (patient.timeline.length === 0) {
+              <p class="empty-message">
+                Nenhum evento registrado.
+              </p>
+            }
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Sinais Vitais Recentes</h2>
+          </div>
+
+          @for (
+            vital of patient.vitalSigns.slice(0, 3);
+            track vital.id
+          ) {
+            <div class="vital-item">
+
+              <div>
+                <span>PA</span>
+                <strong>
+                  {{ vital.systolicBloodPressure ?? '-' }}
+                  /
+                  {{ vital.diastolicBloodPressure ?? '-' }}
+                </strong>
+              </div>
+
+              <div>
+                <span>FC</span>
+                <strong>
+                  {{ vital.heartRate ?? '-' }} bpm
+                </strong>
+              </div>
+
+              <div>
+                <span>Temp.</span>
+                <strong>
+                  {{ vital.temperature ?? '-' }} °C
+                </strong>
+              </div>
+
+              <div>
+                <span>SpO₂</span>
+                <strong>
+                  {{ vital.oxygenSaturation ?? '-' }}%
+                </strong>
+              </div>
+
+            </div>
+          }
+
+          @if (patient.vitalSigns.length === 0) {
+            <p class="empty-message">
+              Nenhum sinal vital registrado.
+            </p>
+          }
+        </article>
+
+      </section>
+    }
+
+    @if (activeTab() === 'admissions') {
+      <section class="tab-content card">
+
+        <div class="card-header">
+          <h2>Internações</h2>
+        </div>
+
+        @if (patient.admissions.length === 0) {
+          <p class="empty-message">
+            Nenhuma internação registrada.
+          </p>
+        }
+
+        @for (
+          admission of patient.admissions;
+          track admission.id
+        ) {
+          <div class="record-row">
+
+            <div>
+              <strong>
+                {{ admission.unit || 'Unidade não informada' }}
+              </strong>
+
+              <span>
+                Leito: {{ admission.bed || '-' }}
+              </span>
+            </div>
+
+            <div>
+              <span>
+                {{
+                  admission.admissionDate
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </span>
+
+              <span
+                class="status-badge"
+                [ngClass]="getStatusClass(admission.status)"
+              >
+                {{ formatStatus(admission.status) }}
+              </span>
+            </div>
+
+          </div>
+        }
+
+      </section>
+    }
+
+    @if (activeTab() === 'exams') {
+      <section class="tab-content card">
+
+        <div class="card-header">
+          <h2>Exames</h2>
+        </div>
+
+        @if (patient.exams.length === 0) {
+          <p class="empty-message">
+            Nenhum exame registrado.
+          </p>
+        }
+
+        @for (
+          exam of patient.exams;
+          track exam.id
+        ) {
+          <div class="record-row">
+
+            <div>
+              <strong>
+                {{ exam.name }}
+              </strong>
+
+              <span>
+                Solicitado:
+                {{
+                  exam.requestedAtUtc
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </span>
+            </div>
+
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(exam.status)"
+            >
+              {{ formatStatus(exam.status) }}
+            </span>
+
+          </div>
+        }
+
+      </section>
+    }
+
+    @if (activeTab() === 'prescriptions') {
+      <section class="tab-content card">
+
+        <div class="card-header">
+          <h2>Prescrições</h2>
+        </div>
+
+        @if (patient.prescriptions.length === 0) {
+          <p class="empty-message">
+            Nenhuma prescrição registrada.
+          </p>
+        }
+
+        @for (
+          prescription of patient.prescriptions;
+          track prescription.id
+        ) {
+          <div class="record-row">
+
+            <div>
+              <strong>
+                {{ prescription.description }}
+              </strong>
+
+              <span>
+                {{
+                  prescription.prescribedAtUtc
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </span>
+            </div>
+
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(prescription.status)"
+            >
+              {{ formatStatus(prescription.status) }}
+            </span>
+
+          </div>
+        }
+
+      </section>
+    }
+
+    @if (activeTab() === 'vitalSigns') {
+      <section class="tab-content card">
+
+        <div class="card-header">
+          <h2>Sinais Vitais</h2>
+        </div>
+
+        @if (patient.vitalSigns.length === 0) {
+          <p class="empty-message">
+            Nenhum sinal vital registrado.
+          </p>
+        }
+
+        @for (
+          vital of patient.vitalSigns;
+          track vital.id
+        ) {
+          <div class="vital-record">
+
+            <div class="record-date">
+              {{
+                vital.measuredAtUtc
+                  | date:'dd/MM/yyyy HH:mm'
+              }}
+            </div>
+
+            <div class="vital-grid">
+
+              <div>
+                <span>Temperatura</span>
+                <strong>
+                  {{ vital.temperature ?? '-' }} °C
+                </strong>
+              </div>
+
+              <div>
+                <span>FC</span>
+                <strong>
+                  {{ vital.heartRate ?? '-' }} bpm
+                </strong>
+              </div>
+
+              <div>
+                <span>FR</span>
+                <strong>
+                  {{ vital.respiratoryRate ?? '-' }} rpm
+                </strong>
+              </div>
+
+              <div>
+                <span>Pressão</span>
+                <strong>
+                  {{ vital.systolicBloodPressure ?? '-' }}
+                  /
+                  {{ vital.diastolicBloodPressure ?? '-' }}
+                </strong>
+              </div>
+
+              <div>
+                <span>SpO₂</span>
+                <strong>
+                  {{ vital.oxygenSaturation ?? '-' }}%
+                </strong>
+              </div>
+
+            </div>
+
+          </div>
+        }
+
+      </section>
+    }
+
+    @if (activeTab() === 'clinicalNotes') {
+      <section class="tab-content card">
+
+        <div class="card-header">
+          <h2>Notas Clínicas</h2>
+        </div>
+
+        @if (patient.clinicalNotes.length === 0) {
+          <p class="empty-message">
+            Nenhuma nota clínica registrada.
+          </p>
+        }
+
+        @for (
+          note of patient.clinicalNotes;
+          track note.id
+        ) {
+          <div class="clinical-note">
+
+            <div class="clinical-note-header">
+              <div>
+                <strong>
+                  {{ note.noteType }}
+                </strong>
+
+                <span>
+                  {{ note.professional }}
+                </span>
+              </div>
+
+              <span>
+                {{
+                  note.createdAtUtc
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </span>
+            </div>
+
+            <p>
+              {{ note.summary }}
+            </p>
+
+          </div>
+        }
+
+      </section>
+    }
+
+    @if (activeTab() === 'timeline') {
+      <section class="tab-content card">
+
+        <div class="card-header">
+          <h2>Timeline Clínica</h2>
+        </div>
+
+        @if (patient.timeline.length === 0) {
+          <p class="empty-message">
+            Nenhum evento registrado.
+          </p>
+        }
+
+        <div class="timeline">
+
+          @for (
+            item of patient.timeline;
+            track item.id
+          ) {
+            <div class="timeline-item">
+
+              <div class="timeline-marker"></div>
+
+              <div class="timeline-content">
+
+                <div class="timeline-title">
+                  <strong>
+                    {{ item.title }}
+                  </strong>
+
+                  <span>
+                    {{
+                      item.occurredAtUtc
+                        | date:'dd/MM/yyyy HH:mm'
+                    }}
+                  </span>
+                </div>
+
+                <p>
+                  {{ item.description }}
+                </p>
+
+                <small>
+                  {{ item.type }}
+                </small>
+
+              </div>
+
+            </div>
+          }
+
+        </div>
+
+      </section>
+    }
+
+    @if (activeTab() === 'alerts') {
+      <section class="tab-content card">
+
+        <div class="card-header">
+          <h2>Alertas</h2>
+        </div>
+
+        @if (patient.alerts.length === 0) {
+          <p class="empty-message">
+            Nenhum alerta registrado.
+          </p>
+        }
+
+        @for (
+          alert of patient.alerts;
+          track alert.id
+        ) {
+          <div class="alert-row">
+
+            <div>
+              <strong>
+                {{ alert.type }}
+              </strong>
+
+              <p>
+                {{ alert.description }}
+              </p>
+            </div>
+
+            <div>
+              <span
+                class="severity-badge"
+                [ngClass]="getSeverityClass(alert.severity)"
+              >
+                {{ formatSeverity(alert.severity) }}
+              </span>
+
+              <small>
+                {{
+                  alert.createdAtUtc
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </small>
+            </div>
+
+          </div>
+        }
+
+      </section>
+    }
+
+  }
+
+</section>

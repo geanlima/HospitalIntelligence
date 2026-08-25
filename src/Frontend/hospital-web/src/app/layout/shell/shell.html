@@ -1,0 +1,98 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">H</div>
+
+      <div class="brand-text">
+        <strong>Hospital</strong>
+        <span>Intelligence</span>
+      </div>
+    </div>
+
+    <nav class="menu">
+      <a routerLink="/dashboard" routerLinkActive="active">
+        <span>⌂</span>
+        Dashboard
+      </a>
+
+      <a routerLink="/patients" routerLinkActive="active">
+        <span>♙</span>
+        Pacientes
+      </a>
+
+      <a href="#">
+        <span>▣</span>
+        Internações
+      </a>
+
+      <a href="#">
+        <span>▤</span>
+        Exames
+      </a>
+
+      <a href="#">
+        <span>▧</span>
+        Prescrições
+      </a>
+
+      <a href="#">
+        <span>♡</span>
+        Sinais Vitais
+      </a>
+
+      <a href="#">
+        <span>□</span>
+        Notas Clínicas
+      </a>
+
+      <a href="#">
+        <span>♧</span>
+        Alertas
+      </a>
+
+      <a href="#">
+        <span>▥</span>
+        Relatórios
+      </a>
+    </nav>
+
+    <div class="user">
+      <div class="avatar">
+        A
+      </div>
+
+      <div>
+        <strong>Administrador</strong>
+        <span>Hospital Intelligence</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="menu-button">
+        ☰
+      </button>
+
+      <div class="global-search">
+        <input
+          type="text"
+          placeholder="Buscar paciente, exame, internação..."
+        />
+      </div>
+
+      <div class="topbar-actions">
+        <button>🔔</button>
+        <button>✉</button>
+
+        <div class="profile">
+          A
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -11,12 +11,14 @@ public static class SearchPatientsEndpoint
             "/patients",
             async (
                 string? name,
+                string? sourceSystem,
                 SearchPatientsHandler handler,
                 CancellationToken cancellationToken) =>
             {
                 var query =
                     new SearchPatientsQuery(
-                        name);
+                        name,
+                        sourceSystem);
 
                 var result =
                     await handler.HandleAsync(
@@ -30,8 +32,8 @@ public static class SearchPatientsEndpoint
             .WithTags("Patients")
             .WithSummary("Pesquisa pacientes")
             .WithDescription(
-                "Pesquisa pacientes por nome. " +
-                "Quando o nome não é informado, retorna todos os pacientes.")
+                "Pesquisa pacientes por nome e sistema externo. " +
+                "Quando os filtros não são informados, retorna todos os pacientes.")
             .Produces(
                 StatusCodes.Status200OK);
 

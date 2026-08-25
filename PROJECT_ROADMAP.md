@@ -37,14 +37,14 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 3 | Patients Application | ✅ Concluída |
 | 4 | Patients Contracts | ✅ Concluída |
 | 5 | Patients Infrastructure | ✅ Concluída |
-| 6 | Hospital.Api | 🟡 95% — implementação validada; commit/push pendente |
-| 7 | PostgreSQL + Docker | 🟡 95% — implementação e testes concluídos; fechamento pendente |
-| 8 | Testes de domínio/aplicação/integração | 🟡 Domínio, Application e Repository integration concluídos; API tests pendentes |
-| 9 | Integration Core | ⬜ Não iniciada |
-| 10 | Mock Hospital | ⬜ Não iniciada |
-| 11 | Salux Connector | ⬜ Não iniciada |
-| 12 | Patient 360 | ⬜ Não iniciada |
-| 13 | Angular | ⬜ Não iniciada |
+| 6 | Hospital.Api | ✅ Concluída |
+| 7 | PostgreSQL + Docker | ✅ Concluída |
+| 8 | Testes de domínio/aplicação/integração | ✅ Concluída |
+| 9 | Integration Core | ✅ Concluída |
+| 10 | Mock Hospital | ✅ Concluída |
+| 11 | Salux Connector | ✅ Concluída |
+| 12 | Patient 360 | ✅ Concluída |
+| 13 | Angular | 🟡 Próxima fase |
 | 14 | Fundação de IA | ⬜ Não iniciada |
 | 15 | Busca Inteligente | ⬜ Não iniciada |
 | 16 | Auditoria Inteligente | ⬜ Não iniciada |
@@ -476,7 +476,7 @@ Essa separação mantém a Fase 5 focada em código, persistência e configuraç
 
 # Fase 6 — Hospital.Api
 
-## Status: 🟡 95% concluída — implementação validada; commit/push pendente
+## Status: ✅ 100% concluída
 
 ### Projeto e referências
 
@@ -554,7 +554,7 @@ A validação ponta a ponta com persistência real será realizada na Fase 7 —
 
 # Fase 7 — PostgreSQL + Docker
 
-## Status: 🟡 95% concluída — implementação e testes concluídos; fechamento pendente
+## Status: ✅ 100% concluída
 
 ### Docker / PostgreSQL
 
@@ -669,7 +669,7 @@ PostgreSQL em Docker
 
 # Fase 9 — Integration Core
 
-## Status: ⬜ Não iniciada
+## Status: ✅ 100% concluída
 
 - [x] Criar `Hospital.Integration.Core`
 - [x] Criar contratos de integração
@@ -683,7 +683,7 @@ PostgreSQL em Docker
 
 # Fase 10 — Mock Hospital
 
-## Status: ⬜ Não iniciada
+## Status: ✅ 100% concluída
 
 - [x] Criar `Hospital.Integration.Mock`
 - [x] Gerar pacientes fictícios
@@ -697,7 +697,7 @@ PostgreSQL em Docker
 
 # Fase 11 — Salux Connector
 
-## Status: ⬜ Não iniciada
+## Status: ✅ 100% concluída
 
 - [x] Criar `Hospital.Integration.Salux`
 - [x] Configurar conexão read-only
@@ -729,6 +729,8 @@ Hospital Intelligence Platform
 
 # Fase 12 — Patient 360
 
+## Status: ✅ 100% concluída
+
 - [x] Dados cadastrais
 - [x] Internações
 - [x] Exames
@@ -740,6 +742,173 @@ Hospital Intelligence Platform
 - [x] Resumo clínico
 
 ---
+
+# Fase 13 — Angular
+
+## Status: 🟡 Próxima fase — 0% iniciada
+
+- [ ] Criar projeto Angular
+- [ ] Criar arquitetura front-end
+- [ ] Criar login
+- [ ] Criar layout
+- [ ] Criar dashboard
+- [ ] Criar listagem de pacientes
+- [ ] Criar Patient 360
+- [ ] Criar timeline
+- [ ] Integrar com Hospital.Api
+
+---
+
+# Fase 14 — Fundação de IA
+
+- [ ] Criar módulo `Hospital.AI`
+- [ ] Abstração para provedor de LLM
+- [ ] Embeddings
+- [ ] pgvector
+- [ ] RAG
+- [ ] Prompt Management
+- [ ] Guardrails
+- [ ] Auditoria
+- [ ] Rastreamento de fontes
+
+---
+
+# Fase 15 — Busca Inteligente
+
+- [ ] Indexar prontuário
+- [ ] Busca semântica
+- [ ] Perguntas em linguagem natural
+- [ ] Evidências
+- [ ] Citações das fontes
+- [ ] Controle de acesso
+
+---
+
+# Fase 16 — Auditoria Inteligente
+
+- [ ] Auditoria de prontuário
+- [ ] Documentação ausente
+- [ ] Divergências
+- [ ] Auditoria financeira
+- [ ] Risco de glosa
+
+---
+
+# Fase 17 — Inteligência Clínica
+
+- [ ] Alta Segura IA
+- [ ] Reconciliação Medicamentosa
+- [ ] Copiloto de Triagem
+- [ ] Prontuário por Voz
+- [ ] Deterioração do Paciente
+
+---
+
+# Fase 18 — Machine Learning
+
+- [ ] Serviço/modelos Python
+- [ ] Previsão de no-show
+- [ ] Previsão de alta
+- [ ] Deterioração
+- [ ] Feature Engineering
+- [ ] Treinamento
+- [ ] Avaliação
+- [ ] Versionamento de modelos
+- [ ] Model Drift
+
+---
+
+# Fase 19 — Hospital Command Center
+
+- [ ] Ocupação
+- [ ] Leitos
+- [ ] Altas previstas
+- [ ] Alertas clínicos
+- [ ] Emergência
+- [ ] Auditoria
+- [ ] Financeiro
+- [ ] Indicadores operacionais
+
+---
+
+# Fase 20 — Segurança e LGPD
+
+- [ ] Authentication
+- [ ] Authorization
+- [ ] Roles
+- [ ] Policies
+- [ ] Audit Trail
+- [ ] Controle de acesso ao prontuário
+- [ ] Criptografia
+- [ ] Secrets
+- [ ] Anonimização
+- [ ] LGPD
+
+---
+
+# Fase 21 — Observabilidade
+
+- [ ] Structured Logging
+- [ ] OpenTelemetry
+- [ ] Traces
+- [ ] Metrics
+- [ ] Correlation ID
+- [ ] Health Checks
+- [ ] Dashboards
+
+---
+
+# Fase 22 — DevOps
+
+- [ ] Dockerizar API
+- [ ] Dockerizar Angular
+- [ ] Dockerizar Workers
+- [ ] Pipeline CI
+- [ ] Testes automáticos
+- [ ] Análise de vulnerabilidades
+- [ ] Versionamento
+- [ ] CD
+- [ ] Deploy
+
+---
+
+# Regra de evolução do projeto
+
+Cada fase deve seguir a sequência:
+
+```text
+1. Entender o problema
+2. Modelar
+3. Implementar
+4. Testar
+5. Documentar
+6. Build verde
+7. Commit
+8. Avançar
+```
+
+A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o projeto utilizável durante toda a evolução.
+
+---
+
+# Próximo passo oficial
+
+## Fase 13 — Angular
+
+A Fase 12 — Patient 360 foi concluída e validada ponta a ponta.
+
+O próximo ciclo do projeto será a construção do front-end Angular, começando por:
+
+1. criar o projeto Angular;
+2. definir a arquitetura `core/shared/features`;
+3. configurar environments e integração HTTP com `Hospital.Api`;
+4. criar layout principal e navegação;
+5. criar listagem e busca de pacientes;
+6. criar a tela Patient 360;
+7. exibir internações, exames, prescrições, sinais vitais, evoluções, alertas e timeline;
+8. criar estados de loading/erro;
+9. adicionar testes do front-end;
+10. executar build/test e fechar a fase.
 
 # Fase 13 — Angular
 

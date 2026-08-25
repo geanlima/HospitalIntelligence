@@ -1,0 +1,212 @@
+<section class="patient-list">
+
+  <header class="page-header">
+    <div>
+      <h1>Pacientes</h1>
+
+      <p>
+        Consulte os pacientes cadastrados no Hospital Intelligence.
+      </p>
+    </div>
+  </header>
+
+  <div class="search">
+
+    <input
+      type="text"
+      [(ngModel)]="searchName"
+      placeholder="Pesquisar por nome"
+    />
+
+    <select
+      [(ngModel)]="externalSystem"
+    >
+      <option value="">
+        Todos os sistemas externos
+      </option>
+
+      <option value="SALUX">
+        SALUX
+      </option>
+
+      <option value="API_TEST">
+        API_TEST
+      </option>
+    </select>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="search()"
+      [disabled]="loading()"
+    >
+      @if (loading()) {
+        Buscando...
+      } @else {
+        Buscar
+      }
+    </button>
+
+    <button
+      type="button"
+      class="secondary-button"
+      (click)="clearSearch()"
+      [disabled]="loading()"
+    >
+      Limpar
+    </button>
+
+  </div>
+
+  @if (hasSearched() && loading()) {
+    <p class="loading-message">
+      Carregando pacientes...
+    </p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">
+      {{ errorMessage() }}
+    </p>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    patients().length === 0
+  ) {
+    <div class="empty-state">
+      Nenhum paciente encontrado.
+    </div>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    patients().length > 0
+  ) {
+
+    <div class="table-card">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Nascimento</th>
+            <th>Gênero</th>
+            <th>Sistema externo</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (
+            patient of paginatedPatients;
+            track patient.id
+          ) {
+
+            <tr>
+
+              <td>
+                {{ patient.name }}
+              </td>
+
+              <td>
+                {{ patient.birthDate | date:'dd/MM/yyyy' }}
+              </td>
+
+              <td>
+                {{ patient.gender }}
+              </td>
+
+              <td>
+                {{ patient.sourceSystem || '-' }}
+              </td>
+
+              <td class="actions">
+
+                <button
+                  type="button"
+                  class="icon-button"
+                  title="Visualizar Patient 360"
+                  (click)="viewPatient360(patient.id)"
+                >
+                  👁
+                </button>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+      <div class="pagination">
+
+        <div class="pagination-info">
+          Mostrando
+          {{ (currentPage - 1) * pageSize + 1 }}
+          até
+          {{
+            currentPage * pageSize > patients().length
+              ? patients().length
+              : currentPage * pageSize
+          }}
+          de
+          {{ patients().length }}
+          pacientes
+        </div>
+
+        @if (totalPages > 1) {
+
+          <div class="pagination-buttons">
+
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            @for (
+              page of pages;
+              track page
+            ) {
+
+              <button
+                type="button"
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+
+            }
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              ›
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  }
+
+</section>

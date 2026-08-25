@@ -48,6 +48,7 @@ public sealed class PatientRepository
 
     public async Task<IReadOnlyCollection<Patient>> SearchAsync(
         string? name,
+        string? sourceSystem,
         CancellationToken cancellationToken = default)
     {
         var query =
@@ -66,9 +67,23 @@ public sealed class PatientRepository
                     $"%{normalizedName}%"));
         }
 
+        if (!string.IsNullOrWhiteSpace(sourceSystem))
+        {
+            var normalizedSourceSystem =
+                sourceSystem.Trim();
+
+            query = query.Where(
+                x =>
+                    x.ExternalIdentifier != null &&
+                    EF.Functions.ILike(
+                        x.ExternalIdentifier.SourceSystem,
+                        normalizedSourceSystem));
+        }
+
         return await query
             .OrderBy(x => x.Name)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(
+                cancellationToken);
     }
 
     public async Task AddAsync(

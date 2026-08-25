@@ -7,7 +7,7 @@ namespace Hospital.Patients.ApplicationTests.Patients.SearchPatients;
 public sealed class SearchPatientsHandlerTests
 {
     [Fact]
-    public async Task HandleAsync_Should_Return_All_Patients_When_Name_Is_Null()
+    public async Task HandleAsync_Should_Return_All_Patients_When_Filters_Are_Null()
     {
         // Arrange
         var repository =
@@ -29,7 +29,9 @@ public sealed class SearchPatientsHandlerTests
             new SearchPatientsHandler(repository);
 
         var query =
-            new SearchPatientsQuery(null);
+            new SearchPatientsQuery(
+                null,
+                null);
 
         // Act
         var result =
@@ -69,7 +71,8 @@ public sealed class SearchPatientsHandlerTests
 
         var query =
             new SearchPatientsQuery(
-                "João");
+                "João",
+                null);
 
         // Act
         var result =
@@ -78,8 +81,7 @@ public sealed class SearchPatientsHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
 
-        Assert.Single(
-            result.Value);
+        Assert.Single(result.Value);
 
         var response =
             result.Value.Single();
@@ -102,6 +104,128 @@ public sealed class SearchPatientsHandlerTests
     }
 
     [Fact]
+    public async Task HandleAsync_Should_Return_Patients_Matching_SourceSystem()
+    {
+        // Arrange
+        var repository =
+            new FakePatientRepository();
+
+        var saluxPatient =
+            Patient.Create(
+                "Paciente Salux",
+                new DateOnly(1990, 1, 1),
+                Gender.Male,
+                ExternalPatientIdentifier.Create(
+                    "SALUX",
+                    "PAC-001"));
+
+        var apiTestPatient =
+            Patient.Create(
+                "Paciente API",
+                new DateOnly(1991, 1, 1),
+                Gender.Female,
+                ExternalPatientIdentifier.Create(
+                    "API_TEST",
+                    "PAC-002"));
+
+        await repository.AddAsync(saluxPatient);
+        await repository.AddAsync(apiTestPatient);
+
+        var handler =
+            new SearchPatientsHandler(repository);
+
+        var query =
+            new SearchPatientsQuery(
+                null,
+                "SALUX");
+
+        // Act
+        var result =
+            await handler.HandleAsync(query);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+
+        Assert.Single(result.Value);
+
+        var response =
+            result.Value.Single();
+
+        Assert.Equal(
+            saluxPatient.Id.Value,
+            response.Id);
+
+        Assert.Equal(
+            "SALUX",
+            response.SourceSystem);
+    }
+
+    [Fact]
+    public async Task HandleAsync_Should_Return_Patients_Matching_Name_And_SourceSystem()
+    {
+        // Arrange
+        var repository =
+            new FakePatientRepository();
+
+        var expectedPatient =
+            Patient.Create(
+                "João da Silva",
+                new DateOnly(1990, 5, 10),
+                Gender.Male,
+                ExternalPatientIdentifier.Create(
+                    "SALUX",
+                    "PAC-001"));
+
+        await repository.AddAsync(expectedPatient);
+
+        await repository.AddAsync(
+            Patient.Create(
+                "João da Silva",
+                new DateOnly(1991, 6, 15),
+                Gender.Male,
+                ExternalPatientIdentifier.Create(
+                    "API_TEST",
+                    "PAC-002")));
+
+        await repository.AddAsync(
+            Patient.Create(
+                "Maria Souza",
+                new DateOnly(1988, 3, 20),
+                Gender.Female,
+                ExternalPatientIdentifier.Create(
+                    "SALUX",
+                    "PAC-003")));
+
+        var handler =
+            new SearchPatientsHandler(repository);
+
+        var query =
+            new SearchPatientsQuery(
+                "João",
+                "SALUX");
+
+        // Act
+        var result =
+            await handler.HandleAsync(query);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+
+        Assert.Single(result.Value);
+
+        var response =
+            result.Value.Single();
+
+        Assert.Equal(
+            expectedPatient.Id.Value,
+            response.Id);
+
+        Assert.Equal(
+            "SALUX",
+            response.SourceSystem);
+    }
+
+    [Fact]
     public async Task HandleAsync_Should_Return_Empty_List_When_No_Patient_Matches()
     {
         // Arrange
@@ -119,7 +243,8 @@ public sealed class SearchPatientsHandlerTests
 
         var query =
             new SearchPatientsQuery(
-                "Carlos");
+                "Carlos",
+                null);
 
         // Act
         var result =
@@ -128,7 +253,6 @@ public sealed class SearchPatientsHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
 
-        Assert.Empty(
-            result.Value);
+        Assert.Empty(result.Value);
     }
 }

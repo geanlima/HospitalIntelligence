@@ -35,7 +35,8 @@ public static class PatientRequestMappings
         this SearchPatientsRequest request)
     {
         return new SearchPatientsQuery(
-            request.Name);
+            request.Name,
+            request.SourceSystem);
     }
 
     public static SynchronizeExternalPatientCommand ToCommand(

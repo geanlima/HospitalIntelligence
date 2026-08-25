@@ -1,0 +1,442 @@
+.patient-360 {
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+.patient-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 6px 0 8px;
+    font-size: 32px;
+    color: #111827;
+  }
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: #6366f1;
+}
+
+.patient-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.edit-button {
+  padding: 10px 18px;
+  border: 1px solid #dbe2ea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+
+  &:hover {
+    background: #f8fafc;
+  }
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 26px;
+
+  article {
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+
+    span {
+      display: block;
+      margin-bottom: 6px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    strong {
+      font-size: 28px;
+      color: #111827;
+    }
+  }
+}
+
+.patient-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  overflow-x: auto;
+
+  button {
+    padding: 12px 14px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      color: #111827;
+    }
+
+    &.active {
+      color: #4f46e5;
+      border-bottom-color: #4f46e5;
+      font-weight: 600;
+    }
+  }
+}
+
+.patient-content {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 18px;
+}
+
+.card {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+
+  h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 16px;
+  }
+
+  button {
+    border: 0;
+    background: transparent;
+    color: #4f46e5;
+    cursor: pointer;
+    font-size: 12px;
+  }
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  span {
+    color: #64748b;
+    font-size: 12px;
+  }
+
+  strong {
+    color: #111827;
+    font-size: 14px;
+  }
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  gap: 14px;
+}
+
+.timeline-marker {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: #6366f1;
+  flex-shrink: 0;
+}
+
+.timeline-content {
+  width: 100%;
+
+  p {
+    margin: 6px 0;
+    color: #475569;
+    font-size: 13px;
+  }
+
+  small {
+    color: #94a3b8;
+  }
+}
+
+.timeline-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  strong {
+    color: #111827;
+    font-size: 14px;
+  }
+
+  span {
+    color: #94a3b8;
+    font-size: 11px;
+  }
+}
+
+.vital-item {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #edf0f4;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  span {
+    color: #64748b;
+    font-size: 11px;
+  }
+
+  strong {
+    color: #111827;
+    font-size: 14px;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.tab-content {
+  min-height: 320px;
+}
+
+.record-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid #edf0f4;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  span {
+    color: #64748b;
+    font-size: 12px;
+  }
+
+  strong {
+    color: #111827;
+  }
+}
+
+.vital-record {
+  padding: 18px 0;
+  border-bottom: 1px solid #edf0f4;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.record-date {
+  margin-bottom: 12px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.vital-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+
+  div {
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  span {
+    color: #64748b;
+    font-size: 11px;
+  }
+
+  strong {
+    color: #111827;
+    font-size: 14px;
+  }
+}
+
+.clinical-note {
+  padding: 18px 0;
+  border-bottom: 1px solid #edf0f4;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  p {
+    margin: 10px 0 0;
+    color: #475569;
+    line-height: 1.6;
+  }
+}
+
+.clinical-note-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  span {
+    color: #64748b;
+    font-size: 12px;
+  }
+}
+
+.alert-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid #edf0f4;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: #475569;
+  }
+
+  > div:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  small {
+    color: #94a3b8;
+  }
+}
+
+.severity {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.empty-message {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+@media (max-width: 1100px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .patient-content {
+    grid-template-columns: 1fr;
+  }
+
+  .vital-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .patient-header {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-meta {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .patient-tabs {
+    padding-bottom: 4px;
+
+    button {
+      padding: 10px 12px;
+    }
+  }
+
+  .record-row,
+  .alert-row,
+  .clinical-note-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .alert-row {
+    > div:last-child {
+      align-items: flex-start;
+    }
+  }
+
+  .vital-grid {
+    grid-template-columns: 1fr;
+  }
+}

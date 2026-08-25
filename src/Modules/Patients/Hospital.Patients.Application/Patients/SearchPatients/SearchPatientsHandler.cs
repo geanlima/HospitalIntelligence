@@ -22,6 +22,7 @@ public sealed class SearchPatientsHandler
         var patients =
             await _patientRepository.SearchAsync(
                 query.Name,
+                query.SourceSystem,
                 cancellationToken);
 
         var response =

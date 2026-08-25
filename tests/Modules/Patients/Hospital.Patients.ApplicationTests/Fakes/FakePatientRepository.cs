@@ -12,7 +12,8 @@ public sealed class FakePatientRepository : IPatientRepository
         CancellationToken cancellationToken = default)
     {
         var patient =
-            _patients.FirstOrDefault(x => x.Id == id);
+            _patients.FirstOrDefault(
+                x => x.Id == id);
 
         return Task.FromResult(patient);
     }
@@ -23,10 +24,17 @@ public sealed class FakePatientRepository : IPatientRepository
         CancellationToken cancellationToken = default)
     {
         var patient =
-            _patients.FirstOrDefault(x =>
-                x.ExternalIdentifier != null &&
-                x.ExternalIdentifier.SourceSystem == sourceSystem &&
-                x.ExternalIdentifier.ExternalId == externalId);
+            _patients.FirstOrDefault(
+                x =>
+                    x.ExternalIdentifier != null &&
+                    string.Equals(
+                        x.ExternalIdentifier.SourceSystem,
+                        sourceSystem,
+                        StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(
+                        x.ExternalIdentifier.ExternalId,
+                        externalId,
+                        StringComparison.OrdinalIgnoreCase));
 
         return Task.FromResult(patient);
     }
@@ -44,28 +52,51 @@ public sealed class FakePatientRepository : IPatientRepository
         _patients.AsReadOnly();
 
     public Task<IReadOnlyCollection<Patient>> SearchAsync(
-    string? name,
-    CancellationToken cancellationToken = default)
+        string? name,
+        string? sourceSystem,
+        CancellationToken cancellationToken = default)
     {
         IEnumerable<Patient> query =
             _patients;
 
         if (!string.IsNullOrWhiteSpace(name))
         {
-            query = query.Where(x =>
-                x.Name.Contains(
-                    name,
-                    StringComparison.OrdinalIgnoreCase));
+            var normalizedName =
+                name.Trim();
+
+            query = query.Where(
+                x =>
+                    x.Name.Contains(
+                        normalizedName,
+                        StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(sourceSystem))
+        {
+            var normalizedSourceSystem =
+                sourceSystem.Trim();
+
+            query = query.Where(
+                x =>
+                    x.ExternalIdentifier != null &&
+                    string.Equals(
+                        x.ExternalIdentifier.SourceSystem,
+                        normalizedSourceSystem,
+                        StringComparison.OrdinalIgnoreCase));
         }
 
         IReadOnlyCollection<Patient> result =
-            query.ToList();
+            query
+                .OrderBy(x => x.Name)
+                .ToList()
+                .AsReadOnly();
 
         return Task.FromResult(result);
     }
+
     public Task UpdateAsync(
-    Patient patient,
-    CancellationToken cancellationToken = default)
+        Patient patient,
+        CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
     }

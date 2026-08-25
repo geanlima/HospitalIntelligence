@@ -15,11 +15,13 @@ public interface IPatientRepository
 
     Task<IReadOnlyCollection<Patient>> SearchAsync(
         string? name,
+        string? sourceSystem,
         CancellationToken cancellationToken = default);
 
     Task AddAsync(
         Patient patient,
         CancellationToken cancellationToken = default);
+
     Task UpdateAsync(
         Patient patient,
         CancellationToken cancellationToken = default);
