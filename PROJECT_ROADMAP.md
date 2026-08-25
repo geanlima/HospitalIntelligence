@@ -729,15 +729,15 @@ Hospital Intelligence Platform
 
 # Fase 12 — Patient 360
 
-- [ ] Dados cadastrais
-- [ ] Internações
-- [ ] Exames
-- [ ] Prescrições
-- [ ] Sinais vitais
-- [ ] Evoluções
-- [ ] Alertas
-- [ ] Timeline clínica
-- [ ] Resumo clínico
+- [x] Dados cadastrais
+- [x] Internações
+- [x] Exames
+- [x] Prescrições
+- [x] Sinais vitais
+- [x] Evoluções
+- [x] Alertas
+- [x] Timeline clínica
+- [x] Resumo clínico
 
 ---
 

@@ -15,6 +15,20 @@
     <ProjectReference Include="..\..\Modules\Patients\Hospital.Patients.Application\Hospital.Patients.Application.csproj" />
     <ProjectReference Include="..\..\Modules\Patients\Hospital.Patients.Contracts\Hospital.Patients.Contracts.csproj" />
     <ProjectReference Include="..\..\Modules\Patients\Hospital.Patients.Infrastructure\Hospital.Patients.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Admissions\Hospital.Admissions.Application\Hospital.Admissions.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Admissions\Hospital.Admissions.Infrastructure\Hospital.Admissions.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Exams\Hospital.Exams.Application\Hospital.Exams.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Exams\Hospital.Exams.Infrastructure\Hospital.Exams.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Prescriptions\Hospital.Prescriptions.Application\Hospital.Prescriptions.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Prescriptions\Hospital.Prescriptions.Infrastructure\Hospital.Prescriptions.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\VitalSigns\Hospital.VitalSigns.Application\Hospital.VitalSigns.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\VitalSigns\Hospital.VitalSigns.Infrastructure\Hospital.VitalSigns.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\ClinicalNotes\Hospital.ClinicalNotes.Application\Hospital.ClinicalNotes.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\ClinicalNotes\Hospital.ClinicalNotes.Infrastructure\Hospital.ClinicalNotes.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Alerts\Hospital.Alerts.Application\Hospital.Alerts.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Alerts\Hospital.Alerts.Infrastructure\Hospital.Alerts.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Timeline\Hospital.Timeline.Application\Hospital.Timeline.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Timeline\Hospital.Timeline.Infrastructure\Hospital.Timeline.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

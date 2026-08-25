@@ -3,6 +3,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Hospital.Patients.Domain\Hospital.Patients.Domain.csproj" />
     <ProjectReference Include="..\Hospital.Patients.Contracts\Hospital.Patients.Contracts.csproj" />
+    <ProjectReference Include="..\..\Admissions\Hospital.Admissions.Application\Hospital.Admissions.Application.csproj" />
+    <ProjectReference Include="..\..\Exams\Hospital.Exams.Application\Hospital.Exams.Application.csproj" />
+    <ProjectReference Include="..\..\Prescriptions\Hospital.Prescriptions.Application\Hospital.Prescriptions.Application.csproj" />
+    <ProjectReference Include="..\..\VitalSigns\Hospital.VitalSigns.Application\Hospital.VitalSigns.Application.csproj" />
+    <ProjectReference Include="..\..\ClinicalNotes\Hospital.ClinicalNotes.Application\Hospital.ClinicalNotes.Application.csproj" />
+    <ProjectReference Include="..\..\Timeline\Hospital.Timeline.Application\Hospital.Timeline.Application.csproj" />
+    <ProjectReference Include="..\..\Alerts\Hospital.Alerts.Application\Hospital.Alerts.Application.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -23,11 +23,46 @@
     <Project Path="src/Integrations/Hospital.Salux/Hospital.Salux.csproj" />
   </Folder>
   <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Admissions/">
+    <Project Path="src/Modules/Admissions/Hospital.Admissions.Application/Hospital.Admissions.Application.csproj" />
+    <Project Path="src/Modules/Admissions/Hospital.Admissions.Domain/Hospital.Admissions.Domain.csproj" />
+    <Project Path="src/Modules/Admissions/Hospital.Admissions.Infrastructure/Hospital.Admissions.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Alerts/">
+    <Project Path="src/Modules/Alerts/Hospital.Alerts.Application/Hospital.Alerts.Application.csproj" />
+    <Project Path="src/Modules/Alerts/Hospital.Alerts.Domain/Hospital.Alerts.Domain.csproj" />
+    <Project Path="src/Modules/Alerts/Hospital.Alerts.Infrastructure/Hospital.Alerts.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/ClinicalNotes/">
+    <Project Path="src/Modules/ClinicalNotes/Hospital.ClinicalNotes.Application/Hospital.ClinicalNotes.Application.csproj" />
+    <Project Path="src/Modules/ClinicalNotes/Hospital.ClinicalNotes.Domain/Hospital.ClinicalNotes.Domain.csproj" />
+    <Project Path="src/Modules/ClinicalNotes/Hospital.ClinicalNotes.Infrastructure/Hospital.ClinicalNotes.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Exams/">
+    <Project Path="src/Modules/Exams/Hospital.Exams.Application/Hospital.Exams.Application.csproj" />
+    <Project Path="src/Modules/Exams/Hospital.Exams.Domain/Hospital.Exams.Domain.csproj" />
+    <Project Path="src/Modules/Exams/Hospital.Exams.Infrastructure/Hospital.Exams.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/Modules/Patients/">
     <Project Path="src/Modules/Patients/Hospital.Patients.Application/Hospital.Patients.Application.csproj" />
     <Project Path="src/Modules/Patients/Hospital.Patients.Contracts/Hospital.Patients.Contracts.csproj" />
     <Project Path="src/Modules/Patients/Hospital.Patients.Domain/Hospital.Patients.Domain.csproj" />
     <Project Path="src/Modules/Patients/Hospital.Patients.Infrastructure/Hospital.Patients.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Prescriptions/">
+    <Project Path="src/Modules/Prescriptions/Hospital.Prescriptions.Application/Hospital.Prescriptions.Application.csproj" />
+    <Project Path="src/Modules/Prescriptions/Hospital.Prescriptions.Domain/Hospital.Prescriptions.Domain.csproj" />
+    <Project Path="src/Modules/Prescriptions/Hospital.Prescriptions.Infrastructure/Hospital.Prescriptions.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Timeline/">
+    <Project Path="src/Modules/Timeline/Hospital.Timeline.Application/Hospital.Timeline.Application.csproj" />
+    <Project Path="src/Modules/Timeline/Hospital.Timeline.Domain/Hospital.Timeline.Domain.csproj" />
+    <Project Path="src/Modules/Timeline/Hospital.Timeline.Infrastructure/Hospital.Timeline.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/VitalSigns/">
+    <Project Path="src/Modules/VitalSigns/Hospital.VitalSigns.Application/Hospital.VitalSigns.Application.csproj" />
+    <Project Path="src/Modules/VitalSigns/Hospital.VitalSigns.Domain/Hospital.VitalSigns.Domain.csproj" />
+    <Project Path="src/Modules/VitalSigns/Hospital.VitalSigns.Infrastructure/Hospital.VitalSigns.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/" />
   <Folder Name="/tests/BuildingBlocks/">
@@ -39,9 +74,30 @@
     <Project Path="tests/Integrations/Hospital.Salux.UnitTests/Hospital.Salux.UnitTests.csproj" />
   </Folder>
   <Folder Name="/tests/Modules/" />
+  <Folder Name="/tests/Modules/Admissions/">
+    <Project Path="tests/Modules/Admissions/Hospital.Admissions.UnitTests/Hospital.Admissions.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/Alerts/">
+    <Project Path="tests/Modules/Alerts/Hospital.Alerts.UnitTests/Hospital.Alerts.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/ClinicalNotes/">
+    <Project Path="tests/Modules/ClinicalNotes/Hospital.ClinicalNotes.UnitTests/Hospital.ClinicalNotes.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/Exams/">
+    <Project Path="tests/Modules/Exams/Hospital.Exams.UnitTests/Hospital.Exams.UnitTests.csproj" />
+  </Folder>
   <Folder Name="/tests/Modules/Patients/">
     <Project Path="tests/Modules/Patients/Hospital.Patients.ApplicationTests/Hospital.Patients.ApplicationTests.csproj" />
     <Project Path="tests/Modules/Patients/Hospital.Patients.IntegrationTests/Hospital.Patients.IntegrationTests.csproj" />
     <Project Path="tests/Modules/Patients/Hospital.Patients.UnitTests/Hospital.Patients.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/Prescriptions/">
+    <Project Path="tests/Modules/Prescriptions/Hospital.Prescriptions.UnitTests/Hospital.Prescriptions.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/Timeline/">
+    <Project Path="tests/Modules/Timeline/Hospital.Timeline.UnitTests/Hospital.Timeline.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/VitalSigns/">
+    <Project Path="tests/Modules/VitalSigns/Hospital.VitalSigns.UnitTests/Hospital.VitalSigns.UnitTests.csproj" />
   </Folder>
 </Solution>
