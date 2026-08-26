@@ -82,6 +82,31 @@ public sealed class SaluxPatientMapperTests
     }
 
     [Fact]
+    public void Map_ShouldCreateDeterministicMessageIdForSameVersion()
+    {
+        var mapper = new SaluxPatientMapper();
+        var updatedAt = new DateTimeOffset(2026, 8, 26, 12, 0, 0, TimeSpan.Zero);
+
+        var first = mapper.Map(
+            new SaluxPatientRecord(
+                "SALUX-1003",
+                "Paciente",
+                new DateOnly(1991, 1, 1),
+                1,
+                updatedAt));
+
+        var second = mapper.Map(
+            new SaluxPatientRecord(
+                "SALUX-1003",
+                "Paciente",
+                new DateOnly(1991, 1, 1),
+                1,
+                updatedAt));
+
+        Assert.Equal(first.MessageId, second.MessageId);
+    }
+
+    [Fact]
     public void Map_WithNullPatient_ShouldThrow()
     {
         var mapper =

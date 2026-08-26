@@ -6,9 +6,9 @@ services:
     environment:
       POSTGRES_DB: hospital_intelligence
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - hospital_postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -22,43 +22,66 @@ services:
       context: .
       dockerfile: src/Hosts/Hospital.Api/Dockerfile
     container_name: hospital-api
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__PatientsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__AdmissionsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__ExamsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__PrescriptionsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__VitalSignsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__ClinicalNotesDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__AlertsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__TimelineDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
-      ConnectionStrings__AiDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Docker}
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__PatientsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__AdmissionsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__ExamsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__PrescriptionsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__VitalSignsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__ClinicalNotesDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__AlertsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__TimelineDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__AiDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__SecurityDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
       AI__VectorStore: PgVector
-      AI__Provider: Mock
-      Security__RequireAuth: "false"
+      AI__Provider: ${AI_PROVIDER:-Mock}
+      Security__RequireAuth: ${SECURITY_REQUIRE_AUTH:-true}
+      Security__JwtSigningKey: ${JWT_SIGNING_KEY:-dev-only-change-me-hospital-intelligence-32chars!}
+      # Salux real (read-only) — preencher no .env do ambiente
+      Salux__Enabled: ${SALUX_ENABLED:-false}
+      Salux__Provider: ${SALUX_PROVIDER:-SqlServer}
+      Salux__ConnectionString: ${SALUX_CONNECTION_STRING:-}
+      Salux__PollIntervalSeconds: ${SALUX_POLL_INTERVAL_SECONDS:-60}
+      Salux__BatchSize: ${SALUX_BATCH_SIZE:-200}
+      Salux__CheckpointConnectionString: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      Salux__PatientQueryFile: ${SALUX_PATIENT_QUERY_FILE:-/app/config/salux-patient-query.sql}
+    volumes:
+      - ./deploy/salux-patient-query.sql:/app/config/salux-patient-query.sql:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
-      - "8080:8080"
+      - "${API_PORT:-8080}:8080"
 
   web:
     build:
       context: src/Frontend/hospital-web
       dockerfile: Dockerfile
+      args:
+        API_URL: ${PUBLIC_API_URL:-http://localhost:8080}
     container_name: hospital-web
+    restart: unless-stopped
     depends_on:
       - api
     ports:
-      - "8088:80"
+      - "${WEB_PORT:-8088}:80"
 
   ml:
     build:
       context: services/ml
       dockerfile: Dockerfile
     container_name: hospital-ml
+    restart: unless-stopped
     ports:
-      - "8090:8090"
+      - "${ML_PORT:-8090}:8090"
 
 volumes:
   hospital_postgres_data:

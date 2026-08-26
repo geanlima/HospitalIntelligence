@@ -3,7 +3,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+
+ARG API_URL=http://localhost:8080
+RUN sed -i "s|https://localhost:7096|${API_URL}|g" src/environments/environment.production.ts \
+ && sed -i "s|https://localhost:7096|${API_URL}|g" src/environments/environment.ts
+
+RUN npm run build -- --configuration=production
 
 FROM nginx:1.27-alpine AS final
 COPY nginx.conf /etc/nginx/conf.d/default.conf

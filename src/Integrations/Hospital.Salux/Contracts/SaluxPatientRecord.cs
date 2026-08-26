@@ -4,4 +4,5 @@ public sealed record SaluxPatientRecord(
     string PatientCode,
     string PatientName,
     DateOnly BirthDate,
-    int GenderCode);
+    int GenderCode,
+    DateTimeOffset UpdatedAtUtc = default);

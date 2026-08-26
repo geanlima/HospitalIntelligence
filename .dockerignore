@@ -1,0 +1,14 @@
+**/.git
+**/bin
+**/obj
+**/.vs
+**/.idea
+**/node_modules
+**/dist
+**/.angular
+**/TestResults
+**/*.user
+**/*.suo
+**/agent-transcripts
+**/.env
+**/terminals
