@@ -39,3 +39,54 @@ public sealed record SearchClinicalKnowledgeResponse(
     Guid PatientId,
     string Query,
     IReadOnlyList<ClinicalKnowledgeHitDto> Hits);
+
+public sealed record ChartAuditFindingDto(
+    string Code,
+    string Category,
+    string Severity,
+    string Title,
+    string Message,
+    IReadOnlyList<string> RelatedSourceIds);
+
+public sealed record AuditPatientChartResponse(
+    Guid PatientId,
+    DateTimeOffset AuditedAtUtc,
+    string OverallRisk,
+    string Summary,
+    int MissingDocumentationCount,
+    int DivergenceCount,
+    int FinancialGlosaRiskCount,
+    IReadOnlyList<ChartAuditFindingDto> Findings);
+
+public sealed record ClinicalSafetyFindingDto(
+    string Code,
+    string Category,
+    string Severity,
+    string Title,
+    string Message,
+    IReadOnlyList<string> RelatedSourceIds);
+
+public sealed record AssessClinicalSafetyResponse(
+    Guid PatientId,
+    DateTimeOffset AssessedAtUtc,
+    string OverallRisk,
+    string Summary,
+    bool DischargeReady,
+    int DischargeBlockerCount,
+    int DeteriorationScore,
+    string DeteriorationBand,
+    string TriageRecommendation,
+    int MedicationIssueCount,
+    IReadOnlyList<ClinicalSafetyFindingDto> Findings);
+
+public sealed record StructureVoiceNoteRequest(
+    string Transcript,
+    Guid? PatientId = null,
+    string NoteType = "Evolution");
+
+public sealed record StructureVoiceNoteResponse(
+    string DraftTitle,
+    string StructuredContent,
+    string NoteType,
+    string Provider,
+    Guid? PatientId);

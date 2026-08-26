@@ -39,12 +39,38 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="edit-button"
-      >
-        Editar
-      </button>
+      <div class="header-actions">
+        <a
+          class="ai-search-button"
+          [routerLink]="['/ai/search']"
+          [queryParams]="{ patientId: patient.patientId }"
+        >
+          Busca IA
+        </a>
+
+        <a
+          class="ai-audit-button"
+          [routerLink]="['/ai/audit']"
+          [queryParams]="{ patientId: patient.patientId }"
+        >
+          Auditoria IA
+        </a>
+
+        <a
+          class="ai-clinical-button"
+          [routerLink]="['/ai/clinical-safety']"
+          [queryParams]="{ patientId: patient.patientId }"
+        >
+          Clínica IA
+        </a>
+
+        <button
+          type="button"
+          class="edit-button"
+        >
+          Editar
+        </button>
+      </div>
     </header>
 
     <section class="summary-grid">

@@ -5,7 +5,7 @@ import {
   OnInit,
   signal
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { Patient360 } from '../../../core/models/patient-360.model';
 import { PatientService } from '../../../core/services/patient.service';
@@ -24,7 +24,8 @@ type PatientTab =
   selector: 'app-patient-360',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './patient-360.html',
   styleUrl: './patient-360.scss'

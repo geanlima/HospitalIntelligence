@@ -82,4 +82,16 @@ export class DashboardComponent implements OnInit {
   goToClinicalNotes(): void {
     this.router.navigate(['/clinical-notes']);
   }
+
+  goToIntelligentSearch(): void {
+    this.router.navigate(['/ai/search']);
+  }
+
+  goToChartAudit(): void {
+    this.router.navigate(['/ai/audit']);
+  }
+
+  goToClinicalSafety(): void {
+    this.router.navigate(['/ai/clinical-safety']);
+  }
 }

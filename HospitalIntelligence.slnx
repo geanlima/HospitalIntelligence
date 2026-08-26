@@ -52,6 +52,11 @@
     <Project Path="src/Modules/Exams/Hospital.Exams.Domain/Hospital.Exams.Domain.csproj" />
     <Project Path="src/Modules/Exams/Hospital.Exams.Infrastructure/Hospital.Exams.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/ML/">
+    <Project Path="src/Modules/ML/Hospital.ML.Application/Hospital.ML.Application.csproj" />
+    <Project Path="src/Modules/ML/Hospital.ML.Contracts/Hospital.ML.Contracts.csproj" />
+    <Project Path="src/Modules/ML/Hospital.ML.Infrastructure/Hospital.ML.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/Modules/Patients/">
     <Project Path="src/Modules/Patients/Hospital.Patients.Application/Hospital.Patients.Application.csproj" />
     <Project Path="src/Modules/Patients/Hospital.Patients.Contracts/Hospital.Patients.Contracts.csproj" />

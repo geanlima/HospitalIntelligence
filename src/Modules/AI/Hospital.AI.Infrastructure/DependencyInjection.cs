@@ -1,5 +1,7 @@
 using Hospital.AI.Application.Abstractions;
 using Hospital.AI.Application.Ask;
+using Hospital.AI.Application.Audit;
+using Hospital.AI.Application.ClinicalSafety;
 using Hospital.AI.Application.Index;
 using Hospital.AI.Application.Rag;
 using Hospital.AI.Application.Search;
@@ -108,6 +110,9 @@ public static class DependencyInjection
         services.AddScoped<AskAiHandler>();
         services.AddScoped<IndexPatientClinicalRecordsHandler>();
         services.AddScoped<SearchClinicalKnowledgeHandler>();
+        services.AddScoped<AuditPatientChartHandler>();
+        services.AddScoped<AssessClinicalSafetyHandler>();
+        services.AddScoped<StructureVoiceNoteHandler>();
 
         return services;
     }

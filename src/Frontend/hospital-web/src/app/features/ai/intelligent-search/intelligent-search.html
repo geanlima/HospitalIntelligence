@@ -1,0 +1,199 @@
+<section class="intelligent-search list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Busca Inteligente</h1>
+      <p>
+        Indexe o prontuário, busque evidências e pergunte em
+        linguagem natural com citações de fonte.
+      </p>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (statusMessage()) {
+    <p class="status">{{ statusMessage() }}</p>
+  }
+
+  <section class="search-card">
+    <h2>1. Paciente</h2>
+
+    <div class="search patient-picker">
+      <input
+        type="text"
+        [(ngModel)]="patientSearchName"
+        placeholder="Buscar paciente por nome"
+        (keyup.enter)="searchPatients()"
+      />
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="searchPatients()"
+        [disabled]="loadingPatients()"
+      >
+        {{ loadingPatients() ? 'Buscando...' : 'Buscar' }}
+      </button>
+
+      <select
+        [(ngModel)]="selectedPatientId"
+        (ngModelChange)="selectPatient($event)"
+      >
+        <option value="">Selecione um paciente</option>
+
+        @for (patient of patients(); track patient.id) {
+          <option [value]="patient.id">
+            {{ patient.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    @if (selectedPatient(); as patient) {
+      <div class="selected-patient">
+        <strong>{{ patient.name }}</strong>
+        <span>ID: {{ patient.id }}</span>
+        <a [routerLink]="['/patients', patient.id, '360']">
+          Abrir Patient 360
+        </a>
+      </div>
+    }
+  </section>
+
+  <section class="search-card">
+    <h2>2. Indexar prontuário</h2>
+    <p class="hint">
+      Gera embeddings dos registros clínicos do paciente no
+      vector store (necessário antes da busca/Q&amp;A).
+    </p>
+
+    <div class="actions-row">
+      <button
+        type="button"
+        class="primary-button"
+        (click)="indexChart()"
+        [disabled]="indexing() || !selectedPatientId"
+      >
+        {{ indexing() ? 'Indexando...' : 'Indexar prontuário' }}
+      </button>
+    </div>
+
+    @if (indexResult(); as indexed) {
+      <p class="result-meta">
+        {{ indexed.indexedCount }} registro(s) ·
+        {{ indexed.indexedAtUtc | date:'dd/MM/yyyy HH:mm' }}
+      </p>
+    }
+  </section>
+
+  <section class="search-card">
+    <h2>3. Busca semântica</h2>
+
+    <div class="search">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Ex.: dispneia, saturação, antibiótico"
+        (keyup.enter)="runSemanticSearch()"
+      />
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="runSemanticSearch()"
+        [disabled]="searching() || !selectedPatientId"
+      >
+        {{ searching() ? 'Buscando...' : 'Buscar evidências' }}
+      </button>
+    </div>
+
+    @if (searchResult(); as result) {
+      @if (result.hits.length === 0) {
+        <p class="empty-state">
+          Nenhuma evidência encontrada. Indexe o prontuário
+          e tente outros termos.
+        </p>
+      } @else {
+        <div class="hits">
+          @for (hit of result.hits; track trackSource($index, hit)) {
+            <article class="hit-card">
+              <header>
+                <strong>{{ hit.title }}</strong>
+                <span class="score">
+                  score {{ formatScore(hit.score) }}
+                </span>
+              </header>
+              <code>{{ hit.sourceId }}</code>
+              <p>{{ hit.excerpt }}</p>
+            </article>
+          }
+        </div>
+      }
+    }
+  </section>
+
+  <section class="search-card">
+    <h2>4. Pergunta em linguagem natural</h2>
+
+    <div class="ask-box">
+      <textarea
+        [(ngModel)]="askQuestion"
+        rows="3"
+        placeholder="Ex.: Qual a evolução recente do paciente?"
+      ></textarea>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="askQuestionAboutChart()"
+        [disabled]="asking() || !selectedPatientId"
+      >
+        {{ asking() ? 'Consultando IA...' : 'Perguntar' }}
+      </button>
+    </div>
+
+    @if (askResult(); as answer) {
+      <article class="answer-card">
+        <header>
+          <strong>Resposta</strong>
+          <span>
+            {{ answer.provider }} · {{ answer.promptKey }}
+          </span>
+        </header>
+
+        <p class="answer-text">{{ answer.answer }}</p>
+
+        <h3>Fontes citadas</h3>
+
+        @if (answer.sources.length === 0) {
+          <p class="empty-state">
+            Nenhuma fonte recuperada. Indexe o prontuário
+            antes de perguntar.
+          </p>
+        } @else {
+          <div class="hits">
+            @for (
+              source of answer.sources;
+              track trackSource($index, source)
+            ) {
+              <article class="hit-card">
+                <header>
+                  <strong>{{ source.title }}</strong>
+                  <span class="score">
+                    score {{ formatScore(source.score) }}
+                  </span>
+                </header>
+                <code>{{ source.sourceId }}</code>
+                <p>{{ source.excerpt }}</p>
+              </article>
+            }
+          </div>
+        }
+      </article>
+    }
+  </section>
+
+</section>

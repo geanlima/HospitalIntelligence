@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore HospitalIntelligence.slnx
+
+      - name: Build
+        run: dotnet build HospitalIntelligence.slnx -c Release --no-restore
+
+      - name: Test
+        run: dotnet test HospitalIntelligence.slnx -c Release --no-build --verbosity normal
+
+      - name: Vulnerability scan (NuGet)
+        run: dotnet list HospitalIntelligence.slnx package --vulnerable --include-transitive || true
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/Frontend/hospital-web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: src/Frontend/hospital-web/package-lock.json
+      - run: npm ci
+      - run: npm run build

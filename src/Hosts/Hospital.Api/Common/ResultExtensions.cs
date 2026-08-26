@@ -49,6 +49,14 @@ public static class ResultExtensions
                         result.Error.Description
                     }),
 
+            "ML.PatientNotFound" =>
+                Results.NotFound(
+                    new
+                    {
+                        result.Error.Code,
+                        result.Error.Description
+                    }),
+
             _ =>
                 Results.BadRequest(
                     new

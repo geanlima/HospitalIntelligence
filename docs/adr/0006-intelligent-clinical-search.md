@@ -45,5 +45,7 @@ Benefícios:
 Limitações:
 
 - embedding ainda determinístico;
-- indexação manual (não event-driven);
-- sem papéis/perfis clínicos ainda.
+- indexação sob demanda (UI/API); reindexação event-driven fica para evolução futura;
+- sem papéis/perfis clínicos ainda (Fase 20).
+
+UI: `src/Frontend/hospital-web` rota `/ai/search`.

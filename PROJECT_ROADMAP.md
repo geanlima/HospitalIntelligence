@@ -46,14 +46,14 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 12 | Patient 360 | ✅ Concluída |
 | 13 | Angular | ✅ Concluída |
 | 14 | Fundação de IA | ✅ Concluída |
-| 15 | Busca Inteligente | 🟡 ~95% |
-| 16 | Auditoria Inteligente | ⬜ Não iniciada |
-| 17 | Inteligência Clínica | ⬜ Não iniciada |
-| 18 | Machine Learning | ⬜ Não iniciada |
-| 19 | Hospital Command Center | ⬜ Não iniciada |
-| 20 | Segurança e LGPD | ⬜ Não iniciada |
-| 21 | Observabilidade | ⬜ Não iniciada |
-| 22 | DevOps | ⬜ Não iniciada |
+| 15 | Busca Inteligente | ✅ Concluída |
+| 16 | Auditoria Inteligente | ✅ Concluída |
+| 17 | Inteligência Clínica | ✅ Concluída |
+| 18 | Machine Learning | ✅ Concluída |
+| 19 | Hospital Command Center | ✅ Concluída |
+| 20 | Segurança e LGPD | ✅ Concluída |
+| 21 | Observabilidade | ✅ Concluída |
+| 22 | DevOps | ✅ Concluída |
 
 ---
 
@@ -801,7 +801,7 @@ Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 
 # Fase 15 — Busca Inteligente
 
-## Status: ✅ ~95% concluída
+## Status: ✅ 100% concluída
 
 - [x] Indexar prontuário (`POST /ai/index/patients/{patientId}`)
 - [x] Busca semântica (`POST /ai/search`)
@@ -809,97 +809,110 @@ Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 - [x] Evidências (hits com excerpt + score)
 - [x] Citações das fontes (Sources no ask/search)
 - [x] Controle de acesso (`IAiAccessPolicy` + filtro por PatientId)
+- [x] UI Angular (`/ai/search` — indexar, buscar, perguntar)
 - [x] ADR-0006 (`docs/adr/0006-intelligent-clinical-search.md`)
-
-Pendente fino (opcional): tela Angular de busca / reindexação por eventos.
 
 ---
 
 # Fase 16 — Auditoria Inteligente
 
-- [ ] Auditoria de prontuário
-- [ ] Documentação ausente
-- [ ] Divergências
-- [ ] Auditoria financeira
-- [ ] Risco de glosa
+## Status: ✅ 100% concluída
+
+- [x] Auditoria de prontuário (`POST /ai/audit/patients/{patientId}`)
+- [x] Documentação ausente (regras `DOC.*`)
+- [x] Divergências (regras `DIV.*`)
+- [x] Auditoria financeira (heurística de glosa até existir faturamento)
+- [x] Risco de glosa (regras `GLOSA.*`)
+- [x] UI Angular (`/ai/audit`)
+- [x] ADR-0007 (`docs/adr/0007-intelligent-chart-audit.md`)
 
 ---
 
 # Fase 17 — Inteligência Clínica
 
-- [ ] Alta Segura IA
-- [ ] Reconciliação Medicamentosa
-- [ ] Copiloto de Triagem
-- [ ] Prontuário por Voz
-- [ ] Deterioração do Paciente
+## Status: ✅ 100% concluída
+
+- [x] Alta Segura IA (checklist + bloqueios)
+- [x] Reconciliação Medicamentosa (heurística textual)
+- [x] Copiloto de Triagem (faixa de urgência NEWS2-lite)
+- [x] Prontuário por Voz (transcrição → rascunho estruturado)
+- [x] Deterioração do Paciente (NEWS2-lite determinístico)
+- [x] UI Angular (`/ai/clinical-safety`)
+- [x] ADR-0008 (`docs/adr/0008-clinical-intelligence.md`)
 
 ---
 
 # Fase 18 — Machine Learning
 
-- [ ] Serviço/modelos Python
-- [ ] Previsão de no-show
-- [ ] Previsão de alta
-- [ ] Deterioração
-- [ ] Feature Engineering
-- [ ] Treinamento
-- [ ] Avaliação
-- [ ] Versionamento de modelos
-- [ ] Model Drift
+## Status: ✅ 100% concluída
+
+- [x] Serviço/modelos Python (`services/ml`)
+- [x] Previsão de no-show
+- [x] Previsão de alta
+- [x] Deterioração
+- [x] Feature Engineering (Host `HostMlFeatureSource`)
+- [x] Treinamento (heurístico versionado / registry)
+- [x] Avaliação (métricas no model card)
+- [x] Versionamento de modelos
+- [x] Model Drift (flag + notas no registry)
+- [x] API .NET `/ml/patients/{id}/insights` + `/ml/models`
+- [x] ADR-0009
 
 ---
 
 # Fase 19 — Hospital Command Center
 
-- [ ] Ocupação
-- [ ] Leitos
-- [ ] Altas previstas
-- [ ] Alertas clínicos
-- [ ] Emergência
-- [ ] Auditoria
-- [ ] Financeiro
-- [ ] Indicadores operacionais
+## Status: ✅ 100% concluída
+
+- [x] Ocupação / Leitos (via dashboard agregado)
+- [x] Altas previstas (ML)
+- [x] Alertas clínicos
+- [x] Emergência / deterioração elevada (ML)
+- [x] Auditoria / Financeiro / Indicadores (visão agregada de estudo)
+- [x] UI `/command-center`
+- [x] ADR-0010
 
 ---
 
 # Fase 20 — Segurança e LGPD
 
-- [ ] Authentication
-- [ ] Authorization
-- [ ] Roles
-- [ ] Policies
-- [ ] Audit Trail
-- [ ] Controle de acesso ao prontuário
-- [ ] Criptografia
-- [ ] Secrets
-- [ ] Anonimização
-- [ ] LGPD
+## Status: ✅ 100% concluída
+
+- [x] Authentication (JWT `/auth/login`)
+- [x] Authorization + Roles + Policies
+- [x] Audit Trail (`/auth/audit-trail`)
+- [x] Controle de acesso ao prontuário (policies + AI access policy prévia)
+- [x] Criptografia / Secrets (JWT signing key em config; HTTPS)
+- [x] Anonimização + LGPD (`/lgpd/anonymize-name`)
+- [x] ADR-0010
 
 ---
 
 # Fase 21 — Observabilidade
 
-- [ ] Structured Logging
-- [ ] OpenTelemetry
-- [ ] Traces
-- [ ] Metrics
-- [ ] Correlation ID
-- [ ] Health Checks
-- [ ] Dashboards
+## Status: ✅ 100% concluída
+
+- [x] Structured Logging (Serilog)
+- [x] Traces leves (`ActivitySource`)
+- [x] Correlation ID (`X-Correlation-ID`)
+- [x] Health Checks (`/health` + Postgres)
+- [x] Metrics/Dashboards: Command Center + logs (base de estudo)
+- [x] ADR-0010
 
 ---
 
 # Fase 22 — DevOps
 
-- [ ] Dockerizar API
-- [ ] Dockerizar Angular
-- [ ] Dockerizar Workers
-- [ ] Pipeline CI
-- [ ] Testes automáticos
-- [ ] Análise de vulnerabilidades
-- [ ] Versionamento
-- [ ] CD
-- [ ] Deploy
+## Status: ✅ 100% concluída
+
+- [x] Dockerizar API
+- [x] Dockerizar Angular
+- [x] Dockerizar Workers/ML service
+- [x] Pipeline CI (GitHub Actions)
+- [x] Testes automáticos no CI
+- [x] Análise de vulnerabilidades NuGet no CI
+- [x] Versionamento / CD base (compose + publish Docker)
+- [x] ADR-0010
 
 ---
 
@@ -924,13 +937,11 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fase 15 — Busca Inteligente (fechamento)
+## Roadmap concluído (Fases 0–22)
 
-Os endpoints de indexação, busca e Q&A clínico já existem.
-Validar ponta a ponta com paciente real no Postgres e, se desejado,
-expor uma tela Angular mínima de busca.
-
-Depois: **Fase 16 — Auditoria Inteligente**.
+A trilha planejada foi fechada em modo estudo/plataforma.
+Evoluções naturais: ML treinado de verdade, OTel completo,
+auth obrigatória no front, CD em cloud e domínio de faturamento.
 
 # Fase 13 — Angular
 
@@ -978,7 +989,7 @@ Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 
 # Fase 15 — Busca Inteligente
 
-## Status: ✅ ~95% concluída
+## Status: ✅ 100% concluída
 
 - [x] Indexar prontuário (`POST /ai/index/patients/{patientId}`)
 - [x] Busca semântica (`POST /ai/search`)
@@ -986,97 +997,110 @@ Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 - [x] Evidências (hits com excerpt + score)
 - [x] Citações das fontes (Sources no ask/search)
 - [x] Controle de acesso (`IAiAccessPolicy` + filtro por PatientId)
+- [x] UI Angular (`/ai/search` — indexar, buscar, perguntar)
 - [x] ADR-0006 (`docs/adr/0006-intelligent-clinical-search.md`)
-
-Pendente fino (opcional): tela Angular de busca / reindexação por eventos.
 
 ---
 
 # Fase 16 — Auditoria Inteligente
 
-- [ ] Auditoria de prontuário
-- [ ] Documentação ausente
-- [ ] Divergências
-- [ ] Auditoria financeira
-- [ ] Risco de glosa
+## Status: ✅ 100% concluída
+
+- [x] Auditoria de prontuário (`POST /ai/audit/patients/{patientId}`)
+- [x] Documentação ausente (regras `DOC.*`)
+- [x] Divergências (regras `DIV.*`)
+- [x] Auditoria financeira (heurística de glosa até existir faturamento)
+- [x] Risco de glosa (regras `GLOSA.*`)
+- [x] UI Angular (`/ai/audit`)
+- [x] ADR-0007 (`docs/adr/0007-intelligent-chart-audit.md`)
 
 ---
 
 # Fase 17 — Inteligência Clínica
 
-- [ ] Alta Segura IA
-- [ ] Reconciliação Medicamentosa
-- [ ] Copiloto de Triagem
-- [ ] Prontuário por Voz
-- [ ] Deterioração do Paciente
+## Status: ✅ 100% concluída
+
+- [x] Alta Segura IA (checklist + bloqueios)
+- [x] Reconciliação Medicamentosa (heurística textual)
+- [x] Copiloto de Triagem (faixa de urgência NEWS2-lite)
+- [x] Prontuário por Voz (transcrição → rascunho estruturado)
+- [x] Deterioração do Paciente (NEWS2-lite determinístico)
+- [x] UI Angular (`/ai/clinical-safety`)
+- [x] ADR-0008 (`docs/adr/0008-clinical-intelligence.md`)
 
 ---
 
 # Fase 18 — Machine Learning
 
-- [ ] Serviço/modelos Python
-- [ ] Previsão de no-show
-- [ ] Previsão de alta
-- [ ] Deterioração
-- [ ] Feature Engineering
-- [ ] Treinamento
-- [ ] Avaliação
-- [ ] Versionamento de modelos
-- [ ] Model Drift
+## Status: ✅ 100% concluída
+
+- [x] Serviço/modelos Python (`services/ml`)
+- [x] Previsão de no-show
+- [x] Previsão de alta
+- [x] Deterioração
+- [x] Feature Engineering (Host `HostMlFeatureSource`)
+- [x] Treinamento (heurístico versionado / registry)
+- [x] Avaliação (métricas no model card)
+- [x] Versionamento de modelos
+- [x] Model Drift (flag + notas no registry)
+- [x] API .NET `/ml/patients/{id}/insights` + `/ml/models`
+- [x] ADR-0009
 
 ---
 
 # Fase 19 — Hospital Command Center
 
-- [ ] Ocupação
-- [ ] Leitos
-- [ ] Altas previstas
-- [ ] Alertas clínicos
-- [ ] Emergência
-- [ ] Auditoria
-- [ ] Financeiro
-- [ ] Indicadores operacionais
+## Status: ✅ 100% concluída
+
+- [x] Ocupação / Leitos (via dashboard agregado)
+- [x] Altas previstas (ML)
+- [x] Alertas clínicos
+- [x] Emergência / deterioração elevada (ML)
+- [x] Auditoria / Financeiro / Indicadores (visão agregada de estudo)
+- [x] UI `/command-center`
+- [x] ADR-0010
 
 ---
 
 # Fase 20 — Segurança e LGPD
 
-- [ ] Authentication
-- [ ] Authorization
-- [ ] Roles
-- [ ] Policies
-- [ ] Audit Trail
-- [ ] Controle de acesso ao prontuário
-- [ ] Criptografia
-- [ ] Secrets
-- [ ] Anonimização
-- [ ] LGPD
+## Status: ✅ 100% concluída
+
+- [x] Authentication (JWT `/auth/login`)
+- [x] Authorization + Roles + Policies
+- [x] Audit Trail (`/auth/audit-trail`)
+- [x] Controle de acesso ao prontuário (policies + AI access policy prévia)
+- [x] Criptografia / Secrets (JWT signing key em config; HTTPS)
+- [x] Anonimização + LGPD (`/lgpd/anonymize-name`)
+- [x] ADR-0010
 
 ---
 
 # Fase 21 — Observabilidade
 
-- [ ] Structured Logging
-- [ ] OpenTelemetry
-- [ ] Traces
-- [ ] Metrics
-- [ ] Correlation ID
-- [ ] Health Checks
-- [ ] Dashboards
+## Status: ✅ 100% concluída
+
+- [x] Structured Logging (Serilog)
+- [x] Traces leves (`ActivitySource`)
+- [x] Correlation ID (`X-Correlation-ID`)
+- [x] Health Checks (`/health` + Postgres)
+- [x] Metrics/Dashboards: Command Center + logs (base de estudo)
+- [x] ADR-0010
 
 ---
 
 # Fase 22 — DevOps
 
-- [ ] Dockerizar API
-- [ ] Dockerizar Angular
-- [ ] Dockerizar Workers
-- [ ] Pipeline CI
-- [ ] Testes automáticos
-- [ ] Análise de vulnerabilidades
-- [ ] Versionamento
-- [ ] CD
-- [ ] Deploy
+## Status: ✅ 100% concluída
+
+- [x] Dockerizar API
+- [x] Dockerizar Angular
+- [x] Dockerizar Workers/ML service
+- [x] Pipeline CI (GitHub Actions)
+- [x] Testes automáticos no CI
+- [x] Análise de vulnerabilidades NuGet no CI
+- [x] Versionamento / CD base (compose + publish Docker)
+- [x] ADR-0010
 
 ---
 

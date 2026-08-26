@@ -1,0 +1,155 @@
+<section class="clinical-safety list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Inteligência Clínica</h1>
+      <p>
+        Alta segura, deterioração (NEWS2-lite), reconciliação medicamentosa,
+        copiloto de triagem e rascunho de nota por transcrição.
+      </p>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <section class="search-card">
+    <h2>Paciente</h2>
+
+    <div class="search patient-picker">
+      <input
+        type="text"
+        [(ngModel)]="patientSearchName"
+        placeholder="Buscar paciente por nome"
+        (keyup.enter)="searchPatients()"
+      />
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="searchPatients()"
+        [disabled]="loadingPatients()"
+      >
+        {{ loadingPatients() ? 'Buscando...' : 'Buscar' }}
+      </button>
+
+      <select
+        [(ngModel)]="selectedPatientId"
+        (ngModelChange)="selectPatient($event)"
+      >
+        <option value="">Selecione um paciente</option>
+        @for (patient of patients(); track patient.id) {
+          <option [value]="patient.id">{{ patient.name }}</option>
+        }
+      </select>
+    </div>
+
+    @if (selectedPatient(); as patient) {
+      <div class="selected-patient">
+        <strong>{{ patient.name }}</strong>
+        <span>ID: {{ patient.id }}</span>
+        <a [routerLink]="['/patients', patient.id, '360']">Patient 360</a>
+        <a
+          [routerLink]="['/ai/audit']"
+          [queryParams]="{ patientId: patient.id }"
+        >
+          Auditoria IA
+        </a>
+      </div>
+    }
+
+    <div class="actions-row">
+      <button
+        type="button"
+        class="primary-button"
+        (click)="runAssessment()"
+        [disabled]="assessing() || !selectedPatientId"
+      >
+        {{ assessing() ? 'Avaliando...' : 'Avaliar segurança clínica' }}
+      </button>
+    </div>
+  </section>
+
+  @if (assessment(); as result) {
+    <section class="summary-grid">
+      <article [class]="riskClass(result.overallRisk)">
+        <span>Risco geral</span>
+        <strong>{{ result.overallRisk }}</strong>
+      </article>
+      <article>
+        <span>Alta segura</span>
+        <strong>{{ result.dischargeReady ? 'Pronta' : 'Bloqueada' }}</strong>
+      </article>
+      <article>
+        <span>NEWS2-lite</span>
+        <strong>{{ result.deteriorationScore }}</strong>
+      </article>
+      <article>
+        <span>Issues medicação</span>
+        <strong>{{ result.medicationIssueCount }}</strong>
+      </article>
+    </section>
+
+    <p class="summary-text">{{ result.summary }}</p>
+    <p class="triage">{{ result.triageRecommendation }}</p>
+
+    <div class="findings">
+      @for (finding of result.findings; track trackFinding($index, finding)) {
+        <article class="finding-card">
+          <header>
+            <div>
+              <span class="category">{{ categoryLabel(finding.category) }}</span>
+              <strong>{{ finding.title }}</strong>
+            </div>
+            <span class="severity" [class]="severityClass(finding.severity)">
+              {{ finding.severity }}
+            </span>
+          </header>
+          <p>{{ finding.message }}</p>
+          <code>{{ finding.code }}</code>
+        </article>
+      }
+    </div>
+  }
+
+  <section class="search-card voice-card">
+    <h2>Prontuário por voz (transcrição)</h2>
+    <p class="hint">
+      Cole a transcrição de um STT externo. A IA estrutura um rascunho
+      para revisão humana (sem captura de áudio nesta fase).
+    </p>
+
+    <select [(ngModel)]="voiceNoteType">
+      <option value="Evolution">Evolution</option>
+      <option value="Medical">Medical</option>
+      <option value="Nursing">Nursing</option>
+    </select>
+
+    <textarea
+      [(ngModel)]="voiceTranscript"
+      rows="4"
+      placeholder="Ex.: Paciente refere melhora da dispneia. Mantém O2 2L. Orientado alta após controle de SpO2."
+    ></textarea>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="structureVoiceNote()"
+      [disabled]="structuring()"
+    >
+      {{ structuring() ? 'Estruturando...' : 'Gerar rascunho de nota' }}
+    </button>
+
+    @if (voiceDraft(); as draft) {
+      <article class="voice-draft">
+        <header>
+          <strong>{{ draft.draftTitle }}</strong>
+          <span>{{ draft.provider }}</span>
+        </header>
+        <pre>{{ draft.structuredContent }}</pre>
+      </article>
+    }
+  </section>
+
+</section>

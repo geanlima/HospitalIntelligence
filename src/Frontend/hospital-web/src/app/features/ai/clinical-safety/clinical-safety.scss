@@ -1,0 +1,245 @@
+@use '../../../shared/styles/list-page';
+
+.clinical-safety {
+  max-width: 960px;
+}
+
+.search-card h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.patient-picker {
+  grid-template-columns: 1fr auto;
+}
+
+.patient-picker select {
+  grid-column: 1 / -1;
+}
+
+.selected-patient {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin: 14px 0;
+  padding-top: 14px;
+  border-top: 1px solid #edf0f4;
+  color: #475569;
+  font-size: 13px;
+
+  a {
+    color: #4f46e5;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
+
+.actions-row .primary-button {
+  width: auto;
+  min-width: 220px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+
+  article {
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+
+    span {
+      display: block;
+      margin-bottom: 6px;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    strong {
+      color: #0f172a;
+      font-size: 20px;
+    }
+  }
+}
+
+.risk-none strong,
+.risk-low strong {
+  color: #166534;
+}
+
+.risk-medium strong {
+  color: #9a3412;
+}
+
+.risk-high strong,
+.risk-critical strong {
+  color: #991b1b;
+}
+
+.summary-text,
+.triage {
+  margin: 0 0 10px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.triage {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-weight: 600;
+}
+
+.findings {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.finding-card {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+
+    strong {
+      display: block;
+      margin-top: 4px;
+      color: #0f172a;
+    }
+  }
+
+  p {
+    margin: 0 0 8px;
+    color: #475569;
+    font-size: 14px;
+  }
+
+  code {
+    color: #6366f1;
+    font-size: 12px;
+  }
+}
+
+.category {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.severity {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.severity-low {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.severity-medium {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.severity-high {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.severity-critical {
+  background: #7f1d1d;
+  color: #fff;
+}
+
+.voice-card {
+  display: grid;
+  gap: 12px;
+
+  .hint {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+  }
+
+  select,
+  textarea,
+  .primary-button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  select,
+  textarea {
+    padding: 12px 14px;
+    border: 1px solid #dbe2ea;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 14px;
+  }
+
+  .primary-button {
+    width: auto;
+    justify-self: start;
+    min-width: 200px;
+    height: 44px;
+  }
+}
+
+.voice-draft {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #64748b;
+    font-size: 12px;
+
+    strong {
+      color: #0f172a;
+      font-size: 14px;
+    }
+  }
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    color: #1f2937;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 800px) {
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .patient-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-row .primary-button,
+  .voice-card .primary-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,96 @@
+<section class="command-center list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Hospital Command Center</h1>
+      <p>
+        Visão operacional + previsões ML (altas, deterioração, no-show).
+      </p>
+    </div>
+    <button type="button" class="primary-button" (click)="load()">
+      Atualizar
+    </button>
+  </header>
+
+  @if (loading()) {
+    <p class="loading-message">Carregando...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (summary(); as data) {
+    <section class="summary-grid">
+      <article>
+        <span>Ocupação</span>
+        <strong>{{ data.operational.occupancyPercentage }}%</strong>
+        <small>
+          {{ data.operational.occupiedBeds }}/{{ data.operational.totalBeds }} leitos
+        </small>
+      </article>
+      <article>
+        <span>Internações ativas</span>
+        <strong>{{ data.operational.activeAdmissions }}</strong>
+      </article>
+      <article>
+        <span>Altas previstas (ML)</span>
+        <strong>{{ data.predictedDischargesToday }}</strong>
+      </article>
+      <article>
+        <span>Deterioração elevada</span>
+        <strong>{{ data.elevatedDeteriorationCount }}</strong>
+      </article>
+      <article>
+        <span>Alertas críticos</span>
+        <strong>{{ data.operational.criticalAlerts }}</strong>
+      </article>
+      <article>
+        <span>No-show alto risco</span>
+        <strong>{{ data.highNoShowRiskCount }}</strong>
+      </article>
+    </section>
+
+    <section class="table-card">
+      <header class="card-header">
+        <h2>Top insights ML</h2>
+        <small>
+          Gerado em {{ data.generatedAtUtc | date:'dd/MM/yyyy HH:mm' }}
+        </small>
+      </header>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Alta</th>
+            <th>Score alta</th>
+            <th>Deterioração</th>
+            <th>Score</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of data.topInsights; track item.patientId) {
+            <tr>
+              <td>{{ item.patientId }}</td>
+              <td>{{ item.dischargeLabel }}</td>
+              <td>{{ item.dischargeScore | number:'1.2-2' }}</td>
+              <td>{{ item.deteriorationLabel }}</td>
+              <td>{{ item.deteriorationScore | number:'1.2-2' }}</td>
+              <td>
+                <a
+                  [routerLink]="['/ai/clinical-safety']"
+                  [queryParams]="{ patientId: item.patientId }"
+                >
+                  Clínica IA
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+
+</section>

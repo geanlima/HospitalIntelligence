@@ -96,7 +96,8 @@ public sealed class HostClinicalRecordSource : IClinicalRecordSource
                     $"Internação - {admission.Unit ?? "sem unidade"}",
                     content,
                     patientId,
-                    admission.AdmissionDate));
+                    admission.AdmissionDate,
+                    admission.Status.ToString()));
         }
 
         var exams =
@@ -116,7 +117,8 @@ public sealed class HostClinicalRecordSource : IClinicalRecordSource
                     $"Exame - {exam.Name}",
                     content,
                     patientId,
-                    exam.RequestedAtUtc));
+                    exam.RequestedAtUtc,
+                    exam.Status.ToString()));
         }
 
         var prescriptions =
@@ -136,7 +138,8 @@ public sealed class HostClinicalRecordSource : IClinicalRecordSource
                     "Prescrição",
                     content,
                     patientId,
-                    prescription.PrescribedAtUtc));
+                    prescription.PrescribedAtUtc,
+                    prescription.Status.ToString()));
         }
 
         var vitalSigns =
@@ -172,7 +175,9 @@ public sealed class HostClinicalRecordSource : IClinicalRecordSource
                     $"Nota clínica - {note.NoteType}",
                     content,
                     patientId,
-                    note.CreatedAtUtc));
+                    note.CreatedAtUtc,
+                    Status: null,
+                    SubType: note.NoteType.ToString()));
         }
 
         var alerts =
@@ -191,7 +196,9 @@ public sealed class HostClinicalRecordSource : IClinicalRecordSource
                     $"Alerta - {alert.Type}",
                     content,
                     patientId,
-                    alert.CreatedAtUtc));
+                    alert.CreatedAtUtc,
+                    alert.Status.ToString(),
+                    alert.Severity.ToString()));
         }
 
         return snapshots;

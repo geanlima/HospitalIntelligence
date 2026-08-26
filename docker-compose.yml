@@ -3,23 +3,62 @@ services:
     image: pgvector/pgvector:pg17
     container_name: hospital-postgres
     restart: unless-stopped
-
     environment:
       POSTGRES_DB: hospital_intelligence
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
     ports:
       - "5432:5432"
-
     volumes:
       - hospital_postgres_data:/var/lib/postgresql/data
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d hospital_intelligence"]
       interval: 5s
       timeout: 5s
       retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Hosts/Hospital.Api/Dockerfile
+    container_name: hospital-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PatientsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__AdmissionsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__ExamsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__PrescriptionsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__VitalSignsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__ClinicalNotesDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__AlertsDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__TimelineDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      ConnectionStrings__AiDatabase: Host=postgres;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres
+      AI__VectorStore: PgVector
+      AI__Provider: Mock
+      Security__RequireAuth: "false"
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: src/Frontend/hospital-web
+      dockerfile: Dockerfile
+    container_name: hospital-web
+    depends_on:
+      - api
+    ports:
+      - "8088:80"
+
+  ml:
+    build:
+      context: services/ml
+      dockerfile: Dockerfile
+    container_name: hospital-ml
+    ports:
+      - "8090:8090"
 
 volumes:
   hospital_postgres_data:

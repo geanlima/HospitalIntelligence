@@ -78,6 +78,34 @@ export const routes: Routes = [
           )
       },
       {
+        path: 'command-center',
+        loadComponent: () =>
+          import('./features/command-center/command-center').then(
+            m => m.CommandCenterComponent
+          )
+      },
+      {
+        path: 'ai/search',
+        loadComponent: () =>
+          import('./features/ai/intelligent-search/intelligent-search').then(
+            m => m.IntelligentSearchComponent
+          )
+      },
+      {
+        path: 'ai/audit',
+        loadComponent: () =>
+          import('./features/ai/chart-audit/chart-audit').then(
+            m => m.ChartAuditComponent
+          )
+      },
+      {
+        path: 'ai/clinical-safety',
+        loadComponent: () =>
+          import('./features/ai/clinical-safety/clinical-safety').then(
+            m => m.ClinicalSafetyComponent
+          )
+      },
+      {
         path: 'reports',
         loadComponent: () =>
           import('./features/reports/reports').then(

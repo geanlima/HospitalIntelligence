@@ -8,7 +8,9 @@ public sealed record ClinicalRecordSnapshot(
     string Title,
     string Content,
     Guid PatientId,
-    DateTimeOffset OccurredAtUtc);
+    DateTimeOffset OccurredAtUtc,
+    string? Status = null,
+    string? SubType = null);
 
 /// <summary>
 /// Porta para ler o prontuário canônico.

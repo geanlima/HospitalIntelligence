@@ -1,0 +1,153 @@
+<section class="chart-audit list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Auditoria Inteligente</h1>
+      <p>
+        Avalia documentação ausente, divergências clínicas e risco
+        de glosa no prontuário do paciente.
+      </p>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <section class="search-card">
+    <h2>Paciente</h2>
+
+    <div class="search patient-picker">
+      <input
+        type="text"
+        [(ngModel)]="patientSearchName"
+        placeholder="Buscar paciente por nome"
+        (keyup.enter)="searchPatients()"
+      />
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="searchPatients()"
+        [disabled]="loadingPatients()"
+      >
+        {{ loadingPatients() ? 'Buscando...' : 'Buscar' }}
+      </button>
+
+      <select
+        [(ngModel)]="selectedPatientId"
+        (ngModelChange)="selectPatient($event)"
+      >
+        <option value="">Selecione um paciente</option>
+
+        @for (patient of patients(); track patient.id) {
+          <option [value]="patient.id">
+            {{ patient.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    @if (selectedPatient(); as patient) {
+      <div class="selected-patient">
+        <strong>{{ patient.name }}</strong>
+        <span>ID: {{ patient.id }}</span>
+        <a [routerLink]="['/patients', patient.id, '360']">
+          Patient 360
+        </a>
+        <a
+          [routerLink]="['/ai/search']"
+          [queryParams]="{ patientId: patient.id }"
+        >
+          Busca IA
+        </a>
+      </div>
+    }
+
+    <div class="actions-row">
+      <button
+        type="button"
+        class="primary-button"
+        (click)="runAudit()"
+        [disabled]="auditing() || !selectedPatientId"
+      >
+        {{ auditing() ? 'Auditando...' : 'Executar auditoria' }}
+      </button>
+    </div>
+  </section>
+
+  @if (auditResult(); as audit) {
+    <section class="summary-grid">
+      <article [class]="riskClass(audit.overallRisk)">
+        <span>Risco geral</span>
+        <strong>{{ audit.overallRisk }}</strong>
+      </article>
+
+      <article>
+        <span>Documentação ausente</span>
+        <strong>{{ audit.missingDocumentationCount }}</strong>
+      </article>
+
+      <article>
+        <span>Divergências</span>
+        <strong>{{ audit.divergenceCount }}</strong>
+      </article>
+
+      <article>
+        <span>Risco de glosa</span>
+        <strong>{{ audit.financialGlosaRiskCount }}</strong>
+      </article>
+    </section>
+
+    <p class="summary-text">{{ audit.summary }}</p>
+    <p class="result-meta">
+      Auditado em
+      {{ audit.auditedAtUtc | date:'dd/MM/yyyy HH:mm' }}
+    </p>
+
+    @if (audit.findings.length === 0) {
+      <p class="empty-state">
+        Nenhum achado. Prontuário consistente com as regras atuais.
+      </p>
+    } @else {
+      <div class="findings">
+        @for (
+          finding of audit.findings;
+          track trackFinding($index, finding)
+        ) {
+          <article class="finding-card">
+            <header>
+              <div>
+                <span class="category">
+                  {{ categoryLabel(finding.category) }}
+                </span>
+                <strong>{{ finding.title }}</strong>
+              </div>
+              <span
+                class="severity"
+                [class]="severityClass(finding.severity)"
+              >
+                {{ finding.severity }}
+              </span>
+            </header>
+
+            <p>{{ finding.message }}</p>
+            <code>{{ finding.code }}</code>
+
+            @if (finding.relatedSourceIds.length > 0) {
+              <div class="sources">
+                @for (
+                  sourceId of finding.relatedSourceIds;
+                  track sourceId
+                ) {
+                  <span>{{ sourceId }}</span>
+                }
+              </div>
+            }
+          </article>
+        }
+      </div>
+    }
+  }
+
+</section>

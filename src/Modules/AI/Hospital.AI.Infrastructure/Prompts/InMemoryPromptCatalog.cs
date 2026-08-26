@@ -58,6 +58,23 @@ public sealed class InMemoryPromptCatalog : IPromptCatalog
                 {{question}}
 
                 Responda com base nas evidências e mencione as fontes usadas.
+                """),
+
+            ["voice-note-draft"] = new PromptTemplate(
+                "voice-note-draft",
+                """
+                Você transforma uma transcrição falada em rascunho de nota clínica.
+                Organize em seções claras (Queixa/Contexto, Achados, Conduta).
+                Não invente dados que não estejam na transcrição.
+                Marque incertezas. Isso é rascunho para revisão humana.
+                """,
+                """
+                Tipo de nota desejado: {{noteType}}
+
+                Transcrição:
+                {{transcript}}
+
+                Produza o rascunho estruturado da nota.
                 """)
         };
 
