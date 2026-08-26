@@ -31,6 +31,9 @@
     <ProjectReference Include="..\..\Modules\Timeline\Hospital.Timeline.Infrastructure\Hospital.Timeline.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Dashboard\Hospital.Dashboard.Application\Hospital.Dashboard.Application.csproj" />
     <ProjectReference Include="..\..\Modules\Dashboard\Hospital.Dashboard.Contracts\Hospital.Dashboard.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\AI\Hospital.AI.Application\Hospital.AI.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\AI\Hospital.AI.Infrastructure\Hospital.AI.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\AI\Hospital.AI.Contracts\Hospital.AI.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

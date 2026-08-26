@@ -3,6 +3,8 @@ using Hospital.Admissions.Application.Admissions.DischargeAdmission;
 using Hospital.Admissions.Application.Admissions.SearchAdmissions;
 using Hospital.Admissions.Infrastructure;
 
+using Hospital.AI.Infrastructure;
+
 using Hospital.Alerts.Application.Alerts.AcknowledgeAlert;
 using Hospital.Alerts.Application.Alerts.CreateAlert;
 using Hospital.Alerts.Application.Alerts.ResolveAlert;
@@ -11,6 +13,7 @@ using Hospital.Alerts.Infrastructure;
 
 using Hospital.Api.Common;
 using Hospital.Api.Endpoints.Admissions;
+using Hospital.Api.Endpoints.AI;
 using Hospital.Api.Endpoints.Alerts;
 using Hospital.Api.Endpoints.ClinicalNotes;
 using Hospital.Api.Endpoints.Dashboard;
@@ -92,6 +95,9 @@ builder.Services.AddAlertsInfrastructure(
     builder.Configuration);
 
 builder.Services.AddTimelineInfrastructure(
+    builder.Configuration);
+
+builder.Services.AddAiInfrastructure(
     builder.Configuration);
 
 builder.Services.AddScoped<CreatePatientHandler>();
@@ -179,6 +185,10 @@ app.MapResolveAlertEndpoint();
 app.MapSearchAlertsEndpoint();
 
 app.MapCreateTimelineItemEndpoint();
+
+app.MapAskAiEndpoint();
+
+await app.Services.SeedAiKnowledgeAsync();
 
 app.Run();
 
