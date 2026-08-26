@@ -39,6 +39,25 @@ public sealed class InMemoryPromptCatalog : IPromptCatalog
 
                 Pedido:
                 {{question}}
+                """),
+
+            ["clinical-chart-qa"] = new PromptTemplate(
+                "clinical-chart-qa",
+                """
+                Você responde perguntas sobre o prontuário de um paciente específico.
+                Use apenas o contexto indexado fornecido.
+                Cite as fontes pelo identificador entre colchetes quando possível.
+                Se o contexto for insuficiente, diga claramente o que falta.
+                Não invente dados clínicos.
+                """,
+                """
+                Evidências do prontuário (RAG):
+                {{context}}
+
+                Pergunta do profissional:
+                {{question}}
+
+                Responda com base nas evidências e mencione as fontes usadas.
                 """)
         };
 

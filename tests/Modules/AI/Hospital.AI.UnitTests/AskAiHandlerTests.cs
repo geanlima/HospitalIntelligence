@@ -59,6 +59,21 @@ public class AskAiHandlerTests
         Assert.Equal("AI.Question.Empty", result.Error.Code);
     }
 
+    [Fact]
+    public async Task HandleAsync_Should_Require_PatientId_For_ClinicalChartPrompt()
+    {
+        var handler = await CreateHandlerAsync();
+
+        var result = await handler.HandleAsync(
+            new AskAiQuery(
+                "Qual a evolução recente?",
+                null,
+                "clinical-chart-qa"));
+
+        Assert.True(result.IsFailure);
+        Assert.Equal("AI.Ask.PatientIdRequired", result.Error.Code);
+    }
+
     private static async Task<AskAiHandler> CreateHandlerAsync()
     {
         var embedding = new DeterministicEmbeddingService();
@@ -69,6 +84,7 @@ public class AskAiHandlerTests
             embedding);
 
         return new AskAiHandler(
+            new AllowAllAiAccessPolicy(),
             new BasicAiGuardrail(),
             new InMemoryPromptCatalog(),
             new RagRetriever(embedding, store),

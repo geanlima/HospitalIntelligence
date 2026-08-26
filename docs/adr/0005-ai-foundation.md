@@ -31,8 +31,7 @@ Este projeto também é trilha de estudo de IA aplicada.
 
 3. O Domain clínico (Patients, Admissions, etc.) **não** referencia IA.
 
-4. Nesta fase, o LLM continua Mock (estudo sem chave de API),
-   mas o vector store já usa **PostgreSQL + pgvector**:
+4. Pipeline padrão:
 
 ```text
 Pergunta
@@ -40,13 +39,19 @@ Pergunta
   → Prompt Catalog
   → Embedding
   → pgvector (cosine distance)
-  → LLM Mock
+  → LLM (Mock | OpenAI-compatible)
   → Guardrail (saída)
   → Auditoria + citações de fonte
 ```
 
-5. Trocar Mock LLM por OpenAI/Azure no futuro deve ser troca de
-   Infrastructure, sem reescrever o use case `AskAiHandler`.
+5. LLM:
+   - **Default**: `Mock` (estudo sem chave de API).
+   - **Real**: `OpenAiCompatibleLlmProvider` via Chat Completions HTTP.
+     Aliases de config: `OpenAICompatible`, `OpenAI`, `Ollama`
+     (ex.: Ollama em `http://localhost:11434/v1`).
+
+6. Trocar de Mock para provedor real é só configuração /
+   Infrastructure — o use case `AskAiHandler` não muda.
 
 ## Conceitos estudados
 
@@ -63,12 +68,11 @@ Pergunta
 Benefícios:
 
 - aprendizado incremental sem custo de API no início;
-- arquitetura pronta para provedor real;
+- adapter real plugável (Ollama local ou OpenAI/Azure);
 - Domain clínico preservado;
 - auditoria e rastreamento de fontes desde o início.
 
 Riscos / próximos passos:
 
-- Mock não avalia qualidade clínica real;
-- InMemory não substitui pgvector em produção;
+- embedding ainda é determinístico (hash), não modelo semântico real;
 - Fase 15 deve indexar dados reais do prontuário.

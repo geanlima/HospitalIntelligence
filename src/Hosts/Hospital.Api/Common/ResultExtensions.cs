@@ -41,6 +41,14 @@ public static class ResultExtensions
                         result.Error.Description
                     }),
 
+            "AI.Access.PatientNotFound" =>
+                Results.NotFound(
+                    new
+                    {
+                        result.Error.Code,
+                        result.Error.Description
+                    }),
+
             _ =>
                 Results.BadRequest(
                     new

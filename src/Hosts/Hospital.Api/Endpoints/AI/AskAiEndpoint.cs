@@ -55,8 +55,9 @@ public static class AskAiEndpoint
             .WithName("AskAi")
             .WithSummary("Pergunta clínica assistida por IA (RAG)")
             .WithDescription(
-                "Executa o pipeline Guardrail → Prompt → RAG → LLM → Auditoria. " +
-                "Nesta fase usa providers Mock para estudo.")
+                "Executa Guardrail → Prompt → RAG → LLM → Auditoria. " +
+                "Para prontuário use PromptKey clinical-chart-qa + PatientId " +
+                "(indexar antes via POST /ai/index/patients/{id}).")
             .Produces<AskAiResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);

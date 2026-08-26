@@ -18,6 +18,14 @@ public sealed record AskAiResult(
 
 public sealed class AskAiHandler
 {
+    private static readonly HashSet<string> PatientScopedPrompts =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            "clinical-chart-qa",
+            "patient-summary"
+        };
+
+    private readonly IAiAccessPolicy _accessPolicy;
     private readonly IAiGuardrail _guardrail;
     private readonly IPromptCatalog _promptCatalog;
     private readonly IRagRetriever _ragRetriever;
@@ -25,12 +33,14 @@ public sealed class AskAiHandler
     private readonly IAiAuditStore _auditStore;
 
     public AskAiHandler(
+        IAiAccessPolicy accessPolicy,
         IAiGuardrail guardrail,
         IPromptCatalog promptCatalog,
         IRagRetriever ragRetriever,
         ILlmProvider llmProvider,
         IAiAuditStore auditStore)
     {
+        _accessPolicy = accessPolicy;
         _guardrail = guardrail;
         _promptCatalog = promptCatalog;
         _ragRetriever = ragRetriever;
@@ -48,6 +58,31 @@ public sealed class AskAiHandler
                 new Error(
                     "AI.Question.Empty",
                     "A pergunta não pode ser vazia."));
+        }
+
+        var requiresPatient =
+            PatientScopedPrompts.Contains(query.PromptKey) ||
+            query.PatientId.HasValue;
+
+        if (requiresPatient)
+        {
+            if (query.PatientId is null || query.PatientId == Guid.Empty)
+            {
+                return Result<AskAiResult>.Failure(
+                    new Error(
+                        "AI.Ask.PatientIdRequired",
+                        "PatientId é obrigatório para perguntas sobre o prontuário."));
+            }
+
+            var access =
+                await _accessPolicy.EnsureCanAccessPatientAsync(
+                    query.PatientId.Value,
+                    cancellationToken);
+
+            if (access.IsFailure)
+            {
+                return Result<AskAiResult>.Failure(access.Error);
+            }
         }
 
         var inputGuard =
@@ -79,7 +114,7 @@ public sealed class AskAiHandler
             await _ragRetriever.RetrieveAsync(
                 query.Question,
                 query.PatientId,
-                topK: 3,
+                topK: 5,
                 cancellationToken);
 
         var contextBlock = string.Join(
@@ -87,6 +122,13 @@ public sealed class AskAiHandler
             ragContext.Chunks.Select(
                 (c, index) =>
                     $"[{index + 1}] {c.Chunk.Title} ({c.Chunk.SourceId})\n{c.Chunk.Content}"));
+
+        if (string.IsNullOrWhiteSpace(contextBlock))
+        {
+            contextBlock =
+                "(Nenhum trecho indexado encontrado para este paciente. " +
+                "Oriente indexar o prontuário antes de responder.)";
+        }
 
         var userPrompt = prompt.UserTemplate
             .Replace("{{question}}", query.Question.Trim(), StringComparison.Ordinal)

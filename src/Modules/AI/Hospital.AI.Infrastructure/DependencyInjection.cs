@@ -1,6 +1,9 @@
 using Hospital.AI.Application.Abstractions;
 using Hospital.AI.Application.Ask;
+using Hospital.AI.Application.Index;
 using Hospital.AI.Application.Rag;
+using Hospital.AI.Application.Search;
+using Hospital.AI.Infrastructure.Access;
 using Hospital.AI.Infrastructure.Audit;
 using Hospital.AI.Infrastructure.Embeddings;
 using Hospital.AI.Infrastructure.Guardrails;
@@ -45,7 +48,43 @@ public static class DependencyInjection
         services.AddSingleton<IPromptCatalog, InMemoryPromptCatalog>();
         services.AddSingleton<IAiGuardrail, BasicAiGuardrail>();
         services.AddSingleton<IAiAuditStore, InMemoryAiAuditStore>();
-        services.AddSingleton<ILlmProvider, MockLlmProvider>();
+        services.AddScoped<IAiAccessPolicy, PatientScopedAiAccessPolicy>();
+        services.AddSingleton<MockLlmProvider>();
+
+        services.AddHttpClient<OpenAiCompatibleLlmProvider>((sp, client) =>
+        {
+            var options = sp.GetRequiredService<IOptions<AiOptions>>().Value;
+            var settings = options.OpenAICompatible;
+
+            client.BaseAddress = new Uri(
+                EnsureTrailingSlash(settings.BaseUrl));
+
+            client.Timeout = TimeSpan.FromSeconds(
+                Math.Max(5, settings.TimeoutSeconds));
+        });
+
+        services.AddScoped<ILlmProvider>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<AiOptions>>().Value;
+
+            if (string.Equals(
+                    options.Provider,
+                    "OpenAICompatible",
+                    StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(
+                    options.Provider,
+                    "OpenAI",
+                    StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(
+                    options.Provider,
+                    "Ollama",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return sp.GetRequiredService<OpenAiCompatibleLlmProvider>();
+            }
+
+            return sp.GetRequiredService<MockLlmProvider>();
+        });
 
         services.AddSingleton<InMemoryVectorStore>();
 
@@ -67,6 +106,8 @@ public static class DependencyInjection
         services.AddScoped<PgVectorStore>();
         services.AddScoped<IRagRetriever, RagRetriever>();
         services.AddScoped<AskAiHandler>();
+        services.AddScoped<IndexPatientClinicalRecordsHandler>();
+        services.AddScoped<SearchClinicalKnowledgeHandler>();
 
         return services;
     }
@@ -101,5 +142,12 @@ public static class DependencyInjection
             vectorStore,
             embeddingService,
             cancellationToken);
+    }
+
+    private static string EnsureTrailingSlash(string baseUrl)
+    {
+        return baseUrl.EndsWith('/')
+            ? baseUrl
+            : baseUrl + "/";
     }
 }

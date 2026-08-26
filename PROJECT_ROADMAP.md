@@ -45,8 +45,8 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 11 | Salux Connector | ✅ Concluída |
 | 12 | Patient 360 | ✅ Concluída |
 | 13 | Angular | ✅ Concluída |
-| 14 | Fundação de IA | 🟡 ~95% |
-| 15 | Busca Inteligente | ⬜ Não iniciada |
+| 14 | Fundação de IA | ✅ Concluída |
+| 15 | Busca Inteligente | 🟡 ~95% |
 | 16 | Auditoria Inteligente | ⬜ Não iniciada |
 | 17 | Inteligência Clínica | ⬜ Não iniciada |
 | 18 | Machine Learning | ⬜ Não iniciada |
@@ -773,7 +773,7 @@ Login real fica para a Fase 20 — Segurança e LGPD.
 
 # Fase 14 — Fundação de IA
 
-## Status: ✅ ~95% concluída
+## Status: ✅ 100% concluída
 
 - [x] Criar módulo `Hospital.AI`
 - [x] Abstração para provedor de LLM (`ILlmProvider`)
@@ -785,20 +785,33 @@ Login real fica para a Fase 20 — Segurança e LGPD.
 - [x] Auditoria (`IAiAuditStore`)
 - [x] Rastreamento de fontes (citações no response)
 - [x] Endpoint `POST /ai/ask`
+- [x] Provider real OpenAI-compatible (`OpenAiCompatibleLlmProvider` — Ollama/OpenAI/Azure)
+- [x] Mock permanece default (`AI:Provider = Mock`)
 - [x] ADR-0005 (`docs/adr/0005-ai-foundation.md`)
 
-Pendente fino: trocar Mock LLM por provider real (opcional nesta fase).
+Para usar LLM real (ex.: Ollama local):
+
+```json
+"AI": { "Provider": "Ollama" }
+```
+
+Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 
 ---
 
 # Fase 15 — Busca Inteligente
 
-- [ ] Indexar prontuário
-- [ ] Busca semântica
-- [ ] Perguntas em linguagem natural
-- [ ] Evidências
-- [ ] Citações das fontes
-- [ ] Controle de acesso
+## Status: ✅ ~95% concluída
+
+- [x] Indexar prontuário (`POST /ai/index/patients/{patientId}`)
+- [x] Busca semântica (`POST /ai/search`)
+- [x] Perguntas em linguagem natural (`clinical-chart-qa` via `/ai/ask`)
+- [x] Evidências (hits com excerpt + score)
+- [x] Citações das fontes (Sources no ask/search)
+- [x] Controle de acesso (`IAiAccessPolicy` + filtro por PatientId)
+- [x] ADR-0006 (`docs/adr/0006-intelligent-clinical-search.md`)
+
+Pendente fino (opcional): tela Angular de busca / reindexação por eventos.
 
 ---
 
@@ -911,17 +924,13 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fase 14 — Fundação de IA
+## Fase 15 — Busca Inteligente (fechamento)
 
-A Fase 13 — Angular foi concluída.
+Os endpoints de indexação, busca e Q&A clínico já existem.
+Validar ponta a ponta com paciente real no Postgres e, se desejado,
+expor uma tela Angular mínima de busca.
 
-O próximo ciclo do projeto será a Fundação de IA, começando por:
-
-1. criar o módulo `Hospital.AI`;
-2. abstrair provedor de LLM;
-3. preparar embeddings / pgvector;
-4. estruturar RAG e prompt management;
-5. definir guardrails e rastreamento de fontes.
+Depois: **Fase 16 — Auditoria Inteligente**.
 
 # Fase 13 — Angular
 
@@ -941,7 +950,7 @@ Login real permanece para a Fase 20.
 
 # Fase 14 — Fundação de IA
 
-## Status: ✅ ~95% concluída
+## Status: ✅ 100% concluída
 
 - [x] Criar módulo `Hospital.AI`
 - [x] Abstração para provedor de LLM (`ILlmProvider`)
@@ -953,20 +962,33 @@ Login real permanece para a Fase 20.
 - [x] Auditoria (`IAiAuditStore`)
 - [x] Rastreamento de fontes (citações no response)
 - [x] Endpoint `POST /ai/ask`
+- [x] Provider real OpenAI-compatible (`OpenAiCompatibleLlmProvider` — Ollama/OpenAI/Azure)
+- [x] Mock permanece default (`AI:Provider = Mock`)
 - [x] ADR-0005 (`docs/adr/0005-ai-foundation.md`)
 
-Pendente fino: trocar Mock LLM por provider real (opcional nesta fase).
+Para usar LLM real (ex.: Ollama local):
+
+```json
+"AI": { "Provider": "Ollama" }
+```
+
+Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 
 ---
 
 # Fase 15 — Busca Inteligente
 
-- [ ] Indexar prontuário
-- [ ] Busca semântica
-- [ ] Perguntas em linguagem natural
-- [ ] Evidências
-- [ ] Citações das fontes
-- [ ] Controle de acesso
+## Status: ✅ ~95% concluída
+
+- [x] Indexar prontuário (`POST /ai/index/patients/{patientId}`)
+- [x] Busca semântica (`POST /ai/search`)
+- [x] Perguntas em linguagem natural (`clinical-chart-qa` via `/ai/ask`)
+- [x] Evidências (hits com excerpt + score)
+- [x] Citações das fontes (Sources no ask/search)
+- [x] Controle de acesso (`IAiAccessPolicy` + filtro por PatientId)
+- [x] ADR-0006 (`docs/adr/0006-intelligent-clinical-search.md`)
+
+Pendente fino (opcional): tela Angular de busca / reindexação por eventos.
 
 ---
 

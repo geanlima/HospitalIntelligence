@@ -11,6 +11,8 @@ using Hospital.Alerts.Application.Alerts.ResolveAlert;
 using Hospital.Alerts.Application.Alerts.SearchAlerts;
 using Hospital.Alerts.Infrastructure;
 
+using Hospital.AI.Application.Abstractions;
+using Hospital.Api.AI;
 using Hospital.Api.Common;
 using Hospital.Api.Endpoints.Admissions;
 using Hospital.Api.Endpoints.AI;
@@ -100,6 +102,8 @@ builder.Services.AddTimelineInfrastructure(
 builder.Services.AddAiInfrastructure(
     builder.Configuration);
 
+builder.Services.AddScoped<IClinicalRecordSource, HostClinicalRecordSource>();
+
 builder.Services.AddScoped<CreatePatientHandler>();
 builder.Services.AddScoped<GetPatientByIdHandler>();
 builder.Services.AddScoped<SearchPatientsHandler>();
@@ -187,6 +191,8 @@ app.MapSearchAlertsEndpoint();
 app.MapCreateTimelineItemEndpoint();
 
 app.MapAskAiEndpoint();
+app.MapIndexPatientClinicalRecordsEndpoint();
+app.MapSearchClinicalKnowledgeEndpoint();
 
 await app.Services.SeedAiKnowledgeAsync();
 
