@@ -1,0 +1,303 @@
+<section class="dashboard">
+
+  <header class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Visão geral da operação hospitalar.</p>
+    </div>
+  </header>
+
+  <section class="summary-grid">
+
+    @if (loading()) {
+
+      <article class="summary-card">
+        <div class="card-content">
+          <span>Carregando indicadores...</span>
+        </div>
+      </article>
+
+    } @else if (errorMessage()) {
+
+      <article class="summary-card">
+        <div class="card-content">
+          <span>{{ errorMessage() }}</span>
+        </div>
+      </article>
+
+    } @else if (summary(); as dashboard) {
+
+      <article class="summary-card">
+        <div class="card-icon">
+          👥
+        </div>
+
+        <div class="card-content">
+          <span>Pacientes</span>
+
+          <strong>
+            {{ dashboard.totalPatients }}
+          </strong>
+
+          <small>
+            Pacientes cadastrados
+          </small>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="card-icon">
+          🏥
+        </div>
+
+        <div class="card-content">
+          <span>Internações Ativas</span>
+
+          <strong>
+            {{ dashboard.activeAdmissions }}
+          </strong>
+
+          <small>
+            Pacientes internados
+          </small>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="card-icon">
+          🧪
+        </div>
+
+        <div class="card-content">
+          <span>Exames Pendentes</span>
+
+          <strong>
+            {{ dashboard.pendingExams }}
+          </strong>
+
+          <small>
+            Aguardando resultado
+          </small>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="card-icon">
+          ⚠️
+        </div>
+
+        <div class="card-content">
+          <span>Alertas Críticos</span>
+
+          <strong>
+            {{ dashboard.criticalAlerts }}
+          </strong>
+
+          <small>
+            Necessitam atenção
+          </small>
+        </div>
+      </article>
+
+    }
+
+  </section>
+
+  <section class="dashboard-grid">
+
+    <article class="card">
+
+      @if (summary(); as dashboard) {
+
+        <div class="card-header">
+          <div>
+            <h2>Ocupação Hospitalar</h2>
+            <p>Visão geral dos leitos</p>
+          </div>
+
+          <strong>
+            {{ dashboard.occupancyPercentage }}%
+          </strong>
+        </div>
+
+        <div class="progress">
+          <div
+            class="progress-value"
+            [style.width.%]="dashboard.occupancyPercentage"
+          ></div>
+        </div>
+
+        <div class="occupancy-info">
+
+          <div>
+            <span>Ocupados</span>
+
+            <strong>
+              {{ dashboard.occupiedBeds }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Disponíveis</span>
+
+            <strong>
+              {{ dashboard.availableBeds }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Total</span>
+
+            <strong>
+              {{ dashboard.totalBeds }}
+            </strong>
+          </div>
+
+        </div>
+
+      } @else {
+
+        <div class="card-header">
+          <div>
+            <h2>Ocupação Hospitalar</h2>
+            <p>Carregando dados...</p>
+          </div>
+        </div>
+
+      }
+
+    </article>
+
+    <article class="card">
+
+      <div class="card-header">
+        <div>
+          <h2>Atividades Recentes</h2>
+          <p>Últimas movimentações do hospital</p>
+        </div>
+      </div>
+
+      @if (summary(); as dashboard) {
+
+        <div class="activity-list">
+
+          @if (dashboard.recentActivities.length === 0) {
+
+            <div class="activity-item">
+              <div class="activity-content">
+                <p>
+                  Nenhuma atividade recente encontrada.
+                </p>
+              </div>
+            </div>
+
+          } @else {
+
+            @for (
+              activity of dashboard.recentActivities;
+              track activity.id
+            ) {
+
+              <div class="activity-item">
+
+                <div class="activity-marker"></div>
+
+                <div class="activity-content">
+
+                  <strong>
+                    {{ activity.title }}
+                  </strong>
+
+                  <p>
+                    {{ activity.description }}
+                  </p>
+
+                  <small>
+                    {{ activity.occurredAtUtc | date:'dd/MM/yyyy HH:mm' }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            }
+
+          }
+
+        </div>
+
+      } @else {
+
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-content">
+              <p>Carregando atividades...</p>
+            </div>
+          </div>
+        </div>
+
+      }
+
+    </article>
+
+  </section>
+
+  <section class="quick-access">
+
+    <h2>Acesso Rápido</h2>
+
+    <div class="quick-grid">
+
+      <button
+        type="button"
+        (click)="goToPatients()"
+      >
+        👥
+        <span>Pacientes</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="goToAdmissions()"
+      >
+        🏥
+        <span>Internações</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="goToExams()"
+      >
+        🧪
+        <span>Exames</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="goToPrescriptions()"
+      >
+        💊
+        <span>Prescrições</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="goToVitalSigns()"
+      >
+        ❤️
+        <span>Sinais Vitais</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="goToAlerts()"
+      >
+        ⚠️
+        <span>Alertas</span>
+      </button>
+
+    </div>
+
+  </section>
+
+</section>

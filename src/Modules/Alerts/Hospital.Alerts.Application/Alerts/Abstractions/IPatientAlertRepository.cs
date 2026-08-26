@@ -19,4 +19,7 @@ public interface IPatientAlertRepository
     Task<IReadOnlyCollection<PatientAlert>> GetByPatientIdAsync(
         Guid patientId,
         CancellationToken cancellationToken = default);
+
+    Task<int> CountCriticalAsync(
+        CancellationToken cancellationToken = default);
 }

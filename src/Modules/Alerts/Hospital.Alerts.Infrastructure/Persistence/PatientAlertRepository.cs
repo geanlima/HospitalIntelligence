@@ -55,4 +55,14 @@ public sealed class PatientAlertRepository
             .OrderByDescending(x => x.CreatedAtUtc)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<int> CountCriticalAsync(
+        CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Alerts
+            .AsNoTracking()
+            .CountAsync(
+                x => x.Severity == AlertSeverity.Critical,
+                cancellationToken);
+    }
 }

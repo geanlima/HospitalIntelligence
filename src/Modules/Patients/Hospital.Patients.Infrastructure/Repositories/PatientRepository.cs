@@ -105,4 +105,11 @@ public sealed class PatientRepository
         await _context.SaveChangesAsync(
             cancellationToken);
     }
+
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Patients
+            .AsNoTracking()
+            .CountAsync(cancellationToken);
+    }
 }

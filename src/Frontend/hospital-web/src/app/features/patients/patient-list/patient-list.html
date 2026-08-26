@@ -10,64 +10,72 @@
     </div>
   </header>
 
-  <div class="search">
+  <section class="search-card">
 
-    <input
-      type="text"
-      [(ngModel)]="searchName"
-      placeholder="Pesquisar por nome"
-    />
+    <div class="search">
 
-    <select
-      [(ngModel)]="externalSystem"
-    >
-      <option value="">
-        Todos os sistemas externos
-      </option>
+      <input
+        type="text"
+        [(ngModel)]="searchName"
+        placeholder="Pesquisar por nome"
+      />
 
-      <option value="SALUX">
-        SALUX
-      </option>
+      <select
+        [(ngModel)]="externalSystem"
+      >
+        <option value="">
+          Todos os sistemas externos
+        </option>
 
-      <option value="API_TEST">
-        API_TEST
-      </option>
-    </select>
+        <option value="SALUX">
+          SALUX
+        </option>
 
-    <button
-      type="button"
-      class="primary-button"
-      (click)="search()"
-      [disabled]="loading()"
-    >
-      @if (loading()) {
-        Buscando...
-      } @else {
-        Buscar
-      }
-    </button>
+        <option value="API_TEST">
+          API_TEST
+        </option>
+      </select>
 
-    <button
-      type="button"
-      class="secondary-button"
-      (click)="clearSearch()"
-      [disabled]="loading()"
-    >
-      Limpar
-    </button>
+      <button
+        type="button"
+        class="primary-button"
+        (click)="search()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          Buscando...
+        } @else {
+          Buscar
+        }
+      </button>
 
-  </div>
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="clearSearch()"
+        [disabled]="loading()"
+      >
+        Limpar
+      </button>
+
+    </div>
+
+  </section>
 
   @if (hasSearched() && loading()) {
+
     <p class="loading-message">
       Carregando pacientes...
     </p>
+
   }
 
   @if (errorMessage()) {
+
     <p class="error">
       {{ errorMessage() }}
     </p>
+
   }
 
   @if (
@@ -76,9 +84,11 @@
     !errorMessage() &&
     patients().length === 0
   ) {
+
     <div class="empty-state">
       Nenhum paciente encontrado.
     </div>
+
   }
 
   @if (
@@ -151,6 +161,7 @@
       <div class="pagination">
 
         <div class="pagination-info">
+
           Mostrando
           {{ (currentPage - 1) * pageSize + 1 }}
           até
@@ -162,6 +173,7 @@
           de
           {{ patients().length }}
           pacientes
+
         </div>
 
         @if (totalPages > 1) {

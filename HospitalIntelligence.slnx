@@ -38,6 +38,10 @@
     <Project Path="src/Modules/ClinicalNotes/Hospital.ClinicalNotes.Domain/Hospital.ClinicalNotes.Domain.csproj" />
     <Project Path="src/Modules/ClinicalNotes/Hospital.ClinicalNotes.Infrastructure/Hospital.ClinicalNotes.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/Dashboard/">
+    <Project Path="src/Modules/Dashboard/Hospital.Dashboard.Application/Hospital.Dashboard.Application.csproj" />
+    <Project Path="src/Modules/Dashboard/Hospital.Dashboard.Contracts/Hospital.Dashboard.Contracts.csproj" />
+  </Folder>
   <Folder Name="/src/Modules/Exams/">
     <Project Path="src/Modules/Exams/Hospital.Exams.Application/Hospital.Exams.Application.csproj" />
     <Project Path="src/Modules/Exams/Hospital.Exams.Domain/Hospital.Exams.Domain.csproj" />

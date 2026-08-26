@@ -18,6 +18,9 @@ public interface IPatientRepository
         string? sourceSystem,
         CancellationToken cancellationToken = default);
 
+    Task<int> CountAsync(
+        CancellationToken cancellationToken = default);
+
     Task AddAsync(
         Patient patient,
         CancellationToken cancellationToken = default);

@@ -15,4 +15,8 @@ public interface ITimelineRepository
     Task<IReadOnlyCollection<TimelineItem>> GetByPatientIdAsync(
         Guid patientId,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<TimelineItem>> GetRecentAsync(
+        int quantity,
+        CancellationToken cancellationToken = default);
 }

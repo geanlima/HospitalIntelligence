@@ -19,4 +19,7 @@ public interface IExamRepository
     Task<IReadOnlyCollection<Exam>> GetByPatientIdAsync(
         Guid patientId,
         CancellationToken cancellationToken = default);
+
+    Task<int> CountPendingAsync(
+        CancellationToken cancellationToken = default);
 }

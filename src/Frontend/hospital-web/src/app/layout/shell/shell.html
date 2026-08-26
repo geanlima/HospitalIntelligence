@@ -1,5 +1,7 @@
 <div class="app-shell">
+
   <aside class="sidebar">
+
     <div class="brand">
       <div class="brand-icon">H</div>
 
@@ -10,53 +12,83 @@
     </div>
 
     <nav class="menu">
-      <a routerLink="/dashboard" routerLinkActive="active">
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+      >
         <span>⌂</span>
         Dashboard
       </a>
 
-      <a routerLink="/patients" routerLinkActive="active">
+      <a
+        routerLink="/patients"
+        routerLinkActive="active"
+      >
         <span>♙</span>
         Pacientes
       </a>
 
-      <a href="#">
+      <a
+        routerLink="/admissions"
+        routerLinkActive="active"
+      >
         <span>▣</span>
         Internações
       </a>
 
-      <a href="#">
+      <a
+        routerLink="/exams"
+        routerLinkActive="active"
+      >
         <span>▤</span>
         Exames
       </a>
 
-      <a href="#">
+      <a
+        routerLink="/prescriptions"
+        routerLinkActive="active"
+      >
         <span>▧</span>
         Prescrições
       </a>
 
-      <a href="#">
+      <a
+        routerLink="/vital-signs"
+        routerLinkActive="active"
+      >
         <span>♡</span>
         Sinais Vitais
       </a>
 
-      <a href="#">
+      <a
+        routerLink="/clinical-notes"
+        routerLinkActive="active"
+      >
         <span>□</span>
         Notas Clínicas
       </a>
 
-      <a href="#">
+      <a
+        routerLink="/alerts"
+        routerLinkActive="active"
+      >
         <span>♧</span>
         Alertas
       </a>
 
-      <a href="#">
+      <a
+        routerLink="/reports"
+        routerLinkActive="active"
+      >
         <span>▥</span>
         Relatórios
       </a>
+
     </nav>
 
     <div class="user">
+
       <div class="avatar">
         A
       </div>
@@ -65,34 +97,53 @@
         <strong>Administrador</strong>
         <span>Hospital Intelligence</span>
       </div>
+
     </div>
+
   </aside>
 
   <div class="main">
+
     <header class="topbar">
-      <button class="menu-button">
+
+      <button
+        type="button"
+        class="menu-button"
+      >
         ☰
       </button>
 
       <div class="global-search">
+
         <input
           type="text"
           placeholder="Buscar paciente, exame, internação..."
         />
+
       </div>
 
       <div class="topbar-actions">
-        <button>🔔</button>
-        <button>✉</button>
+
+        <button type="button">
+          🔔
+        </button>
+
+        <button type="button">
+          ✉
+        </button>
 
         <div class="profile">
           A
         </div>
+
       </div>
+
     </header>
 
     <main class="content">
       <router-outlet></router-outlet>
     </main>
+
   </div>
+
 </div>

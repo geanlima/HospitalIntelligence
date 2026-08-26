@@ -56,4 +56,16 @@ public sealed class ExamRepository
             .OrderByDescending(x => x.RequestedAtUtc)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<int> CountPendingAsync(
+    CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Exams
+            .AsNoTracking()
+            .CountAsync(
+                x =>
+                    x.Status == ExamStatus.Requested ||
+                    x.Status == ExamStatus.InProgress,
+                cancellationToken);
+    }
 }

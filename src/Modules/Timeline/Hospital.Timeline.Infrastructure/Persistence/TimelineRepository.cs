@@ -48,4 +48,15 @@ public sealed class TimelineRepository
             .OrderByDescending(x => x.OccurredAtUtc)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<TimelineItem>> GetRecentAsync(
+        int quantity,
+    CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.TimelineItems
+            .AsNoTracking()
+            .OrderByDescending(x => x.OccurredAtUtc)
+            .Take(quantity)
+            .ToListAsync(cancellationToken);
+    }
 }

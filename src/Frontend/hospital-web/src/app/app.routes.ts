@@ -1,14 +1,10 @@
 import { Routes } from '@angular/router';
 
+import { DashboardComponent } from './features/dashboard/dashboard';
+import { Patient360Component } from './features/patients/patient-360/patient-360';
+import { PatientList } from './features/patients/patient-list/patient-list';
 import { Shell } from './layout/shell/shell';
-
-import {
-  PatientList
-} from './features/patients/patient-list/patient-list';
-
-import {
-  Patient360Component
-} from './features/patients/patient-360/patient-360';
+import { AdmissionListComponent } from './features/admissions/admission-list/admission-list';
 
 export const routes: Routes = [
   {
@@ -17,8 +13,12 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'patients',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent
       },
       {
         path: 'patients',
@@ -27,6 +27,10 @@ export const routes: Routes = [
       {
         path: 'patients/:id/360',
         component: Patient360Component
+      },
+      {
+        path: 'admissions',
+        component: AdmissionListComponent
       }
     ]
   }
