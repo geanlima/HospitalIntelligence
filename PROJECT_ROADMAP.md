@@ -44,8 +44,8 @@ O projeto também será utilizado como trilha prática de estudo de:
 | 10 | Mock Hospital | ✅ Concluída |
 | 11 | Salux Connector | ✅ Concluída |
 | 12 | Patient 360 | ✅ Concluída |
-| 13 | Angular | 🟡 Próxima fase |
-| 14 | Fundação de IA | ⬜ Não iniciada |
+| 13 | Angular | ✅ Concluída |
+| 14 | Fundação de IA | 🟡 ~95% |
 | 15 | Busca Inteligente | ⬜ Não iniciada |
 | 16 | Auditoria Inteligente | ⬜ Não iniciada |
 | 17 | Inteligência Clínica | ⬜ Não iniciada |
@@ -745,31 +745,49 @@ Hospital Intelligence Platform
 
 # Fase 13 — Angular
 
-## Status: 🟡 Próxima fase — 0% iniciada
+## Status: ✅ 100% concluída
 
-- [ ] Criar projeto Angular
-- [ ] Criar arquitetura front-end
-- [ ] Criar login
-- [ ] Criar layout
-- [ ] Criar dashboard
-- [ ] Criar listagem de pacientes
-- [ ] Criar Patient 360
-- [ ] Criar timeline
-- [ ] Integrar com Hospital.Api
+- [x] Criar projeto Angular
+- [x] Criar arquitetura front-end
+- [x] Criar layout
+- [x] Criar dashboard
+- [x] Criar listagem de pacientes
+- [x] Criar Patient 360
+- [x] Criar listagem de internações
+- [x] Criar listagem de exames
+- [x] Criar listagem de prescrições
+- [x] Criar listagem de sinais vitais
+- [x] Criar listagem de notas clínicas
+- [x] Criar listagem de alertas
+- [x] Completar navegação da sidebar
+- [x] Completar Quick Access do Dashboard
+- [x] Mover URL da API para environment
+- [x] Criar interceptor HTTP
+- [x] Implementar guards (placeholder para auth futura)
+- [x] Lazy loading de rotas
+- [x] Integrar com Hospital.Api
+
+Login real fica para a Fase 20 — Segurança e LGPD.
 
 ---
 
 # Fase 14 — Fundação de IA
 
-- [ ] Criar módulo `Hospital.AI`
-- [ ] Abstração para provedor de LLM
-- [ ] Embeddings
-- [ ] pgvector
-- [ ] RAG
-- [ ] Prompt Management
-- [ ] Guardrails
-- [ ] Auditoria
-- [ ] Rastreamento de fontes
+## Status: ✅ ~95% concluída
+
+- [x] Criar módulo `Hospital.AI`
+- [x] Abstração para provedor de LLM (`ILlmProvider`)
+- [x] Embeddings (`IEmbeddingService` + mock determinístico)
+- [x] pgvector (PostgreSQL + `PgVectorStore`)
+- [x] RAG (`IRagRetriever` + vector search)
+- [x] Prompt Management (`IPromptCatalog`)
+- [x] Guardrails (`IAiGuardrail`)
+- [x] Auditoria (`IAiAuditStore`)
+- [x] Rastreamento de fontes (citações no response)
+- [x] Endpoint `POST /ai/ask`
+- [x] ADR-0005 (`docs/adr/0005-ai-foundation.md`)
+
+Pendente fino: trocar Mock LLM por provider real (opcional nesta fase).
 
 ---
 
@@ -893,48 +911,51 @@ A ideia é evitar acumular funcionalidades parcialmente concluídas e manter o p
 
 # Próximo passo oficial
 
-## Fase 13 — Angular
+## Fase 14 — Fundação de IA
 
-A Fase 12 — Patient 360 foi concluída e validada ponta a ponta.
+A Fase 13 — Angular foi concluída.
 
-O próximo ciclo do projeto será a construção do front-end Angular, começando por:
+O próximo ciclo do projeto será a Fundação de IA, começando por:
 
-1. criar o projeto Angular;
-2. definir a arquitetura `core/shared/features`;
-3. configurar environments e integração HTTP com `Hospital.Api`;
-4. criar layout principal e navegação;
-5. criar listagem e busca de pacientes;
-6. criar a tela Patient 360;
-7. exibir internações, exames, prescrições, sinais vitais, evoluções, alertas e timeline;
-8. criar estados de loading/erro;
-9. adicionar testes do front-end;
-10. executar build/test e fechar a fase.
+1. criar o módulo `Hospital.AI`;
+2. abstrair provedor de LLM;
+3. preparar embeddings / pgvector;
+4. estruturar RAG e prompt management;
+5. definir guardrails e rastreamento de fontes.
 
 # Fase 13 — Angular
 
-- [ ] Criar projeto Angular
-- [ ] Criar arquitetura front-end
-- [ ] Criar login
-- [ ] Criar layout
-- [ ] Criar dashboard
-- [ ] Criar listagem de pacientes
-- [ ] Criar Patient 360
-- [ ] Criar timeline
-- [ ] Integrar com Hospital.Api
+- [x] Criar projeto Angular
+- [x] Criar arquitetura front-end
+- [x] Criar layout
+- [x] Criar dashboard
+- [x] Criar listagem de pacientes
+- [x] Criar Patient 360
+- [x] Criar listagens clínicas (internações, exames, prescrições, sinais vitais, notas, alertas)
+- [x] Environment + interceptor + guards + lazy loading
+- [x] Integrar com Hospital.Api
+
+Login real permanece para a Fase 20.
 
 ---
 
 # Fase 14 — Fundação de IA
 
-- [ ] Criar módulo `Hospital.AI`
-- [ ] Abstração para provedor de LLM
-- [ ] Embeddings
-- [ ] pgvector
-- [ ] RAG
-- [ ] Prompt Management
-- [ ] Guardrails
-- [ ] Auditoria
-- [ ] Rastreamento de fontes
+## Status: ✅ ~95% concluída
+
+- [x] Criar módulo `Hospital.AI`
+- [x] Abstração para provedor de LLM (`ILlmProvider`)
+- [x] Embeddings (`IEmbeddingService` + mock determinístico)
+- [x] pgvector (PostgreSQL + `PgVectorStore`)
+- [x] RAG (`IRagRetriever` + vector search)
+- [x] Prompt Management (`IPromptCatalog`)
+- [x] Guardrails (`IAiGuardrail`)
+- [x] Auditoria (`IAiAuditStore`)
+- [x] Rastreamento de fontes (citações no response)
+- [x] Endpoint `POST /ai/ask`
+- [x] ADR-0005 (`docs/adr/0005-ai-foundation.md`)
+
+Pendente fino: trocar Mock LLM por provider real (opcional nesta fase).
 
 ---
 

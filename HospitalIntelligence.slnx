@@ -28,6 +28,11 @@
     <Project Path="src/Modules/Admissions/Hospital.Admissions.Domain/Hospital.Admissions.Domain.csproj" />
     <Project Path="src/Modules/Admissions/Hospital.Admissions.Infrastructure/Hospital.Admissions.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/AI/">
+    <Project Path="src/Modules/AI/Hospital.AI.Application/Hospital.AI.Application.csproj" />
+    <Project Path="src/Modules/AI/Hospital.AI.Contracts/Hospital.AI.Contracts.csproj" />
+    <Project Path="src/Modules/AI/Hospital.AI.Infrastructure/Hospital.AI.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/Modules/Alerts/">
     <Project Path="src/Modules/Alerts/Hospital.Alerts.Application/Hospital.Alerts.Application.csproj" />
     <Project Path="src/Modules/Alerts/Hospital.Alerts.Domain/Hospital.Alerts.Domain.csproj" />
@@ -80,6 +85,9 @@
   <Folder Name="/tests/Modules/" />
   <Folder Name="/tests/Modules/Admissions/">
     <Project Path="tests/Modules/Admissions/Hospital.Admissions.UnitTests/Hospital.Admissions.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/AI/">
+    <Project Path="tests/Modules/AI/Hospital.AI.UnitTests/Hospital.AI.UnitTests.csproj" />
   </Folder>
   <Folder Name="/tests/Modules/Alerts/">
     <Project Path="tests/Modules/Alerts/Hospital.Alerts.UnitTests/Hospital.Alerts.UnitTests.csproj" />

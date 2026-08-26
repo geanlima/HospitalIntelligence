@@ -33,6 +33,14 @@ public static class ResultExtensions
                         result.Error.Description
                     }),
 
+            "AI.Prompt.NotFound" =>
+                Results.NotFound(
+                    new
+                    {
+                        result.Error.Code,
+                        result.Error.Description
+                    }),
+
             _ =>
                 Results.BadRequest(
                     new
