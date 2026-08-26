@@ -29,7 +29,7 @@
   font-size: 13px;
 
   a {
-    color: #4f46e5;
+    color: #1e3a8a;
     font-weight: 600;
     text-decoration: none;
   }
@@ -177,26 +177,31 @@
   }
 
   select,
-  textarea,
-  .primary-button {
+  textarea {
     width: 100%;
     box-sizing: border-box;
-  }
-
-  select,
-  textarea {
     padding: 12px 14px;
     border: 1px solid #dbe2ea;
     border-radius: 9px;
     font-family: inherit;
     font-size: 14px;
+    color: #334155;
+    outline: none;
+
+    &:focus {
+      border-color: #1e3a8a;
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
+    }
+  }
+
+  select {
+    height: 48px;
   }
 
   .primary-button {
     width: auto;
     justify-self: start;
-    min-width: 200px;
-    height: 44px;
+    min-width: 220px;
   }
 }
 
