@@ -1,0 +1,163 @@
+<section class="list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Sinais Vitais</h1>
+      <p>Consulte as medições de sinais vitais.</p>
+    </div>
+  </header>
+
+  <section class="search-card">
+    <div class="search search-actions">
+      <button
+        type="button"
+        class="primary-button"
+        (click)="search()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          Buscando...
+        } @else {
+          Buscar
+        }
+      </button>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="clearSearch()"
+        [disabled]="loading()"
+      >
+        Limpar
+      </button>
+    </div>
+  </section>
+
+  @if (hasSearched() && loading()) {
+    <p class="loading-message">Carregando sinais vitais...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    vitalSigns().length === 0
+  ) {
+    <div class="empty-state">Nenhum sinal vital encontrado.</div>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    vitalSigns().length > 0
+  ) {
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Medido em</th>
+            <th>Temp.</th>
+            <th>FC</th>
+            <th>FR</th>
+            <th>PA</th>
+            <th>SpO2</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            vitalSign of paginatedVitalSigns;
+            track vitalSign.id
+          ) {
+            <tr>
+              <td>
+                <strong>{{ vitalSign.patientName }}</strong>
+              </td>
+              <td>
+                {{
+                  vitalSign.measuredAtUtc
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </td>
+              <td>{{ vitalSign.temperature ?? '-' }}</td>
+              <td>{{ vitalSign.heartRate ?? '-' }}</td>
+              <td>{{ vitalSign.respiratoryRate ?? '-' }}</td>
+              <td>
+                {{
+                  formatBloodPressure(
+                    vitalSign.systolicBloodPressure,
+                    vitalSign.diastolicBloodPressure
+                  )
+                }}
+              </td>
+              <td>{{ vitalSign.oxygenSaturation ?? '-' }}</td>
+              <td class="actions">
+                <button
+                  type="button"
+                  class="icon-button"
+                  title="Visualizar Patient 360"
+                  (click)="viewPatient360(vitalSign.patientId)"
+                >
+                  👁
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Mostrando
+          {{ (currentPage - 1) * pageSize + 1 }}
+          até
+          {{
+            currentPage * pageSize > vitalSigns().length
+              ? vitalSigns().length
+              : currentPage * pageSize
+          }}
+          de
+          {{ vitalSigns().length }}
+          registros
+        </div>
+
+        @if (totalPages > 1) {
+          <div class="pagination-buttons">
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            @for (page of pages; track page) {
+              <button
+                type="button"
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              ›
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</section>

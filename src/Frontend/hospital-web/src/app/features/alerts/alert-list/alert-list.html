@@ -1,0 +1,175 @@
+<section class="list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Alertas</h1>
+      <p>Consulte alertas clínicos e operacionais.</p>
+    </div>
+  </header>
+
+  <section class="search-card">
+    <div class="search search-2">
+      <select [(ngModel)]="status">
+        <option value="">Todos os status</option>
+        <option value="Active">Ativo</option>
+        <option value="Acknowledged">Reconhecido</option>
+        <option value="Resolved">Resolvido</option>
+      </select>
+
+      <select [(ngModel)]="severity">
+        <option value="">Todas as severidades</option>
+        <option value="Low">Baixa</option>
+        <option value="Medium">Média</option>
+        <option value="High">Alta</option>
+        <option value="Critical">Crítica</option>
+      </select>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="search()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          Buscando...
+        } @else {
+          Buscar
+        }
+      </button>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="clearSearch()"
+        [disabled]="loading()"
+      >
+        Limpar
+      </button>
+    </div>
+  </section>
+
+  @if (hasSearched() && loading()) {
+    <p class="loading-message">Carregando alertas...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    alerts().length === 0
+  ) {
+    <div class="empty-state">Nenhum alerta encontrado.</div>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    alerts().length > 0
+  ) {
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Tipo</th>
+            <th>Severidade</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Criado em</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (alert of paginatedAlerts; track alert.id) {
+            <tr>
+              <td><strong>{{ alert.patientName }}</strong></td>
+              <td>{{ alert.type }}</td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="getSeverityClass(alert.severity)"
+                >
+                  {{ formatSeverity(alert.severity) }}
+                </span>
+              </td>
+              <td class="content-cell">{{ alert.description }}</td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="getStatusClass(alert.status)"
+                >
+                  {{ formatStatus(alert.status) }}
+                </span>
+              </td>
+              <td>
+                {{ alert.createdAtUtc | date:'dd/MM/yyyy HH:mm' }}
+              </td>
+              <td class="actions">
+                <button
+                  type="button"
+                  class="icon-button"
+                  title="Visualizar Patient 360"
+                  (click)="viewPatient360(alert.patientId)"
+                >
+                  👁
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Mostrando
+          {{ (currentPage - 1) * pageSize + 1 }}
+          até
+          {{
+            currentPage * pageSize > alerts().length
+              ? alerts().length
+              : currentPage * pageSize
+          }}
+          de
+          {{ alerts().length }}
+          alertas
+        </div>
+
+        @if (totalPages > 1) {
+          <div class="pagination-buttons">
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            @for (page of pages; track page) {
+              <button
+                type="button"
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              ›
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</section>

@@ -1,0 +1,165 @@
+<section class="list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Prescrições</h1>
+      <p>Consulte as prescrições registradas.</p>
+    </div>
+  </header>
+
+  <section class="search-card">
+    <div class="search search-1">
+      <select [(ngModel)]="status">
+        <option value="">Todos os status</option>
+        <option value="Active">Ativa</option>
+        <option value="Suspended">Suspensa</option>
+        <option value="Completed">Concluída</option>
+        <option value="Cancelled">Cancelada</option>
+      </select>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="search()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          Buscando...
+        } @else {
+          Buscar
+        }
+      </button>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="clearSearch()"
+        [disabled]="loading()"
+      >
+        Limpar
+      </button>
+    </div>
+  </section>
+
+  @if (hasSearched() && loading()) {
+    <p class="loading-message">Carregando prescrições...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    prescriptions().length === 0
+  ) {
+    <div class="empty-state">Nenhuma prescrição encontrada.</div>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    prescriptions().length > 0
+  ) {
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Descrição</th>
+            <th>Prescrito em</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            prescription of paginatedPrescriptions;
+            track prescription.id
+          ) {
+            <tr>
+              <td>
+                <strong>{{ prescription.patientName }}</strong>
+              </td>
+              <td>{{ prescription.description }}</td>
+              <td>
+                {{
+                  prescription.prescribedAtUtc
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="getStatusClass(prescription.status)"
+                >
+                  {{ formatStatus(prescription.status) }}
+                </span>
+              </td>
+              <td class="actions">
+                <button
+                  type="button"
+                  class="icon-button"
+                  title="Visualizar Patient 360"
+                  (click)="viewPatient360(prescription.patientId)"
+                >
+                  👁
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Mostrando
+          {{ (currentPage - 1) * pageSize + 1 }}
+          até
+          {{
+            currentPage * pageSize > prescriptions().length
+              ? prescriptions().length
+              : currentPage * pageSize
+          }}
+          de
+          {{ prescriptions().length }}
+          prescrições
+        </div>
+
+        @if (totalPages > 1) {
+          <div class="pagination-buttons">
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            @for (page of pages; track page) {
+              <button
+                type="button"
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              ›
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</section>

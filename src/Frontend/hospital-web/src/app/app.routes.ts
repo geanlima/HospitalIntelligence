@@ -1,15 +1,13 @@
 import { Routes } from '@angular/router';
 
-import { DashboardComponent } from './features/dashboard/dashboard';
-import { Patient360Component } from './features/patients/patient-360/patient-360';
-import { PatientList } from './features/patients/patient-list/patient-list';
+import { authGuard } from './core/guards/auth.guard';
 import { Shell } from './layout/shell/shell';
-import { AdmissionListComponent } from './features/admissions/admission-list/admission-list';
 
 export const routes: Routes = [
   {
     path: '',
     component: Shell,
+    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -18,19 +16,73 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        component: DashboardComponent
+        loadComponent: () =>
+          import('./features/dashboard/dashboard').then(
+            m => m.DashboardComponent
+          )
       },
       {
         path: 'patients',
-        component: PatientList
+        loadComponent: () =>
+          import('./features/patients/patient-list/patient-list').then(
+            m => m.PatientList
+          )
       },
       {
         path: 'patients/:id/360',
-        component: Patient360Component
+        loadComponent: () =>
+          import('./features/patients/patient-360/patient-360').then(
+            m => m.Patient360Component
+          )
       },
       {
         path: 'admissions',
-        component: AdmissionListComponent
+        loadComponent: () =>
+          import('./features/admissions/admission-list/admission-list').then(
+            m => m.AdmissionListComponent
+          )
+      },
+      {
+        path: 'exams',
+        loadComponent: () =>
+          import('./features/exams/exam-list/exam-list').then(
+            m => m.ExamListComponent
+          )
+      },
+      {
+        path: 'prescriptions',
+        loadComponent: () =>
+          import('./features/prescriptions/prescription-list/prescription-list').then(
+            m => m.PrescriptionListComponent
+          )
+      },
+      {
+        path: 'vital-signs',
+        loadComponent: () =>
+          import('./features/vital-signs/vital-sign-list/vital-sign-list').then(
+            m => m.VitalSignListComponent
+          )
+      },
+      {
+        path: 'clinical-notes',
+        loadComponent: () =>
+          import('./features/clinical-notes/clinical-note-list/clinical-note-list').then(
+            m => m.ClinicalNoteListComponent
+          )
+      },
+      {
+        path: 'alerts',
+        loadComponent: () =>
+          import('./features/alerts/alert-list/alert-list').then(
+            m => m.AlertListComponent
+          )
+      },
+      {
+        path: 'reports',
+        loadComponent: () =>
+          import('./features/reports/reports').then(
+            m => m.ReportsComponent
+          )
       }
     ]
   }

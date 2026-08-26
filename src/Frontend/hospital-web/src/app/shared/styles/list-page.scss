@@ -1,0 +1,276 @@
+.list-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 28px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+  }
+}
+
+.search-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.search {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+
+  input,
+  select,
+  button {
+    height: 48px;
+    box-sizing: border-box;
+  }
+
+  input,
+  select {
+    width: 100%;
+    min-width: 0;
+    padding: 0 14px;
+    border: 1px solid #dbe2ea;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #334155;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+
+    &:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 0 18px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.primary-button {
+  border: 1px solid #4f46e5;
+  background: #4f46e5;
+  color: #ffffff;
+
+  &:hover:not(:disabled) {
+    border-color: #4338ca;
+    background: #4338ca;
+  }
+}
+
+.secondary-button {
+  border: 1px solid #dbe2ea;
+  background: #f1f5f9;
+  color: #334155;
+
+  &:hover:not(:disabled) {
+    background: #e2e8f0;
+  }
+}
+
+.loading-message,
+.empty-state {
+  margin: 18px 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.empty-state {
+  padding: 40px;
+  text-align: center;
+}
+
+.error {
+  margin: 18px 0;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.table-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 14px 16px;
+    text-align: left;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  td {
+    padding: 16px;
+    border-top: 1px solid #edf0f4;
+    color: #1f2937;
+    font-size: 14px;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-active,
+.status-requested,
+.status-inprogress {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-discharged,
+.status-resulted,
+.status-completed,
+.status-acknowledged {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-cancelled,
+.status-suspended,
+.status-critical {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-high {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.status-medium {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.status-low,
+.status-neutral,
+.status-resolved {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.actions {
+  width: 80px;
+  text-align: center;
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid #dbe2ea;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+
+  &:hover {
+    background: #eef2ff;
+    border-color: #6366f1;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-top: 1px solid #edf0f4;
+}
+
+.pagination-info {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 6px;
+
+  button {
+    min-width: 34px;
+    height: 34px;
+    border: 1px solid #dbe2ea;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #475569;
+    cursor: pointer;
+
+    &.active {
+      border-color: #4f46e5;
+      background: #4f46e5;
+      color: #ffffff;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .table-card {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 900px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}

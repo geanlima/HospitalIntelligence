@@ -1,0 +1,163 @@
+<section class="list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Exames</h1>
+      <p>Consulte exames solicitados e resultados.</p>
+    </div>
+  </header>
+
+  <section class="search-card">
+    <div class="search search-2">
+      <select [(ngModel)]="status">
+        <option value="">Todos os status</option>
+        <option value="Requested">Solicitado</option>
+        <option value="InProgress">Em andamento</option>
+        <option value="Resulted">Com resultado</option>
+        <option value="Cancelled">Cancelado</option>
+      </select>
+
+      <input
+        type="text"
+        [(ngModel)]="name"
+        placeholder="Nome do exame"
+      />
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="search()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          Buscando...
+        } @else {
+          Buscar
+        }
+      </button>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="clearSearch()"
+        [disabled]="loading()"
+      >
+        Limpar
+      </button>
+    </div>
+  </section>
+
+  @if (hasSearched() && loading()) {
+    <p class="loading-message">Carregando exames...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    exams().length === 0
+  ) {
+    <div class="empty-state">Nenhum exame encontrado.</div>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    exams().length > 0
+  ) {
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Exame</th>
+            <th>Solicitado</th>
+            <th>Status</th>
+            <th>Resultado</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (exam of paginatedExams; track exam.id) {
+            <tr>
+              <td><strong>{{ exam.patientName }}</strong></td>
+              <td>{{ exam.name }}</td>
+              <td>{{ exam.requestedAtUtc | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="getStatusClass(exam.status)"
+                >
+                  {{ formatStatus(exam.status) }}
+                </span>
+              </td>
+              <td>{{ exam.result || '-' }}</td>
+              <td class="actions">
+                <button
+                  type="button"
+                  class="icon-button"
+                  title="Visualizar Patient 360"
+                  (click)="viewPatient360(exam.patientId)"
+                >
+                  👁
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Mostrando
+          {{ (currentPage - 1) * pageSize + 1 }}
+          até
+          {{
+            currentPage * pageSize > exams().length
+              ? exams().length
+              : currentPage * pageSize
+          }}
+          de
+          {{ exams().length }}
+          exames
+        </div>
+
+        @if (totalPages > 1) {
+          <div class="pagination-buttons">
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            @for (page of pages; track page) {
+              <button
+                type="button"
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              ›
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</section>

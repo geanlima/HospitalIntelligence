@@ -1,0 +1,12 @@
+@use '../../../shared/styles/list-page';
+
+.search-actions {
+  grid-template-columns: 110px 110px;
+  justify-content: start;
+}
+
+@media (max-width: 600px) {
+  .search-actions {
+    grid-template-columns: 1fr;
+  }
+}

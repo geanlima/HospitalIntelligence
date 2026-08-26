@@ -1,0 +1,155 @@
+<section class="list-page">
+
+  <header class="page-header">
+    <div>
+      <h1>Notas Clínicas</h1>
+      <p>Consulte as notas registradas no prontuário.</p>
+    </div>
+  </header>
+
+  <section class="search-card">
+    <div class="search search-1">
+      <select [(ngModel)]="noteType">
+        <option value="">Todos os tipos</option>
+        <option value="Evolution">Evolução</option>
+        <option value="Nursing">Enfermagem</option>
+        <option value="Medical">Médica</option>
+        <option value="Physiotherapy">Fisioterapia</option>
+        <option value="Nutrition">Nutrição</option>
+        <option value="Psychology">Psicologia</option>
+        <option value="Other">Outra</option>
+      </select>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="search()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          Buscando...
+        } @else {
+          Buscar
+        }
+      </button>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="clearSearch()"
+        [disabled]="loading()"
+      >
+        Limpar
+      </button>
+    </div>
+  </section>
+
+  @if (hasSearched() && loading()) {
+    <p class="loading-message">Carregando notas clínicas...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    notes().length === 0
+  ) {
+    <div class="empty-state">Nenhuma nota clínica encontrada.</div>
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    notes().length > 0
+  ) {
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Profissional</th>
+            <th>Tipo</th>
+            <th>Conteúdo</th>
+            <th>Criada em</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (note of paginatedNotes; track note.id) {
+            <tr>
+              <td><strong>{{ note.patientName }}</strong></td>
+              <td>{{ note.professional }}</td>
+              <td>{{ formatNoteType(note.noteType) }}</td>
+              <td class="content-cell">{{ note.content }}</td>
+              <td>
+                {{ note.createdAtUtc | date:'dd/MM/yyyy HH:mm' }}
+              </td>
+              <td class="actions">
+                <button
+                  type="button"
+                  class="icon-button"
+                  title="Visualizar Patient 360"
+                  (click)="viewPatient360(note.patientId)"
+                >
+                  👁
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Mostrando
+          {{ (currentPage - 1) * pageSize + 1 }}
+          até
+          {{
+            currentPage * pageSize > notes().length
+              ? notes().length
+              : currentPage * pageSize
+          }}
+          de
+          {{ notes().length }}
+          notas
+        </div>
+
+        @if (totalPages > 1) {
+          <div class="pagination-buttons">
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            @for (page of pages; track page) {
+              <button
+                type="button"
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              ›
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</section>

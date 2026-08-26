@@ -14,9 +14,6 @@ import { Patient360 } from '../models/patient-360.model';
 export class PatientService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl =
-    'https://localhost:7096';
-
   getPatients(
     name?: string,
     sourceSystem?: string
@@ -38,7 +35,7 @@ export class PatientService {
     }
 
     return this.http.get<Patient[]>(
-      `${this.apiUrl}/patients`,
+      '/patients',
       {
         params
       }
@@ -49,7 +46,7 @@ export class PatientService {
     patientId: string
   ): Observable<Patient360> {
     return this.http.get<Patient360>(
-      `${this.apiUrl}/patients/${patientId}/360`
+      `/patients/${patientId}/360`
     );
   }
 }

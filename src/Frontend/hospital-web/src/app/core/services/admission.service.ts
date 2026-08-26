@@ -10,8 +10,6 @@ import { Admission } from '../models/admission.model';
 export class AdmissionService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7096';
-
   getAdmissions(
     status?: string,
     unit?: string
@@ -33,7 +31,7 @@ export class AdmissionService {
     }
 
     return this.http.get<Admission[]>(
-      `${this.apiUrl}/admissions`,
+      '/admissions',
       { params }
     );
   }

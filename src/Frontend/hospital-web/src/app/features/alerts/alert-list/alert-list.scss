@@ -1,0 +1,32 @@
+@use '../../../shared/styles/list-page';
+
+.search-2 {
+  grid-template-columns:
+    220px
+    minmax(220px, 1fr)
+    110px
+    110px;
+}
+
+.content-cell {
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .search-2 {
+    grid-template-columns: 1fr 1fr;
+
+    select {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .search-2 {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,17 +2,15 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { DashboardSummary } from '../models/dashboard-summary.model';
+import { VitalSign } from '../models/vital-sign.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService {
+export class VitalSignService {
   private readonly http = inject(HttpClient);
 
-  getSummary(): Observable<DashboardSummary> {
-    return this.http.get<DashboardSummary>(
-      '/dashboard/summary'
-    );
+  getVitalSigns(): Observable<VitalSign[]> {
+    return this.http.get<VitalSign[]>('/vital-signs');
   }
 }

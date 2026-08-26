@@ -78,4 +78,8 @@ export class DashboardComponent implements OnInit {
   goToAlerts(): void {
     this.router.navigate(['/alerts']);
   }
+
+  goToClinicalNotes(): void {
+    this.router.navigate(['/clinical-notes']);
+  }
 }
