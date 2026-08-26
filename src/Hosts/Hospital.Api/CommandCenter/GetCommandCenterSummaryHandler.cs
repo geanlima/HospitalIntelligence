@@ -14,6 +14,7 @@ public sealed record CommandCenterSummaryResponse(
 
 public sealed record CommandCenterPatientInsight(
     Guid PatientId,
+    string PatientName,
     string DischargeLabel,
     double DischargeScore,
     string DeteriorationLabel,
@@ -99,6 +100,7 @@ public sealed class GetCommandCenterSummaryHandler
             insights.Add(
                 new CommandCenterPatientInsight(
                     patient.Id.Value,
+                    patient.Name,
                     discharge.Label,
                     discharge.Score,
                     deterioration.Label,

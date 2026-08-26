@@ -19,7 +19,9 @@ public sealed class HospitalApiFactory
                     new Dictionary<string, string?>
                     {
                         ["ConnectionStrings:PatientsDatabase"] =
-                            "Host=localhost;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres"
+                            "Host=localhost;Port=5432;Database=hospital_intelligence;Username=postgres;Password=postgres",
+                        ["Security:RequireAuth"] = "false",
+                        ["Salux:Enabled"] = "false"
                     });
             });
     }

@@ -1,7 +1,26 @@
-import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 
-/**
- * Placeholder para autenticação futura (Fase 20).
- * Mantém a estrutura de guards pronta sem bloquear o acesso agora.
- */
-export const authGuard: CanActivateFn = () => true;
+import { AuthService } from '../services/auth.service';
+
+export const authGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (auth.isAuthenticated()) {
+    return true;
+  }
+
+  return router.createUrlTree(['/login']);
+};
+
+export const guestGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (!auth.isAuthenticated()) {
+    return true;
+  }
+
+  return router.createUrlTree(['/dashboard']);
+};

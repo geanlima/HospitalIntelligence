@@ -10,6 +10,8 @@
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
@@ -40,6 +42,7 @@
     <ProjectReference Include="..\..\Modules\AI\Hospital.AI.Contracts\Hospital.AI.Contracts.csproj" />
     <ProjectReference Include="..\..\Modules\ML\Hospital.ML.Infrastructure\Hospital.ML.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\ML\Hospital.ML.Contracts\Hospital.ML.Contracts.csproj" />
+    <ProjectReference Include="..\..\Integrations\Hospital.Salux\Hospital.Salux.csproj" />
   </ItemGroup>
 
 </Project>

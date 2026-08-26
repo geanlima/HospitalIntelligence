@@ -1,0 +1,53 @@
+<div class="login-page">
+  <section class="login-panel">
+    <div class="brand">
+      <div class="brand-icon">H</div>
+      <div>
+        <strong>Hospital Intelligence</strong>
+        <span>Acesso seguro</span>
+      </div>
+    </div>
+
+    <h1>Entrar</h1>
+    <p class="lead">
+      Autenticação JWT da Fase 20 — use as contas de estudo.
+    </p>
+
+    <form (ngSubmit)="submit()">
+      <label>
+        Usuário
+        <input
+          name="username"
+          [(ngModel)]="username"
+          autocomplete="username"
+          required
+        />
+      </label>
+
+      <label>
+        Senha
+        <input
+          name="password"
+          type="password"
+          [(ngModel)]="password"
+          autocomplete="current-password"
+          required
+        />
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Entrando…' : 'Entrar' }}
+      </button>
+    </form>
+
+    <ul class="hints">
+      <li><code>admin</code> / <code>admin</code> — Admin + Clinician</li>
+      <li><code>clinician</code> / <code>clinician</code> — Clinician</li>
+      <li><code>auditor</code> / <code>auditor</code> — Auditor</li>
+    </ul>
+  </section>
+</div>

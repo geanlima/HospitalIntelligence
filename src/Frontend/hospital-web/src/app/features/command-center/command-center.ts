@@ -24,6 +24,7 @@ interface CommandCenterSummary {
   highNoShowRiskCount: number;
   topInsights: Array<{
     patientId: string;
+    patientName: string;
     dischargeLabel: string;
     dischargeScore: number;
     deteriorationLabel: string;

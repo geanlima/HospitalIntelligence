@@ -11,10 +11,11 @@ Aceito.
 UI Angular em `/command-center`.
 
 ### Fase 20 — Segurança e LGPD
-JWT de estudo (`/auth/login`), roles Admin/Clinician/Auditor,
-policies, audit trail em memória, anonimização LGPD.
-`Security:RequireAuth` permanece `false` por padrão para não
-quebrar o front de estudo.
+JWT (`/auth/login`), roles Admin/Clinician/Auditor,
+policies com `Security:RequireAuth=true` (fallback autenticado),
+audit trail **persistido** em Postgres (`security_audit_entries`),
+anonimização LGPD, UI Angular de login + Bearer interceptor.
+Testes de integração desligam `RequireAuth` via factory.
 
 ### Fase 21 — Observabilidade
 Serilog estruturado, Correlation ID (`X-Correlation-ID`),

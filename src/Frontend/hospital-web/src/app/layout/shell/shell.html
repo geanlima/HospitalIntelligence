@@ -122,13 +122,22 @@
     <div class="user">
 
       <div class="avatar">
-        A
+        {{ avatarLetter() }}
       </div>
 
       <div>
-        <strong>Administrador</strong>
-        <span>Hospital Intelligence</span>
+        <strong>{{ username() }}</strong>
+        <span>{{ rolesLabel() }}</span>
       </div>
+
+      <button
+        type="button"
+        class="logout"
+        (click)="logout()"
+        title="Sair"
+      >
+        Sair
+      </button>
 
     </div>
 
@@ -165,7 +174,7 @@
         </button>
 
         <div class="profile">
-          A
+          {{ avatarLetter() }}
         </div>
 
       </div>

@@ -878,9 +878,9 @@ Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 
 ## Status: ✅ 100% concluída
 
-- [x] Authentication (JWT `/auth/login`)
-- [x] Authorization + Roles + Policies
-- [x] Audit Trail (`/auth/audit-trail`)
+- [x] Authentication (JWT `/auth/login` + UI Angular)
+- [x] Authorization + Roles + Policies (`RequireAuth=true`)
+- [x] Audit Trail persistido (`/auth/audit-trail` + Postgres)
 - [x] Controle de acesso ao prontuário (policies + AI access policy prévia)
 - [x] Criptografia / Secrets (JWT signing key em config; HTTPS)
 - [x] Anonimização + LGPD (`/lgpd/anonymize-name`)
@@ -1066,9 +1066,9 @@ Ou OpenAI: `Provider: "OpenAI"` + `OpenAICompatible:BaseUrl/ApiKey/Model`.
 
 ## Status: ✅ 100% concluída
 
-- [x] Authentication (JWT `/auth/login`)
-- [x] Authorization + Roles + Policies
-- [x] Audit Trail (`/auth/audit-trail`)
+- [x] Authentication (JWT `/auth/login` + UI Angular)
+- [x] Authorization + Roles + Policies (`RequireAuth=true`)
+- [x] Audit Trail persistido (`/auth/audit-trail` + Postgres)
 - [x] Controle de acesso ao prontuário (policies + AI access policy prévia)
 - [x] Criptografia / Secrets (JWT signing key em config; HTTPS)
 - [x] Anonimização + LGPD (`/lgpd/anonymize-name`)

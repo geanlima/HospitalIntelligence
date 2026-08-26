@@ -1,7 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Hospital.Api.Security.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Hospital.Api.Security;
@@ -48,35 +51,13 @@ public sealed record AuditTrailEntry(
 
 public interface ISecurityAuditTrail
 {
-    void Append(AuditTrailEntry entry);
+    Task AppendAsync(
+        AuditTrailEntry entry,
+        CancellationToken cancellationToken = default);
 
-    IReadOnlyList<AuditTrailEntry> List(int take = 100);
-}
-
-public sealed class InMemorySecurityAuditTrail : ISecurityAuditTrail
-{
-    private readonly List<AuditTrailEntry> _entries = [];
-    private readonly object _gate = new();
-
-    public void Append(AuditTrailEntry entry)
-    {
-        lock (_gate)
-        {
-            _entries.Insert(0, entry);
-            if (_entries.Count > 1000)
-            {
-                _entries.RemoveRange(1000, _entries.Count - 1000);
-            }
-        }
-    }
-
-    public IReadOnlyList<AuditTrailEntry> List(int take = 100)
-    {
-        lock (_gate)
-        {
-            return _entries.Take(take).ToList();
-        }
-    }
+    Task<IReadOnlyList<AuditTrailEntry>> ListAsync(
+        int take = 100,
+        CancellationToken cancellationToken = default);
 }
 
 public static class LgpdAnonymizer
@@ -117,7 +98,20 @@ public static class SecurityExtensions
                 .GetSection(SecurityOptions.SectionName)
                 .Get<SecurityOptions>() ?? new SecurityOptions();
 
-        services.AddSingleton<ISecurityAuditTrail, InMemorySecurityAuditTrail>();
+        var connectionString =
+            configuration.GetConnectionString("SecurityDatabase")
+            ?? configuration.GetConnectionString("PatientsDatabase");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException(
+                "Connection string 'SecurityDatabase' (or PatientsDatabase) was not found.");
+        }
+
+        services.AddDbContext<SecurityDbContext>(db =>
+            db.UseNpgsql(connectionString));
+
+        services.AddScoped<ISecurityAuditTrail, EfSecurityAuditTrail>();
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -145,9 +139,40 @@ public static class SecurityExtensions
             auth.AddPolicy(
                 "AuditorOrAdmin",
                 p => p.RequireRole(HospitalRoles.Auditor, HospitalRoles.Admin));
+
+            if (options.RequireAuth)
+            {
+                auth.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            }
         });
 
         return services;
+    }
+
+    public static async Task EnsureSecuritySchemaAsync(
+        this IServiceProvider services,
+        CancellationToken cancellationToken = default)
+    {
+        await using var scope = services.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<SecurityDbContext>();
+
+        await db.Database.ExecuteSqlRawAsync(
+            """
+            CREATE TABLE IF NOT EXISTS security_audit_entries (
+                "Id" uuid PRIMARY KEY,
+                "OccurredAtUtc" timestamptz NOT NULL,
+                "UserName" varchar(200) NULL,
+                "Action" varchar(100) NOT NULL,
+                "Resource" varchar(500) NOT NULL,
+                "CorrelationId" varchar(100) NULL,
+                "Details" varchar(2000) NOT NULL
+            );
+            CREATE INDEX IF NOT EXISTS ix_security_audit_entries_occurred
+                ON security_audit_entries ("OccurredAtUtc" DESC);
+            """,
+            cancellationToken);
     }
 
     public static LoginResponse IssueDevToken(

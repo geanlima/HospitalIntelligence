@@ -73,7 +73,7 @@
         <tbody>
           @for (item of data.topInsights; track item.patientId) {
             <tr>
-              <td>{{ item.patientId }}</td>
+              <td>{{ item.patientName || item.patientId }}</td>
               <td>{{ item.dischargeLabel }}</td>
               <td>{{ item.dischargeScore | number:'1.2-2' }}</td>
               <td>{{ item.deteriorationLabel }}</td>

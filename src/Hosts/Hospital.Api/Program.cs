@@ -22,6 +22,7 @@ using Hospital.Api.Endpoints.ClinicalNotes;
 using Hospital.Api.Endpoints.CommandCenter;
 using Hospital.Api.Endpoints.Dashboard;
 using Hospital.Api.Endpoints.Exams;
+using Hospital.Api.Endpoints.Integrations;
 using Hospital.Api.Endpoints.ML;
 using Hospital.Api.Endpoints.Patients;
 using Hospital.Api.Endpoints.Prescriptions;
@@ -66,6 +67,8 @@ using Hospital.VitalSigns.Application.VitalSigns.CreateVitalSign;
 using Hospital.VitalSigns.Application.VitalSigns.SearchVitalSigns;
 using Hospital.VitalSigns.Infrastructure;
 
+using Hospital.Salux;
+
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -102,6 +105,7 @@ builder.Services.AddAlertsInfrastructure(builder.Configuration);
 builder.Services.AddTimelineInfrastructure(builder.Configuration);
 builder.Services.AddAiInfrastructure(builder.Configuration);
 builder.Services.AddMlInfrastructure();
+builder.Services.AddSaluxIntegration(builder.Configuration);
 
 builder.Services.AddScoped<IClinicalRecordSource, HostClinicalRecordSource>();
 builder.Services.AddScoped<IMlFeatureSource, HostMlFeatureSource>();
@@ -161,8 +165,9 @@ app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health").AllowAnonymous();
 app.MapAuthEndpoints();
+app.MapSaluxSyncEndpoint();
 app.MapDashboardSummaryEndpoint();
 app.MapCommandCenterSummaryEndpoint();
 app.MapPatientMlInsightsEndpoint();
@@ -206,6 +211,8 @@ app.MapAuditPatientChartEndpoint();
 app.MapAssessClinicalSafetyEndpoint();
 app.MapStructureVoiceNoteEndpoint();
 
+await app.Services.EnsureSecuritySchemaAsync();
+await app.Services.EnsureSaluxSchemaAsync();
 await app.Services.SeedAiKnowledgeAsync();
 
 try
