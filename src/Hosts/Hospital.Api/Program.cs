@@ -6,6 +6,7 @@ using Hospital.Admissions.Infrastructure;
 using Hospital.Alerts.Application.Alerts.AcknowledgeAlert;
 using Hospital.Alerts.Application.Alerts.CreateAlert;
 using Hospital.Alerts.Application.Alerts.ResolveAlert;
+using Hospital.Alerts.Application.Alerts.SearchAlerts;
 using Hospital.Alerts.Infrastructure;
 
 using Hospital.Api.Common;
@@ -20,12 +21,14 @@ using Hospital.Api.Endpoints.Timeline;
 using Hospital.Api.Endpoints.VitalSigns;
 
 using Hospital.ClinicalNotes.Application.ClinicalNotes.CreateClinicalNote;
+using Hospital.ClinicalNotes.Application.ClinicalNotes.SearchClinicalNotes;
 using Hospital.ClinicalNotes.Infrastructure;
 
 using Hospital.Dashboard.Application.Dashboard;
 
 using Hospital.Exams.Application.Exams.CreateExam;
 using Hospital.Exams.Application.Exams.RegisterExamResult;
+using Hospital.Exams.Application.Exams.SearchExams;
 using Hospital.Exams.Infrastructure;
 
 using Hospital.Patients.Application.Patient360;
@@ -38,12 +41,14 @@ using Hospital.Patients.Infrastructure;
 
 using Hospital.Prescriptions.Application.ChangePrescriptionStatus;
 using Hospital.Prescriptions.Application.CreatePrescription;
+using Hospital.Prescriptions.Application.SearchPrescriptions;
 using Hospital.Prescriptions.Infrastructure;
 
 using Hospital.Timeline.Application.Timeline.CreateTimelineItem;
 using Hospital.Timeline.Infrastructure;
 
 using Hospital.VitalSigns.Application.VitalSigns.CreateVitalSign;
+using Hospital.VitalSigns.Application.VitalSigns.SearchVitalSigns;
 using Hospital.VitalSigns.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -102,17 +107,22 @@ builder.Services.AddScoped<SearchAdmissionsHandler>();
 
 builder.Services.AddScoped<CreateExamHandler>();
 builder.Services.AddScoped<RegisterExamResultHandler>();
+builder.Services.AddScoped<SearchExamsHandler>();
 
 builder.Services.AddScoped<CreatePrescriptionHandler>();
 builder.Services.AddScoped<ChangePrescriptionStatusHandler>();
+builder.Services.AddScoped<SearchPrescriptionsHandler>();
 
 builder.Services.AddScoped<CreateVitalSignHandler>();
+builder.Services.AddScoped<SearchVitalSignsHandler>();
 
 builder.Services.AddScoped<CreateClinicalNoteHandler>();
+builder.Services.AddScoped<SearchClinicalNotesHandler>();
 
 builder.Services.AddScoped<CreateAlertHandler>();
 builder.Services.AddScoped<AcknowledgeAlertHandler>();
 builder.Services.AddScoped<ResolveAlertHandler>();
+builder.Services.AddScoped<SearchAlertsHandler>();
 
 builder.Services.AddScoped<CreateTimelineItemHandler>();
 
@@ -151,17 +161,22 @@ app.MapSearchAdmissionsEndpoint();
 
 app.MapCreateExamEndpoint();
 app.MapRegisterExamResultEndpoint();
+app.MapSearchExamsEndpoint();
 
 app.MapCreatePrescriptionEndpoint();
 app.MapChangePrescriptionStatusEndpoint();
+app.MapSearchPrescriptionsEndpoint();
 
 app.MapCreateVitalSignEndpoint();
+app.MapSearchVitalSignsEndpoint();
 
 app.MapCreateClinicalNoteEndpoint();
+app.MapSearchClinicalNotesEndpoint();
 
 app.MapCreateAlertEndpoint();
 app.MapAcknowledgeAlertEndpoint();
 app.MapResolveAlertEndpoint();
+app.MapSearchAlertsEndpoint();
 
 app.MapCreateTimelineItemEndpoint();
 

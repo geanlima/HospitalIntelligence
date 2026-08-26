@@ -22,4 +22,9 @@ public interface IExamRepository
 
     Task<int> CountPendingAsync(
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<Exam>> SearchAsync(
+        ExamStatus? status,
+        string? name,
+        CancellationToken cancellationToken = default);
 }

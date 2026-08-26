@@ -56,4 +56,23 @@ public sealed class PrescriptionRepository
             .OrderByDescending(x => x.PrescribedAtUtc)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<Prescription>> SearchAsync(
+        PrescriptionStatus? status,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _dbContext.Prescriptions
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (status.HasValue)
+        {
+            query = query.Where(
+                x => x.Status == status.Value);
+        }
+
+        return await query
+            .OrderByDescending(x => x.PrescribedAtUtc)
+            .ToListAsync(cancellationToken);
+    }
 }

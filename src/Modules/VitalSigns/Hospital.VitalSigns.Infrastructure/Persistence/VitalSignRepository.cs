@@ -47,4 +47,13 @@ public sealed class VitalSignRepository
             .OrderByDescending(x => x.MeasuredAtUtc)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<VitalSign>> SearchAsync(
+        CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.VitalSigns
+            .AsNoTracking()
+            .OrderByDescending(x => x.MeasuredAtUtc)
+            .ToListAsync(cancellationToken);
+    }
 }

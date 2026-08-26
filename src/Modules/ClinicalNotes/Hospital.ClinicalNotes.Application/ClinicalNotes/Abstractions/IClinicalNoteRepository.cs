@@ -15,4 +15,8 @@ public interface IClinicalNoteRepository
     Task<IReadOnlyCollection<ClinicalNote>> GetByPatientIdAsync(
         Guid patientId,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<ClinicalNote>> SearchAsync(
+        ClinicalNoteType? noteType,
+        CancellationToken cancellationToken = default);
 }

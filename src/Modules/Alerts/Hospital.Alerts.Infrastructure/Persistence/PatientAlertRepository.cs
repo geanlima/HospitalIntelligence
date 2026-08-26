@@ -65,4 +65,30 @@ public sealed class PatientAlertRepository
                 x => x.Severity == AlertSeverity.Critical,
                 cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<PatientAlert>> SearchAsync(
+        AlertStatus? status,
+        AlertSeverity? severity,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _dbContext.Alerts
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (status.HasValue)
+        {
+            query = query.Where(
+                x => x.Status == status.Value);
+        }
+
+        if (severity.HasValue)
+        {
+            query = query.Where(
+                x => x.Severity == severity.Value);
+        }
+
+        return await query
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .ToListAsync(cancellationToken);
+    }
 }

@@ -68,4 +68,34 @@ public sealed class ExamRepository
                     x.Status == ExamStatus.InProgress,
                 cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<Exam>> SearchAsync(
+        ExamStatus? status,
+        string? name,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _dbContext.Exams
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (status.HasValue)
+        {
+            query = query.Where(
+                x => x.Status == status.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            var normalizedName = name.Trim();
+
+            query = query.Where(
+                x => EF.Functions.ILike(
+                    x.Name,
+                    $"%{normalizedName}%"));
+        }
+
+        return await query
+            .OrderByDescending(x => x.RequestedAtUtc)
+            .ToListAsync(cancellationToken);
+    }
 }

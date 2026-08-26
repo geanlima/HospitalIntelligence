@@ -15,4 +15,7 @@ public interface IVitalSignRepository
     Task<IReadOnlyCollection<VitalSign>> GetByPatientIdAsync(
         Guid patientId,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<VitalSign>> SearchAsync(
+        CancellationToken cancellationToken = default);
 }

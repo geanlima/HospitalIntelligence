@@ -47,4 +47,23 @@ public sealed class ClinicalNoteRepository
             .OrderByDescending(x => x.CreatedAtUtc)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<ClinicalNote>> SearchAsync(
+        ClinicalNoteType? noteType,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _dbContext.ClinicalNotes
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (noteType.HasValue)
+        {
+            query = query.Where(
+                x => x.NoteType == noteType.Value);
+        }
+
+        return await query
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .ToListAsync(cancellationToken);
+    }
 }

@@ -19,4 +19,8 @@ public interface IPrescriptionRepository
     Task<IReadOnlyCollection<Prescription>> GetByPatientIdAsync(
         Guid patientId,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<Prescription>> SearchAsync(
+        PrescriptionStatus? status,
+        CancellationToken cancellationToken = default);
 }

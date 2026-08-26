@@ -22,4 +22,9 @@ public interface IPatientAlertRepository
 
     Task<int> CountCriticalAsync(
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<PatientAlert>> SearchAsync(
+        AlertStatus? status,
+        AlertSeverity? severity,
+        CancellationToken cancellationToken = default);
 }
