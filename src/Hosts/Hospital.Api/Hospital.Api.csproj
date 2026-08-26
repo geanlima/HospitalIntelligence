@@ -29,6 +29,8 @@
     <ProjectReference Include="..\..\Modules\Alerts\Hospital.Alerts.Infrastructure\Hospital.Alerts.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Timeline\Hospital.Timeline.Application\Hospital.Timeline.Application.csproj" />
     <ProjectReference Include="..\..\Modules\Timeline\Hospital.Timeline.Infrastructure\Hospital.Timeline.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Dashboard\Hospital.Dashboard.Application\Hospital.Dashboard.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Dashboard\Hospital.Dashboard.Contracts\Hospital.Dashboard.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

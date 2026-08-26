@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hospital.Dashboard.Contracts\Hospital.Dashboard.Contracts.csproj" />
+    <ProjectReference Include="..\..\Patients\Hospital.Patients.Application\Hospital.Patients.Application.csproj" />
+    <ProjectReference Include="..\..\Admissions\Hospital.Admissions.Application\Hospital.Admissions.Application.csproj" />
+    <ProjectReference Include="..\..\Exams\Hospital.Exams.Application\Hospital.Exams.Application.csproj" />
+    <ProjectReference Include="..\..\Alerts\Hospital.Alerts.Application\Hospital.Alerts.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
