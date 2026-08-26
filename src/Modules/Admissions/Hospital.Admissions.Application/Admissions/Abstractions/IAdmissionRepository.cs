@@ -19,4 +19,12 @@ public interface IAdmissionRepository
     Task<IReadOnlyCollection<Admission>> GetByPatientIdAsync(
         Guid patientId,
         CancellationToken cancellationToken = default);
+
+    Task<int> CountActiveAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<Admission>> SearchAsync(
+        AdmissionStatus? status,
+        string? unit,
+        CancellationToken cancellationToken = default);
 }

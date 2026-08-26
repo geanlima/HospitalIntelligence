@@ -1,0 +1,256 @@
+<section class="admissions">
+
+  <header class="page-header">
+    <div>
+      <h1>Internações</h1>
+
+      <p>
+        Consulte e acompanhe as internações hospitalares.
+      </p>
+    </div>
+  </header>
+
+  <section class="search-card">
+
+    <div class="search">
+
+      <select [(ngModel)]="status">
+        <option value="">
+          Todos os status
+        </option>
+
+        <option value="Active">
+          Ativa
+        </option>
+
+        <option value="Discharged">
+          Alta
+        </option>
+
+        <option value="Cancelled">
+          Cancelada
+        </option>
+      </select>
+
+      <input
+        type="text"
+        [(ngModel)]="unit"
+        placeholder="Unidade"
+      />
+
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="search()"
+      >
+        Buscar
+      </button>
+
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="clearSearch()"
+      >
+        Limpar
+      </button>
+
+    </div>
+
+  </section>
+
+  @if (
+    hasSearched() &&
+    loading()
+  ) {
+
+    <section class="card">
+      <div class="state">
+        Carregando internações...
+      </div>
+    </section>
+
+  }
+
+  @if (errorMessage()) {
+
+    <section class="card">
+      <div class="state error">
+        {{ errorMessage() }}
+      </div>
+    </section>
+
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    admissions().length === 0
+  ) {
+
+    <section class="card">
+
+      <div class="state">
+
+        <div class="state-icon">
+          🏥
+        </div>
+
+        <h2>
+          Nenhuma internação encontrada
+        </h2>
+
+        <p>
+          Ajuste os filtros e tente novamente.
+        </p>
+
+      </div>
+
+    </section>
+
+  }
+
+  @if (
+    hasSearched() &&
+    !loading() &&
+    !errorMessage() &&
+    admissions().length > 0
+  ) {
+
+    <section class="card table-card">
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Internação</th>
+              <th>Unidade</th>
+              <th>Leito</th>
+              <th>Status</th>
+              <th>Alta</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (
+              admission of paginatedAdmissions;
+              track admission.id
+            ) {
+
+              <tr>
+
+                <td>
+                  <strong>
+                    {{ admission.patientName }}
+                  </strong>
+                </td>
+
+                <td>
+                  {{
+                    admission.admissionDate
+                      | date:'dd/MM/yyyy HH:mm'
+                  }}
+                </td>
+
+                <td>
+                  {{ admission.unit ?? '-' }}
+                </td>
+
+                <td>
+                  {{ admission.bed ?? '-' }}
+                </td>
+
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [ngClass]="
+                      getStatusClass(
+                        admission.status
+                      )
+                    "
+                  >
+                    {{
+                      formatStatus(
+                        admission.status
+                      )
+                    }}
+                  </span>
+
+                </td>
+
+                <td>
+
+                  @if (admission.dischargeDate) {
+
+                    {{
+                      admission.dischargeDate
+                        | date:'dd/MM/yyyy HH:mm'
+                    }}
+
+                  } @else {
+
+                    -
+
+                  }
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      @if (totalPages > 1) {
+
+        <div class="pagination">
+
+          <button
+            type="button"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+            ‹
+          </button>
+
+          @for (
+            page of pages;
+            track page
+          ) {
+
+            <button
+              type="button"
+              [class.active]="page === currentPage"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+
+          }
+
+          <button
+            type="button"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            ›
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</section>

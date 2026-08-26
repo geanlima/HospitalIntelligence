@@ -55,4 +55,45 @@ public sealed class AdmissionRepository
             .OrderByDescending(x => x.AdmissionDate)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<int> CountActiveAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Admissions
+            .AsNoTracking()
+            .CountAsync(
+                x => x.Status == AdmissionStatus.Active,
+                cancellationToken);
+    }
+
+    public async Task<IReadOnlyCollection<Admission>> SearchAsync(
+    AdmissionStatus? status,
+    string? unit,
+    CancellationToken cancellationToken = default)
+    {
+        var query = _dbContext.Admissions
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (status.HasValue)
+        {
+            query = query.Where(
+                x => x.Status == status.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(unit))
+        {
+            var normalizedUnit = unit.Trim();
+
+            query = query.Where(
+                x => x.Unit != null &&
+                     EF.Functions.ILike(
+                         x.Unit,
+                         $"%{normalizedUnit}%"));
+        }
+
+        return await query
+            .OrderByDescending(x => x.AdmissionDate)
+            .ToListAsync(cancellationToken);
+    }
+
 }
