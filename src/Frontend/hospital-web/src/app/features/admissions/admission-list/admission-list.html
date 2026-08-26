@@ -40,16 +40,22 @@
 
       <button
         type="button"
-        class="btn-primary"
+        class="primary-button"
         (click)="search()"
+        [disabled]="loading()"
       >
-        Buscar
+        @if (loading()) {
+          Buscando...
+        } @else {
+          Buscar
+        }
       </button>
 
       <button
         type="button"
-        class="btn-secondary"
+        class="secondary-button"
         (click)="clearSearch()"
+        [disabled]="loading()"
       >
         Limpar
       </button>
@@ -58,26 +64,19 @@
 
   </section>
 
-  @if (
-    hasSearched() &&
-    loading()
-  ) {
+  @if (hasSearched() && loading()) {
 
-    <section class="card">
-      <div class="state">
-        Carregando internações...
-      </div>
-    </section>
+    <p class="loading-message">
+      Carregando internações...
+    </p>
 
   }
 
   @if (errorMessage()) {
 
-    <section class="card">
-      <div class="state error">
-        {{ errorMessage() }}
-      </div>
-    </section>
+    <p class="error">
+      {{ errorMessage() }}
+    </p>
 
   }
 
@@ -88,25 +87,9 @@
     admissions().length === 0
   ) {
 
-    <section class="card">
-
-      <div class="state">
-
-        <div class="state-icon">
-          🏥
-        </div>
-
-        <h2>
-          Nenhuma internação encontrada
-        </h2>
-
-        <p>
-          Ajuste os filtros e tente novamente.
-        </p>
-
-      </div>
-
-    </section>
+    <div class="empty-state">
+      Nenhuma internação encontrada.
+    </div>
 
   }
 
@@ -117,139 +100,169 @@
     admissions().length > 0
   ) {
 
-    <section class="card table-card">
+    <div class="table-card">
 
-      <div class="table-wrapper">
+      <table>
 
-        <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Internação</th>
+            <th>Unidade</th>
+            <th>Leito</th>
+            <th>Status</th>
+            <th>Alta</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
 
-          <thead>
-            <tr>
-              <th>Paciente</th>
-              <th>Internação</th>
-              <th>Unidade</th>
-              <th>Leito</th>
-              <th>Status</th>
-              <th>Alta</th>
-            </tr>
-          </thead>
-
-          <tbody>
-
-            @for (
-              admission of paginatedAdmissions;
-              track admission.id
-            ) {
-
-              <tr>
-
-                <td>
-                  <strong>
-                    {{ admission.patientName }}
-                  </strong>
-                </td>
-
-                <td>
-                  {{
-                    admission.admissionDate
-                      | date:'dd/MM/yyyy HH:mm'
-                  }}
-                </td>
-
-                <td>
-                  {{ admission.unit ?? '-' }}
-                </td>
-
-                <td>
-                  {{ admission.bed ?? '-' }}
-                </td>
-
-                <td>
-
-                  <span
-                    class="status-badge"
-                    [ngClass]="
-                      getStatusClass(
-                        admission.status
-                      )
-                    "
-                  >
-                    {{
-                      formatStatus(
-                        admission.status
-                      )
-                    }}
-                  </span>
-
-                </td>
-
-                <td>
-
-                  @if (admission.dischargeDate) {
-
-                    {{
-                      admission.dischargeDate
-                        | date:'dd/MM/yyyy HH:mm'
-                    }}
-
-                  } @else {
-
-                    -
-
-                  }
-
-                </td>
-
-              </tr>
-
-            }
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-      @if (totalPages > 1) {
-
-        <div class="pagination">
-
-          <button
-            type="button"
-            (click)="previousPage()"
-            [disabled]="currentPage === 1"
-          >
-            ‹
-          </button>
+        <tbody>
 
           @for (
-            page of pages;
-            track page
+            admission of paginatedAdmissions;
+            track admission.id
           ) {
 
-            <button
-              type="button"
-              [class.active]="page === currentPage"
-              (click)="goToPage(page)"
-            >
-              {{ page }}
-            </button>
+            <tr>
+
+              <td>
+                <strong>
+                  {{ admission.patientName }}
+                </strong>
+              </td>
+
+              <td>
+                {{
+                  admission.admissionDate
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </td>
+
+              <td>
+                {{ admission.unit ?? '-' }}
+              </td>
+
+              <td>
+                {{ admission.bed ?? '-' }}
+              </td>
+
+              <td>
+
+                <span
+                  class="status-badge"
+                  [ngClass]="
+                    getStatusClass(
+                      admission.status
+                    )
+                  "
+                >
+                  {{
+                    formatStatus(
+                      admission.status
+                    )
+                  }}
+                </span>
+
+              </td>
+
+              <td>
+
+                @if (admission.dischargeDate) {
+
+                  {{
+                    admission.dischargeDate
+                      | date:'dd/MM/yyyy HH:mm'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </td>
+
+              <td class="actions">
+
+                <button
+                  type="button"
+                  class="icon-button"
+                  title="Visualizar Patient 360"
+                  (click)="viewPatient360(admission.patientId)"
+                >
+                  👁
+                </button>
+
+              </td>
+
+            </tr>
 
           }
 
-          <button
-            type="button"
-            (click)="nextPage()"
-            [disabled]="currentPage === totalPages"
-          >
-            ›
-          </button>
+        </tbody>
+
+      </table>
+
+      <div class="pagination">
+
+        <div class="pagination-info">
+
+          Mostrando
+          {{ (currentPage - 1) * pageSize + 1 }}
+          até
+          {{
+            currentPage * pageSize > admissions().length
+              ? admissions().length
+              : currentPage * pageSize
+          }}
+          de
+          {{ admissions().length }}
+          internações
 
         </div>
 
-      }
+        @if (totalPages > 1) {
 
-    </section>
+          <div class="pagination-buttons">
+
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            @for (
+              page of pages;
+              track page
+            ) {
+
+              <button
+                type="button"
+                [class.active]="currentPage === page"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+
+            }
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              ›
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
 
   }
 

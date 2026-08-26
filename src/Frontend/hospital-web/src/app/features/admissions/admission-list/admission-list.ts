@@ -5,6 +5,7 @@ import {
   signal
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { Admission } from '../../../core/models/admission.model';
 import { AdmissionService } from '../../../core/services/admission.service';
@@ -22,6 +23,9 @@ import { AdmissionService } from '../../../core/services/admission.service';
 export class AdmissionListComponent {
   private readonly admissionService =
     inject(AdmissionService);
+
+  private readonly router =
+    inject(Router);
 
   readonly admissions =
     signal<Admission[]>([]);
@@ -136,6 +140,16 @@ export class AdmissionListComponent {
     this.goToPage(
       this.currentPage + 1
     );
+  }
+
+  viewPatient360(
+    patientId: string
+  ): void {
+    this.router.navigate([
+      '/patients',
+      patientId,
+      '360'
+    ]);
   }
 
   formatStatus(status: string): string {
